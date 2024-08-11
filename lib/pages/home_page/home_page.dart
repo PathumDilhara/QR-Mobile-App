@@ -10,7 +10,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    PersistentTabController _persistentTabController =
+    PersistentTabController persistentTabController =
         PersistentTabController();
 
     return Scaffold(
@@ -18,7 +18,7 @@ class HomePage extends StatelessWidget {
         padding: const EdgeInsets.all(10.0),
         child: PersistentTabView(
           context,
-          controller: _persistentTabController,
+          controller: persistentTabController,
           screens: const [
             QRScanningPage(),
             QRGeneratingPage(),

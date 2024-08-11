@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:qr_mobile_app/pages/onboarding_screen/onboarding_screens.dart';
+import 'package:qr_mobile_app/utils/colors.dart';
 
-import 'pages/home_page/home_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,11 +16,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        scaffoldBackgroundColor: Colors.white,
-        appBarTheme: const AppBarTheme(color: Colors.white),
-        textTheme: GoogleFonts.dmSansTextTheme(Theme.of(context).textTheme),
+        scaffoldBackgroundColor: AppColors.kWhiteColor,
+        appBarTheme: const AppBarTheme(color: AppColors.kWhiteColor),
+        textTheme: GoogleFonts.signikaTextTheme(Theme.of(context).textTheme),
       ),
-      home: const HomePage(),
+      home: const OnboardingScreen(),
     );
   }
 }
@@ -28,7 +29,9 @@ class MyApp extends StatelessWidget {
 // flutter pub add google_fonts
 // flutter pub add shared_preferences
 // flutter pub add persistent_bottom_nav_bar
+// flutter pub add smooth_page_indicator
 
 // improvements
 
 // page transition improvements
+// google fon style
