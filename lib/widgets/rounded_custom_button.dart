@@ -3,7 +3,11 @@ import 'package:qr_mobile_app/utils/colors.dart';
 import 'package:qr_mobile_app/utils/text_styles.dart';
 
 class RoundedCustomButton extends StatelessWidget {
-  const RoundedCustomButton({super.key});
+  final bool isLastPage;
+  const RoundedCustomButton({
+    super.key,
+    required this.isLastPage,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +20,11 @@ class RoundedCustomButton extends StatelessWidget {
         color: AppColors.kMainColor,
       ),
       child: Center(
-        child: Text("Next", style: AppTextStyles.appTitleStyle.copyWith(color: AppColors.kWhiteColor),),
+        child: Text(
+          isLastPage ? "Get start" : "Next",
+          style: AppTextStyles.appTitleStyle
+              .copyWith(color: AppColors.kWhiteColor),
+        ),
       ),
     );
   }
