@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qr_mobile_app/user_services/user_services.dart';
 import 'package:qr_mobile_app/utils/colors.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -14,9 +15,9 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
   bool isLastPage = false;
+  final PageController pageController = PageController();
   @override
   Widget build(BuildContext context) {
-    final PageController pageController = PageController();
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -75,12 +76,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               left: 0,
               right: 0,
               child: GestureDetector(
-                onTap: () {
+                onTap: () async {
+                  if(!isLastPage){
                   pageController.animateToPage(
                     pageController.page!.toInt() + 1, // pageController.page is double ---> int
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeInOut,
                   );
+                  } else if(isLastPage){
+                    await UserServices.storeLoginState("LoggedIn");
+                    //String loginState = await UserServices.checkLoginState();
+                    //print(loginState);
+                  }
                 },
                 child: RoundedCustomButton(
                   isLastPage: isLastPage,
