@@ -10,10 +10,10 @@ class UserServices{
   }
 
   // Method to check the loginState is saved in shared Preferences
-  static Future<String> checkLoginState() async {
+  static Future<bool> checkLoginState() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? loginState = prefs.getString("loginState");
-    return loginState!; // if null return false
+    return loginState != null; // if null return false
   }
 
   // Method to clear login state

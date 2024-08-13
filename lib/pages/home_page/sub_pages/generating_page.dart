@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../utils/text_styles.dart';
+import '../../../utils/text_styles.dart';
+
 
 class QRGeneratingPage extends StatelessWidget {
   const QRGeneratingPage({super.key});

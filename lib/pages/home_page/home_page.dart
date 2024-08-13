@@ -1,19 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
-import 'package:qr_mobile_app/pages/sub_pages/generating_page.dart';
-import 'package:qr_mobile_app/pages/sub_pages/scanning_page.dart';
+import 'package:qr_mobile_app/user_services/user_services.dart';
 import 'package:qr_mobile_app/utils/colors.dart';
+import 'package:qr_mobile_app/utils/routers.dart';
 import 'package:qr_mobile_app/utils/text_styles.dart';
+
+import 'sub_pages/generating_page.dart';
+import 'sub_pages/scanning_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    PersistentTabController persistentTabController =
-        PersistentTabController();
+    PersistentTabController persistentTabController = PersistentTabController();
 
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+            onPressed: () {
+              AppRouter.router.go("/onboarding_screen");
+            },
+            icon: const Icon(
+              Icons.arrow_back,
+            )),
+      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     UserServices.clearSavedLoginState();
+      //     ScaffoldMessenger.of(context).showSnackBar(
+      //       const SnackBar(
+      //         content: Text("Login state cleared"),
+      //       ),
+      //     );
+      //   },
+      //   child: const Text("Clear"),
+      // ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: PersistentTabView(
@@ -63,9 +86,9 @@ class HomePage extends StatelessWidget {
           fontSize: 30,
           fontWeight: FontWeight.bold,
         ),
-        activeColorPrimary: AppColors.kMainColor,   // for icon
-        activeColorSecondary: AppColors.kWhiteColor,   // for text
-        inactiveColorPrimary: AppColors.kBlackColor,   // for when not selected
+        activeColorPrimary: AppColors.kMainColor, // for icon
+        activeColorSecondary: AppColors.kWhiteColor, // for text
+        inactiveColorPrimary: AppColors.kBlackColor, // for when not selected
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(

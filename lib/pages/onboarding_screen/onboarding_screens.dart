@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qr_mobile_app/user_services/user_services.dart';
 import 'package:qr_mobile_app/utils/colors.dart';
+import 'package:qr_mobile_app/utils/routers.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../widgets/onboarding_screen_widget.dart';
@@ -85,8 +86,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   );
                   } else if(isLastPage){
                     await UserServices.storeLoginState("LoggedIn");
-                    //String loginState = await UserServices.checkLoginState();
+                    bool loginState = await UserServices.checkLoginState();
                     //print(loginState);
+                    AppRouter.router.push("/home");
                   }
                 },
                 child: RoundedCustomButton(
