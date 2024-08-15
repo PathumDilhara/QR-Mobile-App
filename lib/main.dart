@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:qr_mobile_app/pages/onboarding_screen/onboarding_screens.dart';
 import 'package:qr_mobile_app/utils/colors.dart';
 import 'package:qr_mobile_app/utils/routers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,7 +23,6 @@ class MyApp extends StatelessWidget {
         appBarTheme: const AppBarTheme(color: AppColors.kWhiteColor),
         textTheme: GoogleFonts.signikaTextTheme(Theme.of(context).textTheme),
       ),
-      // home: const OnboardingScreen(),   // no need when we use router
     );
   }
 }
@@ -34,6 +32,7 @@ class MyApp extends StatelessWidget {
 // flutter pub add shared_preferences
 // flutter pub add persistent_bottom_nav_bar
 // flutter pub add smooth_page_indicator
+// flutter pub add qr_code_scanner
 
 // improvements
 

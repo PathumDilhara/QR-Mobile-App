@@ -22,4 +22,11 @@ class AppTextStyles {
     fontWeight: FontWeight.w500,
     color: AppColors.kWhiteColor,
   );
+
+  // Description Style
+  static TextStyle appDescriptionTextStyle = const TextStyle(
+    fontSize: 24,
+    fontWeight: FontWeight.w400,
+    color: AppColors.kBlackColor,
+  );
 }

@@ -86,8 +86,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   );
                   } else if(isLastPage){
                     await UserServices.storeLoginState("LoggedIn");
-                    bool loginState = await UserServices.checkLoginState();
-                    //print(loginState);
+                    // bool loginState = await UserServices.checkLoginState();
+                    // print(loginState);
                     AppRouter.router.push("/home");
                   }
                 },
