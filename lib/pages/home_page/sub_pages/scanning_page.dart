@@ -78,12 +78,11 @@ class _QRScanningPageState extends State<QRScanningPage> {
             height: 10,
           ),
           Expanded(
-            child: (result != null)
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      // to use two text styles
-                      Row(
+            flex: 1,
+            child: Column(
+              children: [
+                (result != null)
+                    ? Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           RichText(
@@ -113,7 +112,6 @@ class _QRScanningPageState extends State<QRScanningPage> {
                             onPressed: () {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-
                                   duration: const Duration(seconds: 1),
                                   backgroundColor: AppColors.kMainColor,
                                   content: Text(
@@ -133,69 +131,15 @@ class _QRScanningPageState extends State<QRScanningPage> {
                             ),
                           ),
                         ],
+                      )
+                    : Text(
+                        "Scan code",
+                        style: AppTextStyles.appDescriptionTextStyle,
                       ),
-                      const SizedBox(height: 10,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          // Buttons for camera control
-                          ElevatedButton(
-                            onPressed: () async {
-                              await qrViewController!.flipCamera();
-                            },
-                            child: const Icon(Icons.flip_camera_ios_outlined, size: 24,)
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          ElevatedButton(
-                            onPressed: () async {
-                              await qrViewController!.pauseCamera();
-                            },
-                            child: const Text(
-                              "Pause",
-                              style: TextStyle(fontSize: 18),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          ElevatedButton(
-                            onPressed: () async {
-                              await qrViewController!.resumeCamera();
-                            },
-                            child: const Text(
-                              "Resume",
-                              style: TextStyle(fontSize: 18),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          ElevatedButton(
-                            onPressed: () async {
-                              await qrViewController!.toggleFlash();
-                            },
-                            child: FutureBuilder(
-                              future: qrViewController?.getFlashStatus(),
-                              builder: (context, snapshot) {
-                                final String flash =
-                                    snapshot.data == false ? "OFF" : "ON";
-                                return Text(
-                                  "Flash: $flash",
-                                  style: const TextStyle(fontSize: 18),
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  )
-                : Text(
-                    "Scan code",
-                    style: AppTextStyles.appDescriptionTextStyle,
-                  ),
+                const SizedBox(height: 20,),
+                _controlButtons(),
+              ],
+            ),
           ),
         ],
       ),
@@ -212,6 +156,68 @@ class _QRScanningPageState extends State<QRScanningPage> {
           result = event;
         });
       },
+    );
+  }
+
+  Widget _controlButtons() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 5.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+// Buttons for camera control
+          ElevatedButton(
+              onPressed: () async {
+                await qrViewController!.flipCamera();
+              },
+              child: const Icon(
+                Icons.flip_camera_ios_outlined,
+                size: 24,
+              )),
+          const SizedBox(
+            width: 5,
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              await qrViewController!.pauseCamera();
+            },
+            child: const Text(
+              "Pause",
+              style: TextStyle(fontSize: 18),
+            ),
+          ),
+          const SizedBox(
+            width: 5,
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              await qrViewController!.resumeCamera();
+            },
+            child: const Text(
+              "Resume",
+              style: TextStyle(fontSize: 18),
+            ),
+          ),
+          const SizedBox(
+            width: 5,
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              await qrViewController!.toggleFlash();
+            },
+            child: FutureBuilder(
+              future: qrViewController?.getFlashStatus(),
+              builder: (context, snapshot) {
+                final String flash = snapshot.data == false ? "OFF" : "ON";
+                return Text(
+                  "Flash: $flash",
+                  style: const TextStyle(fontSize: 18),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

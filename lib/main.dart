@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         scaffoldBackgroundColor: AppColors.kWhiteColor,
         appBarTheme: const AppBarTheme(color: AppColors.kWhiteColor),
-        textTheme: GoogleFonts.signikaTextTheme(Theme.of(context).textTheme),
+        textTheme: GoogleFonts.dmSansTextTheme(Theme.of(context).textTheme),
       ),
     );
   }
@@ -38,3 +38,5 @@ class MyApp extends StatelessWidget {
 
 // page transition improvements
 // google font style
+// copy to clipboard button
+// qr save button

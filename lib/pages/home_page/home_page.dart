@@ -39,8 +39,9 @@ class HomePage extends StatelessWidget {
           context,
           controller: persistentTabController,
           screens: const [
-            QRScanningPage(),
+
             QRGeneratingPage(),
+            QRScanningPage(),
           ],
           items: _navBarItems(),
           handleAndroidBackButtonPress: true,
