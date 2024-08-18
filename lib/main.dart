@@ -10,9 +10,15 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  DateTime? lastPressed;
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
@@ -21,7 +27,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         scaffoldBackgroundColor: AppColors.kWhiteColor,
         appBarTheme: const AppBarTheme(color: AppColors.kWhiteColor),
-        textTheme: GoogleFonts.dmSansTextTheme(Theme.of(context).textTheme),
+        textTheme: GoogleFonts.dmSansTextTheme(
+          Theme.of(context).textTheme,
+        ),
       ),
     );
   }

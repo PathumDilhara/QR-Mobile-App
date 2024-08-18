@@ -13,16 +13,6 @@ class HomePage extends StatelessWidget {
     PersistentTabController persistentTabController = PersistentTabController();
 
     return Scaffold(
-      // appBar: AppBar(
-      //   automaticallyImplyLeading: false,
-      //   leading: IconButton(
-      //       onPressed: () {
-      //         AppRouter.router.go("/onboarding_screen");
-      //       },
-      //       icon: const Icon(
-      //         Icons.arrow_back,
-      //       )),
-      // ),
       // floatingActionButton: FloatingActionButton(
       //   onPressed: () {
       //     UserServices.clearSavedLoginState();
@@ -34,43 +24,48 @@ class HomePage extends StatelessWidget {
       //   },
       //   child: const Text("Clear"),
       // ),
-      body: SafeArea(
-        child: PersistentTabView(
-          context,
-          controller: persistentTabController,
-          screens: const [
-
-            QRGeneratingPage(),
-            QRScanningPage(),
-          ],
-          items: _navBarItems(),
-          handleAndroidBackButtonPress: true,
-          hideNavigationBarWhenKeyboardAppears: true,
-          padding: const EdgeInsets.all(10),
-          backgroundColor: Colors.white,
-          isVisible: true,
-          animationSettings: const NavBarAnimationSettings(
-            navBarItemAnimation: ItemAnimationSettings(
-              duration: Duration(milliseconds: 400),
-              curve: Curves.ease,
-            ),
-            screenTransitionAnimation: ScreenTransitionAnimationSettings(
-              animateTabTransition: true,
-              duration: Duration(
-                milliseconds: 300,
-              ),
-              screenTransitionAnimationType:
-                  ScreenTransitionAnimationType.fadeIn,
-            ),
+      body: PersistentTabView(
+        // decoration: NavBarDecoration(
+        //   gradient: LinearGradient(
+        //     begin: Alignment.centerLeft,
+        //     end: Alignment.centerRight,
+        //     colors: [Colors.red, Colors.white],
+        //   ),
+        // ),
+        margin: const EdgeInsets.only(bottom: 10),
+        context,
+        controller: persistentTabController,
+        screens: const [
+          QRScanningPage(),
+          QRGeneratingPage(),
+        ],
+        items: _navBarItems(),
+        handleAndroidBackButtonPress: true,
+        hideNavigationBarWhenKeyboardAppears: true,
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        backgroundColor: Colors.white,
+        isVisible: true,
+        animationSettings: const NavBarAnimationSettings(
+          navBarItemAnimation: ItemAnimationSettings(
+            duration: Duration(milliseconds: 400),
+            curve: Curves.ease,
           ),
-          //confineToSafeArea: true,
-          navBarHeight: 60,
-          navBarStyle: NavBarStyle.style10,
+          screenTransitionAnimation: ScreenTransitionAnimationSettings(
+            animateTabTransition: true,
+            duration: Duration(
+              milliseconds: 300,
+            ),
+            screenTransitionAnimationType: ScreenTransitionAnimationType.fadeIn,
+          ),
         ),
+        //confineToSafeArea: true,
+        navBarHeight: 65,
+        navBarStyle: NavBarStyle.style10,
       ),
     );
   }
 
+  // Persistent nav bar item
   List<PersistentBottomNavBarItem> _navBarItems() {
     return [
       PersistentBottomNavBarItem(
@@ -80,7 +75,7 @@ class HomePage extends StatelessWidget {
         ),
         title: "Scan",
         textStyle: const TextStyle(
-          fontSize: 30,
+          fontSize: 18,
           fontWeight: FontWeight.bold,
         ),
         activeColorPrimary: AppColors.kMainColor, // for icon
@@ -93,7 +88,10 @@ class HomePage extends StatelessWidget {
           size: 30,
         ),
         title: "Generate",
-        textStyle: AppTextStyles.appSubtitleStyle.copyWith(fontSize: 50),
+        textStyle: const TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
         activeColorPrimary: AppColors.kMainColor,
         activeColorSecondary: AppColors.kWhiteColor,
         inactiveColorPrimary: AppColors.kBlackColor,

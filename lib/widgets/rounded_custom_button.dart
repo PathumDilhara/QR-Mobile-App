@@ -12,8 +12,10 @@ class RoundedCustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 10),
-      width: 100,
+      margin: const EdgeInsets.symmetric(
+        horizontal: 30,
+      ),
+      width: double.infinity,
       height: 50,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(100),
@@ -22,8 +24,10 @@ class RoundedCustomButton extends StatelessWidget {
       child: Center(
         child: Text(
           isLastPage ? "Get start" : "Next",
-          style: AppTextStyles.appTitleStyle
-              .copyWith(color: AppColors.kWhiteColor),
+          style: AppTextStyles.appTitleStyle.copyWith(
+            color: AppColors.kWhiteColor,
+            fontSize: 20,
+          ),
         ),
       ),
     );
