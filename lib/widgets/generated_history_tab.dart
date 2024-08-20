@@ -13,6 +13,7 @@ class _GeneratedHistoryTabState extends State<GeneratedHistoryTab> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView.builder(
+
         padding: const EdgeInsets.only(bottom: kBottomNavigationBarHeight + 10),
         itemCount: 20,
         shrinkWrap: true,
