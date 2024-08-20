@@ -121,6 +121,11 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
       maxLines: 2,
       autofocus:
           true, //  text field will focus itself if nothing else is already focused.
+      onTap: () {
+        setState(() {
+          qrInputController.text = "";
+        });
+      },
       controller: qrInputController,
       decoration: InputDecoration(
         suffixIcon: IconButton(
@@ -156,6 +161,13 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
             width: 2,
           ),
         ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(
+            color: AppColors.kBlackColor.withOpacity(0.3),
+            width: 2
+          )
+        )
       ),
 
       // when tap the tik icon on keyboard or enter of keyboard
@@ -176,10 +188,12 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
             height: MediaQuery.of(context).size.height * 0.2,
           ),
           Text(
-            "No data Provided",
+            "No data provided",
             style: TextStyle(
               fontSize: 25,
-              color: AppColors.kBlackColor.withOpacity(0.5),
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? AppColors.kWhiteColor.withOpacity(0.7)
+                  : AppColors.kSubtitleColor.withOpacity(0.3),
             ),
           ),
         ],
@@ -208,7 +222,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
       onTap: () async {
         try {
           await _requestPermission();
-          // check unnecessary importss
+          // check unnecessary imports
           await Future.delayed(const Duration(milliseconds: 300));
           final Uint8List? image = await screenshotController.capture();
           if (image != null) {
@@ -216,6 +230,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
                 await ImageGallerySaver.saveImage(image, name: "MyQrImage");
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
+                elevation: 3,
                 backgroundColor: AppColors.kMainColor,
                 duration: const Duration(seconds: 1),
                 content: Text(
@@ -251,8 +266,17 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
         width: double.infinity,
         height: 50,
         decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              AppColors.kMainColor,
+              AppColors.kMainColor.withOpacity(0.5),
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter
+          ),
+          // color: AppColors.kMainColor,
           borderRadius: BorderRadius.circular(100),
-          color: AppColors.kMainColor,
+          //color: AppColors.kMainColor,
         ),
         child: const Center(
           child: Row(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_mobile_app/utils/colors.dart';
+import 'package:qr_mobile_app/utils/routers.dart';
 import 'package:qr_mobile_app/utils/text_styles.dart';
 
 class QRScanningPage extends StatefulWidget {
@@ -15,8 +15,8 @@ class _QRScanningPageState extends State<QRScanningPage> {
   final GlobalKey qrKey = GlobalKey(debugLabel: "QR");
   QRViewController? qrViewController;
   Barcode? result; // Variable to save the scanned QR code data
-  dynamic title1;
-  dynamic title2;
+  // dynamic title1;
+  // dynamic title2;
 
   @override
   void dispose() {
@@ -37,19 +37,6 @@ class _QRScanningPageState extends State<QRScanningPage> {
     // }
   }
 
-  void titleSet() {
-    if (result != null) {
-      title1 = result!.format.name == "qrcode"
-          ? "QRCode : "
-          : result!.format.name == "ean8"
-              ? "Barcode : "
-              : "Scanned code :";
-      //title1 = "${result!.format.toString().split('.').last} : "; // this is also correct
-      title2 = "${result!.code}";
-    } else {
-      title1 = 'Scan a code';
-    }
-  }
 
   bool isCameraPaused = false; // State variable to track camera status
 
@@ -59,7 +46,7 @@ class _QRScanningPageState extends State<QRScanningPage> {
             MediaQuery.of(context).size.height < 400)
         ? 300.0
         : 300.0;
-    titleSet();
+    //titleSet();
     return Scaffold(
       body: Stack(
         children: [
@@ -89,78 +76,14 @@ class _QRScanningPageState extends State<QRScanningPage> {
                       horizontal: 20.0, vertical: 10),
                   child: Column(
                     children: [
-                      (result != null)
-                          ? Scrollbar(
-                              thumbVisibility: true,
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    RichText(
-                                      softWrap: true,
-                                      maxLines: 3,
-                                      //overflow: TextOverflow.ellipsis,
-                                      text: TextSpan(
-                                        children: [
-                                          TextSpan(
-                                            text: title1,
-                                            style: const TextStyle(
-                                              fontSize: 24,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                          TextSpan(
-                                            text: title2,
-                                            style: const TextStyle(
-                                              fontSize: 24,
-                                              color: Colors.grey,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    IconButton(
-                                      onPressed: () {
-                                        if (title2 != null) {
-                                          Clipboard.setData(
-                                              ClipboardData(text: title2));
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            SnackBar(
-                                              duration:
-                                                  const Duration(seconds: 1),
-                                              backgroundColor:
-                                                  AppColors.kMainColor,
-                                              content: Text(
-                                                " Copied to clipboard",
-                                                style: AppTextStyles
-                                                    .appDescriptionTextStyle
-                                                    .copyWith(
-                                                  fontSize: 18,
-                                                  color: AppColors.kWhiteColor,
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        }
-                                      },
-                                      icon: const Icon(
-                                        Icons.copy,
-                                        size: 25,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            )
-                          : Text(
-                              "Scan code",
-                              style: AppTextStyles.appDescriptionTextStyle,
-                            ),
+                      Text(
+                        "Scan code",
+                        style: AppTextStyles.appDescriptionTextStyle.copyWith(
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? AppColors.kWhiteColor.withOpacity(0.7)
+                              : AppColors.kBlackColor,
+                        ),
+                      ),
                       const SizedBox(
                         height: 10,
                       ),
@@ -186,6 +109,16 @@ class _QRScanningPageState extends State<QRScanningPage> {
         setState(() {
           result = event;
         });
+
+        try {
+          if (result != null) {
+            qrViewController.pauseCamera();
+            AppRouter.router
+                .push("/scan_result", extra: result!.code.toString());
+          }
+        } catch (err) {
+          print(err.toString());
+        }
       },
     );
   }
@@ -218,6 +151,7 @@ class _QRScanningPageState extends State<QRScanningPage> {
             child: Icon(
               isCameraPaused ? Icons.play_arrow_outlined : Icons.pause,
               size: 30,
+              color: AppColors.kMainColor,
             ),
           ),
         ),
@@ -244,13 +178,16 @@ class _QRScanningPageState extends State<QRScanningPage> {
         child: FutureBuilder(
           future: qrViewController?.getFlashStatus(),
           builder: (context, snapshot) {
-            final IconData flash = snapshot.data == false
-                ? Icons.flash_off_outlined
-                : Icons.flash_on_outlined;
+            final IconData flash =
+                snapshot.data == false || snapshot.data == null
+                    ? Icons.flash_off_outlined
+                    : Icons.flash_on_outlined;
             return Icon(
               flash,
-              size: 30,
-              color: snapshot.data == false ? null : AppColors.kWhiteColor,
+              size: 24,
+              color: snapshot.data == false || snapshot.data == null
+                  ? AppColors.kMainColor
+                  : AppColors.kWhiteColor,
             );
           },
         ),
@@ -261,17 +198,27 @@ class _QRScanningPageState extends State<QRScanningPage> {
   Widget _cameraControlButton() {
     return Positioned(
       right: 10,
-      bottom: 250,
+      bottom: 260,
       child: ElevatedButton(
         style: const ButtonStyle(backgroundColor: WidgetStateColor.transparent),
         onPressed: () async {
           await qrViewController!.flipCamera();
+          setState(() {});
         },
-        child: const Icon(
-          Icons.flip_camera_ios_outlined,
-          size: 24,
+        child: FutureBuilder(
+          future: qrViewController?.getCameraInfo(),
+          builder: (context, snapshot) {
+            return Icon(
+              Icons.flip_camera_ios_outlined,
+              size: 24,
+              color: snapshot.data == CameraFacing.back || snapshot.data == null
+                  ? AppColors.kMainColor
+                  : AppColors.kWhiteColor,
+            );
+          },
         ),
       ),
     );
   }
 }
+

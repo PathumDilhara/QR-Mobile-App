@@ -24,11 +24,12 @@ class OnboardingScreenWidget extends StatelessWidget {
           width: MediaQuery.of(context).size.width * 0.9,
           fit: BoxFit.cover,
         ),
-        Text(
-          title,
-          textAlign: TextAlign.center,
-          style: AppTextStyles.appTitleStyle.copyWith(fontSize: 40, fontWeight: FontWeight.bold)
-        ),
+        Text(title,
+            textAlign: TextAlign.center,
+            style: AppTextStyles.appTitleStyle.copyWith(
+              fontSize: 40,
+              fontWeight: FontWeight.bold,
+            )),
         Text(
           description,
           textAlign: TextAlign.center,
@@ -38,7 +39,9 @@ class OnboardingScreenWidget extends StatelessWidget {
             color: AppColors.kSubtitleColor.withOpacity(0.3),
           ),
         ),
-        const SizedBox(height: 80,),
+        const SizedBox(
+          height: 80,
+        ),
       ],
     );
   }

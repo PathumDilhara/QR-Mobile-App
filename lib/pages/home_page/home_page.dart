@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
+import 'package:qr_mobile_app/pages/history/history_page.dart';
 import 'package:qr_mobile_app/utils/colors.dart';
 import 'package:qr_mobile_app/utils/text_styles.dart';
+import '../../user_services/user_services.dart';
+import '../settings_page/settings_page.dart';
 import 'sub_pages/generating_page.dart';
 import 'sub_pages/scanning_page.dart';
 
@@ -25,21 +28,24 @@ class HomePage extends StatelessWidget {
       //   child: const Text("Clear"),
       // ),
       body: PersistentTabView(
-        // decoration: NavBarDecoration(
-        //   gradient: LinearGradient(
-        //     begin: Alignment.centerLeft,
-        //     end: Alignment.centerRight,
-        //     colors: [Colors.red, Colors.white],
-        //   ),
-        // ),
         margin: const EdgeInsets.only(bottom: 10),
+        decoration: const NavBarDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Colors.transparent,
+              Colors.transparent,
+            ],
+          ),
+        ),
         context,
         controller: persistentTabController,
         screens: const [
+          HistoryPage(),
           QRScanningPage(),
           QRGeneratingPage(),
+          SettingsPage(),
         ],
-        items: _navBarItems(),
+        items: _navBarItems(context),
         handleAndroidBackButtonPress: true,
         hideNavigationBarWhenKeyboardAppears: true,
         padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -66,7 +72,10 @@ class HomePage extends StatelessWidget {
   }
 
   // Persistent nav bar item
-  List<PersistentBottomNavBarItem> _navBarItems() {
+  List<PersistentBottomNavBarItem> _navBarItems(BuildContext context) {
+    final inactiveColor = Theme.of(context).brightness == Brightness.dark
+        ? AppColors.kWhiteColor.withOpacity(0.7)
+        : AppColors.kBlackColor;
     return [
       PersistentBottomNavBarItem(
         icon: const Icon(
@@ -80,7 +89,7 @@ class HomePage extends StatelessWidget {
         ),
         activeColorPrimary: AppColors.kMainColor, // for icon
         activeColorSecondary: AppColors.kWhiteColor, // for text
-        inactiveColorPrimary: AppColors.kBlackColor, // for when not selected
+        inactiveColorPrimary: inactiveColor, // for when not selected
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(
@@ -94,7 +103,35 @@ class HomePage extends StatelessWidget {
         ),
         activeColorPrimary: AppColors.kMainColor,
         activeColorSecondary: AppColors.kWhiteColor,
-        inactiveColorPrimary: AppColors.kBlackColor,
+        inactiveColorPrimary: inactiveColor,
+      ),
+      PersistentBottomNavBarItem(
+        icon: const Icon(
+          Icons.history,
+          size: 30,
+        ),
+        title: "History",
+        textStyle: const TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
+        activeColorPrimary: AppColors.kMainColor, // for icon
+        activeColorSecondary: AppColors.kWhiteColor, // for text
+        inactiveColorPrimary: inactiveColor, // for when not selected
+      ),
+      PersistentBottomNavBarItem(
+        icon: const Icon(
+          Icons.settings,
+          size: 30,
+        ),
+        title: "Settings",
+        textStyle: const TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
+        activeColorPrimary: AppColors.kMainColor, // for icon
+        activeColorSecondary: AppColors.kWhiteColor, // for text
+        inactiveColorPrimary: inactiveColor, // for when not selected
       ),
     ];
   }

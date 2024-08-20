@@ -18,7 +18,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  DateTime? lastPressed;
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
@@ -30,7 +29,24 @@ class _MyAppState extends State<MyApp> {
         textTheme: GoogleFonts.dmSansTextTheme(
           Theme.of(context).textTheme,
         ),
+        colorScheme: ColorScheme.fromSwatch().copyWith(
+          secondary: AppColors.kMainColor,
+        ),
       ),
+      darkTheme: ThemeData(
+        scaffoldBackgroundColor: Colors.black.withOpacity(0.5),
+        appBarTheme: const AppBarTheme(color: Colors.black),
+        textTheme: GoogleFonts.dmSansTextTheme(
+          Theme.of(context).textTheme.apply(
+            bodyColor: Colors.white,
+            displayColor: Colors.white,
+          ),
+        ),
+        colorScheme: ColorScheme.fromSwatch(brightness: Brightness.dark).copyWith(
+          secondary: AppColors.kMainColor,
+        ),
+      ),
+      themeMode: ThemeMode.system, // Automatically switches between dark and light theme
     );
   }
 }
