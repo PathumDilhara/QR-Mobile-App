@@ -36,9 +36,11 @@ class _GeneratedHistoryTabState extends State<GeneratedHistoryTab> {
               ),
               title: Text(
                 "Gen $index",
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 20,
-                  color: Colors.black,
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white.withOpacity(0.7)
+                      : Colors.black,
                 ),
               ),
             ),

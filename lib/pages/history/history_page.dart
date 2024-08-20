@@ -25,13 +25,23 @@ class _HistoryPageState extends State<HistoryPage>
   Widget build(BuildContext context) {
     final Color customColor = Theme.of(context).brightness == Brightness.dark
         ? AppColors.kWhiteColor.withOpacity(0.7)
-        : AppColors.kBlackColor;
+        : AppColors.kBlackColor.withOpacity(0.8);
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(60.0),
           child: TabBar(
-            indicatorColor: WidgetStateColor.transparent,
+            dividerColor: Theme.of(context).brightness == Brightness.dark
+                ? Colors.black12
+                : Colors.transparent,
+            overlayColor: WidgetStatePropertyAll(
+              AppColors.kMainColor.withOpacity(0.1),
+            ),
+            indicatorColor: Theme.of(context).brightness == Brightness.dark
+                ? Colors.white.withOpacity(0.5)
+                : AppColors.kMainColor,
             labelColor: AppColors.kMainColor,
             unselectedLabelColor: Colors.grey,
             controller: _tabController,
@@ -56,21 +66,16 @@ class _HistoryPageState extends State<HistoryPage>
           style: TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.bold,
-              color: Theme.of(context).brightness == Brightness.dark
-                  ? AppColors.kWhiteColor.withOpacity(0.7)
-                  : AppColors.kBlackColor),
+              color: customColor),
         ),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: TabBarView(
-          controller: _tabController,
-          children: const [
-            GeneratedHistoryTab(),
-            ScanHistoryTab(),
-          ],
-        ),
+      body: TabBarView(
+        controller: _tabController,
+        children: const [
+          GeneratedHistoryTab(),
+          ScanHistoryTab(),
+        ],
       ),
     );
   }

@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:qr_mobile_app/pages/history/history_page.dart';
 import 'package:qr_mobile_app/utils/colors.dart';
-import 'package:qr_mobile_app/utils/text_styles.dart';
-import '../../user_services/user_services.dart';
 import '../settings_page/settings_page.dart';
 import 'sub_pages/generating_page.dart';
 import 'sub_pages/scanning_page.dart';
@@ -29,11 +27,15 @@ class HomePage extends StatelessWidget {
       // ),
       body: PersistentTabView(
         margin: const EdgeInsets.only(bottom: 10),
-        decoration: const NavBarDecoration(
+        decoration: NavBarDecoration(
           gradient: LinearGradient(
             colors: [
-              Colors.transparent,
-              Colors.transparent,
+              Theme.of(context).brightness == Brightness.dark
+                  ? Colors.transparent
+                  : Colors.white,
+          Theme.of(context).brightness == Brightness.dark
+              ? Colors.transparent
+              : Colors.white,
             ],
           ),
         ),
