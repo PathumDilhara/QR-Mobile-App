@@ -4,7 +4,6 @@ import 'package:qr_mobile_app/utils/colors.dart';
 
 import '../user_services/hive_db_services/generated_qr_services.dart';
 
-
 class GeneratedHistoryTab extends StatefulWidget {
   const GeneratedHistoryTab({super.key});
 
@@ -13,7 +12,6 @@ class GeneratedHistoryTab extends StatefulWidget {
 }
 
 class _GeneratedHistoryTabState extends State<GeneratedHistoryTab> {
-
   final GeneratedQRServices qrServices = GeneratedQRServices();
   List<GeneratedQRModel> allQRCodes = [];
 
@@ -28,15 +26,17 @@ class _GeneratedHistoryTabState extends State<GeneratedHistoryTab> {
     final bool isNewUser = await qrServices.isQRBoxEmpty();
     // print("***********************$isNewUser");
     if (isNewUser) {
-      await qrServices.createInitialQRCodes();
+      await qrServices.createInitialGeneratedQRCodes();
     }
 
     _loadQrCodes();
+   // qrServices.clearQRBox();
   }
 
   // Method to load stored qr codes
   Future<void> _loadQrCodes() async {
-    final List<GeneratedQRModel> loadedQrCodes = await qrServices.loadQRCodes();
+    final List<GeneratedQRModel> loadedQrCodes =
+        await qrServices.loadGeneratedQRCodes();
     setState(() {
       allQRCodes = loadedQrCodes;
       // print("****************${loadedQrCodes.length}");
@@ -45,6 +45,7 @@ class _GeneratedHistoryTabState extends State<GeneratedHistoryTab> {
 
   @override
   Widget build(BuildContext context) {
+    GeneratedQRServices generatedQRServices = GeneratedQRServices();
     return Scaffold(
       body: ListView.builder(
         padding: const EdgeInsets.only(bottom: kBottomNavigationBarHeight + 10),
@@ -59,7 +60,12 @@ class _GeneratedHistoryTabState extends State<GeneratedHistoryTab> {
             child: ListTile(
               tileColor: AppColors.kMainColor.withOpacity(0.3),
               trailing: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  setState(() {
+                    generatedQRServices
+                        .deleteGeneratedQRCode(allQRCodes[index]);
+                  });
+                },
                 icon: Icon(
                   Icons.delete,
                   size: 25,
@@ -69,7 +75,7 @@ class _GeneratedHistoryTabState extends State<GeneratedHistoryTab> {
                 ),
               ),
               title: Text(
-              allQRCodes[index].title,
+                allQRCodes[index].title,
                 style: TextStyle(
                   fontSize: 20,
                   color: Theme.of(context).brightness == Brightness.dark

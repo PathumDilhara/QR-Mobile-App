@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:qr_mobile_app/model/generated_qr_model.dart';
 import 'package:qr_mobile_app/utils/colors.dart';
 import 'package:screenshot/screenshot.dart';
+
+import '../../../user_services/hive_db_services/generated_qr_services.dart';
 
 class QRGeneratingPage extends StatefulWidget {
   const QRGeneratingPage({super.key});
@@ -18,6 +21,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
   final TextEditingController qrInputController = TextEditingController();
   String? qrData;
   final ScreenshotController screenshotController = ScreenshotController();
+  final GeneratedQRServices generatedQRServices = GeneratedQRServices();
 
   @override
   void dispose() {
@@ -129,11 +133,13 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
       controller: qrInputController,
       decoration: InputDecoration(
         suffixIcon: IconButton(
-          onPressed: () {
-            setState(() {
+          onPressed: () async{
+            setState(() async{
+              GeneratedQRModel generatedQRModel = GeneratedQRModel(title: qrInputController.text, date: DateTime.now());
               qrData = qrInputController.text;
-              print(qrData);
+              //print(qrData);
               FocusScope.of(context).unfocus();
+              await generatedQRServices.storeGeneratedQR(generatedQRModel);
             });
           },
           icon: const Icon(

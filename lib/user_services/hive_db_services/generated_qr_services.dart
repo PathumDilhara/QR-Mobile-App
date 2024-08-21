@@ -29,21 +29,44 @@ class GeneratedQRServices {
     return _myQRBox.isEmpty;
   }
 
-  Future<void> createInitialQRCodes () async {
+  Future<void> createInitialGeneratedQRCodes () async {
     if(_myQRBox.isEmpty){
       await _myQRBox.put("generated_qr", allQRCodes);
     }
   }
   // Method to load qr codes
-  Future<List<GeneratedQRModel>> loadQRCodes() async {
-    final dynamic qrCodes = _myQRBox.get("generated_qr");
+  Future<List<GeneratedQRModel>> loadGeneratedQRCodes() async {
+    final dynamic allQRCodes = _myQRBox.get("generated_qr");
 
-    if (qrCodes != null && qrCodes is List<dynamic>){
-      return qrCodes.cast<GeneratedQRModel>().toList();
+    if (allQRCodes != null && allQRCodes is List<dynamic>){
+      return allQRCodes.cast<GeneratedQRModel>().toList();
     }
     return [];
   }
 
+  // Method to delete a single history
+  Future<void> deleteGeneratedQRCode (GeneratedQRModel qr)async {
+    try {
+      final dynamic allQRCodes = _myQRBox.get("generated_qr");
+      allQRCodes.remove();
+      await _myQRBox.put("generated_qr", allQRCodes);
+    } catch(err) {
+      print(err.toString());
+    }
+  }
+
+  // method to store new qr code
+  Future<void> storeGeneratedQR (GeneratedQRModel generatedQRModel) async {
+    try {
+      final dynamic allQRCodes = _myQRBox.get("generated_qr");
+      allQRCodes.add(generatedQRModel);
+      await _myQRBox.put("generated_qr", allQRCodes);
+    } catch(err){
+      print(err.toString());
+    }
+  }
+
+  // Method to clear storage
   Future<void> clearQRBox() async {
     await _myQRBox.clear();
   }
