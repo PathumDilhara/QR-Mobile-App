@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:qr_mobile_app/pages/home_page/home_page.dart';
 import 'package:qr_mobile_app/pages/home_page/sub_pages/scan_result_page.dart';
 import 'package:qr_mobile_app/pages/onboarding_screen/onboarding_screens.dart';
-import 'package:qr_mobile_app/user_services/user_services.dart';
+import 'package:qr_mobile_app/user_services/shared_preferences_services/user_services.dart';
 
 class AppRouter {
   static final router = GoRouter(

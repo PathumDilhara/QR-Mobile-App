@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:qr_mobile_app/model/qr_model.dart';
+import 'package:qr_mobile_app/model/generated_qr_model.dart';
 import 'package:qr_mobile_app/utils/colors.dart';
 import 'package:qr_mobile_app/utils/routers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'model/scanned_qr_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPreferences.getInstance();
   await Hive.initFlutter();
-  Hive.registerAdapter(QRModelAdapter());
+  Hive.registerAdapter(GeneratedQRModelAdapter());
+  Hive.registerAdapter(ScannedQrModelAdapter());
   await Hive.openBox("generated_qr");
+  await Hive.openBox("scanned_qr");
   runApp(const MyApp());
 }
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:qr_mobile_app/user_services/user_services.dart';
+import 'package:qr_mobile_app/user_services/shared_preferences_services/user_services.dart';
 import 'package:qr_mobile_app/utils/colors.dart';
 import 'package:qr_mobile_app/utils/routers.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
