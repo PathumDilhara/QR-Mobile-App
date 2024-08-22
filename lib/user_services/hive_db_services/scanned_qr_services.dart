@@ -45,6 +45,29 @@ class ScannedQRServices {
     return [];
   }
 
+  // Method to delete a single history
+  Future<void> deleteScannedQRCode (ScannedQrModel scannedQRModel)async {
+    try {
+      final dynamic allQRCodes = _myQRBox.get("scanned_qr");
+      allQRCodes.remove(scannedQRModel);
+      await _myQRBox.put("scanned_qr", allQRCodes);
+    } catch(err) {
+      print(err.toString());
+    }
+  }
+
+  // method to store new qr code
+  Future<void> storeScannedQR (ScannedQrModel scannedQRModel) async {
+    try {
+      final dynamic allQRCodes = _myQRBox.get("scanned_qr");
+      allQRCodes.add(scannedQRModel);
+      await _myQRBox.put("scanned_qr", allQRCodes);
+    } catch(err){
+      print(err.toString());
+    }
+  }
+
+  // Method to clear storage
   Future<void> clearQRBox() async {
     await _myQRBox.clear();
   }

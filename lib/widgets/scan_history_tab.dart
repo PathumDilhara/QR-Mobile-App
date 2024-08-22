@@ -1,80 +1,107 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_mobile_app/model/scanned_qr_model.dart';
-import 'package:qr_mobile_app/user_services/hive_db_services/scanned_qr_services.dart';
 import 'package:qr_mobile_app/utils/colors.dart';
 
-class ScanHistoryTab extends StatefulWidget {
+import '../provider/qr_history_provider.dart';
+
+class ScanHistoryTab extends StatelessWidget {
   const ScanHistoryTab({super.key});
 
-  @override
-  State<ScanHistoryTab> createState() => _ScanHistoryTabState();
-}
-
-class _ScanHistoryTabState extends State<ScanHistoryTab> {
-
-  final ScannedQRServices qrServices = ScannedQRServices();
-  List<ScannedQrModel> allQRCodes = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _checkIfUserIsNew();
-  }
-
-  // new user
-  void _checkIfUserIsNew() async {
-    final bool isNewUser = await qrServices.isQRBoxEmpty();
-     print("***********************$isNewUser");
-    if (isNewUser) {
-      await qrServices.createInitialQRCodes();
-    }
-
-    _loadQrCodes();
-  }
-
-  // Method to load stored qr codes
-  Future<void> _loadQrCodes() async {
-    final List<ScannedQrModel> loadedQrCodes = await qrServices.loadQRCodes();
-    setState(() {
-      allQRCodes = loadedQrCodes;
-       print("****************${loadedQrCodes.length}");
-    });
-  }
+  // @override
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView.builder(
-        padding: const EdgeInsets.only(bottom: kBottomNavigationBarHeight + 10),
-        itemCount: allQRCodes.length,
-        shrinkWrap: true,
-        scrollDirection: Axis.vertical,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.only(
-              bottom: 5.0,
-            ),
-            child: ListTile(
-              tileColor: AppColors.kMainColor.withOpacity(0.3),
-              trailing: IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.delete,
-                  size: 25,
-                  color: Theme.of(context).brightness == Brightness.dark
-                      ? AppColors.kWhiteColor.withOpacity(0.7)
-                      : AppColors.kBlackColor,
-                ),
-              ),
-              title: Text(
-                allQRCodes[index].title,
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Theme.of(context).brightness == Brightness.dark
-                      ? Colors.white.withOpacity(0.7)
-                      : Colors.black,
-                ),
-              ),
-            ),
+      backgroundColor: Colors.transparent,
+      body: Consumer<QRHistoryProvider>(
+        builder: (BuildContext context, QRHistoryProvider qrHistoryProvider,
+            Widget? child) {
+          return FutureBuilder(
+            future: qrHistoryProvider.loadScnQRCodes(),
+            // if true below if else part will be executed
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text("Error: ${snapshot.error}"));
+              } else {
+                // Check if the QR code list is empty
+                if (qrHistoryProvider.storedScnQRCodes.isEmpty) {
+                  return Center(
+                    child: Text(
+                      "No history available",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? Colors.white.withOpacity(0.7)
+                            : Colors.black,
+                      ),
+                    ),
+                  );
+                }
+                return ListView.builder(
+                  padding: const EdgeInsets.only(
+                      bottom: kBottomNavigationBarHeight + 10),
+                  itemCount: qrHistoryProvider.storedScnQRCodes.length,
+                  shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
+                  itemBuilder: (context, index) {
+                    final ScannedQrModel qrCode =
+                        qrHistoryProvider.storedScnQRCodes[index];
+                    return Padding(
+                      padding: const EdgeInsets.only(
+                        bottom: 5.0,
+                      ),
+                      child: ListTile(
+                        tileColor: AppColors.kMainColor.withOpacity(0.3),
+                        trailing: IconButton(
+                          onPressed: () async {
+                            await qrHistoryProvider.deleteScnQRCode(qrCode);
+                          },
+                          icon: Icon(
+                            Icons.delete_outline,
+                            size: 25,
+                            color:
+                                Theme.of(context).brightness == Brightness.dark
+                                    ? AppColors.kWhiteColor.withOpacity(0.7)
+                                    : AppColors.kBlackColor,
+                          ),
+                        ),
+                        title: Text(
+                          qrCode.title,
+                          style: TextStyle(
+                            fontSize: 20,
+                            color:
+                                Theme.of(context).brightness == Brightness.dark
+                                    ? Colors.white.withOpacity(0.7)
+                                    : Colors.black,
+                          ),
+                        ),
+                        subtitle: Text(
+                          "${DateFormat.yMMMd().format(
+                            DateTime.parse(
+                              qrCode.date.toString(),
+                            ),
+                          )} ${DateFormat.Hm().format(
+                            DateTime.parse(
+                              qrCode.date.toString(),
+                            ),
+                          )}",
+                          style: TextStyle(
+                            color:
+                                Theme.of(context).brightness == Brightness.dark
+                                    ? Colors.white.withOpacity(0.7)
+                                    : Colors.black,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                );
+              }
+            },
           );
         },
       ),

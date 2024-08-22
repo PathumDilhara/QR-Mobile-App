@@ -1,89 +1,111 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_mobile_app/model/generated_qr_model.dart';
 import 'package:qr_mobile_app/utils/colors.dart';
 
-import '../user_services/hive_db_services/generated_qr_services.dart';
+import '../provider/qr_history_provider.dart';
 
-class GeneratedHistoryTab extends StatefulWidget {
+class GeneratedHistoryTab extends StatelessWidget {
   const GeneratedHistoryTab({super.key});
 
-  @override
-  State<GeneratedHistoryTab> createState() => _GeneratedHistoryTabState();
-}
-
-class _GeneratedHistoryTabState extends State<GeneratedHistoryTab> {
-  final GeneratedQRServices qrServices = GeneratedQRServices();
-  List<GeneratedQRModel> allQRCodes = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _checkIfUserIsNew();
-  }
-
-  // new user
-  void _checkIfUserIsNew() async {
-    final bool isNewUser = await qrServices.isQRBoxEmpty();
-    // print("***********************$isNewUser");
-    if (isNewUser) {
-      await qrServices.createInitialGeneratedQRCodes();
-    }
-
-    _loadQrCodes();
-   // qrServices.clearQRBox();
-  }
-
-  // Method to load stored qr codes
-  Future<void> _loadQrCodes() async {
-    final List<GeneratedQRModel> loadedQrCodes =
-        await qrServices.loadGeneratedQRCodes();
-    setState(() {
-      allQRCodes = loadedQrCodes;
-      // print("****************${loadedQrCodes.length}");
-    });
-  }
-
+  // @override
   @override
   Widget build(BuildContext context) {
-    GeneratedQRServices generatedQRServices = GeneratedQRServices();
     return Scaffold(
-      body: ListView.builder(
-        padding: const EdgeInsets.only(bottom: kBottomNavigationBarHeight + 10),
-        itemCount: allQRCodes.length,
-        shrinkWrap: true,
-        scrollDirection: Axis.vertical,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.only(
-              bottom: 5.0,
-            ),
-            child: ListTile(
-              tileColor: AppColors.kMainColor.withOpacity(0.3),
-              trailing: IconButton(
-                onPressed: () {
-                  setState(() {
-                    generatedQRServices
-                        .deleteGeneratedQRCode(allQRCodes[index]);
-                  });
-                },
-                icon: Icon(
-                  Icons.delete,
-                  size: 25,
-                  color: Theme.of(context).brightness == Brightness.dark
-                      ? AppColors.kWhiteColor.withOpacity(0.7)
-                      : AppColors.kBlackColor,
-                ),
-              ),
-              title: Text(
-                allQRCodes[index].title,
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Theme.of(context).brightness == Brightness.dark
-                      ? Colors.white.withOpacity(0.7)
-                      : Colors.black,
-                ),
-              ),
-            ),
+      backgroundColor: Colors.transparent,
+      body: Consumer<QRHistoryProvider>(
+        builder: (BuildContext context, QRHistoryProvider qrHistoryProvider,
+            Widget? child) {
+          return FutureBuilder(
+            future: qrHistoryProvider
+                .loadGeneratedQRCodes(), // if true below if else part will be executed
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text("Error: ${snapshot.error}"));
+              } else {
+                // Check if the QR code list is empty
+                if (qrHistoryProvider.storedGenQRCodes.isEmpty) {
+                  return Center(
+                    child: Text(
+                      "No history available",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? Colors.white.withOpacity(0.7)
+                            : Colors.black,
+                      ),
+                    ),
+                  );
+                }
+
+                // if box is not empty
+                return ListView.builder(
+                  padding: const EdgeInsets.only(
+                      bottom: kBottomNavigationBarHeight + 10),
+                  itemCount: qrHistoryProvider.storedGenQRCodes.length,
+                  shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
+                  itemBuilder: (context, index) {
+                    final GeneratedQRModel qrCode =
+                        qrHistoryProvider.storedGenQRCodes[index];
+                    return Padding(
+                      padding: const EdgeInsets.only(
+                        bottom: 5.0,
+                      ),
+                      child: ListTile(
+                        tileColor: AppColors.kMainColor.withOpacity(0.3),
+                        trailing: IconButton(
+                          onPressed: () async {
+                            await qrHistoryProvider
+                                .deleteGeneratedQRCode(qrCode);
+                          },
+                          icon: Icon(
+                            Icons.delete_outline,
+                            size: 25,
+                            color:
+                                Theme.of(context).brightness == Brightness.dark
+                                    ? AppColors.kWhiteColor.withOpacity(0.7)
+                                    : Colors.purple,
+                          ),
+                        ),
+                        title: Text(
+                          qrCode.title,
+                          style: TextStyle(
+                            fontSize: 20,
+                            color:
+                                Theme.of(context).brightness == Brightness.dark
+                                    ? Colors.white.withOpacity(0.7)
+                                    : Colors.black,
+                          ),
+                        ),
+                        subtitle: Text(
+                          "${DateFormat.yMMMd().format(
+                            DateTime.parse(
+                              qrCode.date.toString(),
+                            ),
+                          )} ${DateFormat.Hm().format(
+                            DateTime.parse(
+                              qrCode.date.toString(),
+                            ),
+                          )}",
+                          style: TextStyle(
+                            fontSize: 14,
+                            color:
+                                Theme.of(context).brightness == Brightness.dark
+                                    ? Colors.white.withOpacity(0.7)
+                                    : Colors.black,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                );
+              }
+            },
           );
         },
       ),

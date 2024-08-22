@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:qr_mobile_app/model/scanned_qr_model.dart';
+import 'package:qr_mobile_app/provider/qr_history_provider.dart';
 import 'package:qr_mobile_app/utils/colors.dart';
 import 'package:qr_mobile_app/utils/routers.dart';
 import 'package:qr_mobile_app/utils/text_styles.dart';
@@ -15,8 +17,7 @@ class _QRScanningPageState extends State<QRScanningPage> {
   final GlobalKey qrKey = GlobalKey(debugLabel: "QR");
   QRViewController? qrViewController;
   Barcode? result; // Variable to save the scanned QR code data
-  // dynamic title1;
-  // dynamic title2;
+
 
   @override
   void dispose() {
@@ -37,7 +38,6 @@ class _QRScanningPageState extends State<QRScanningPage> {
     // }
   }
 
-
   bool isCameraPaused = false; // State variable to track camera status
 
   @override
@@ -46,7 +46,6 @@ class _QRScanningPageState extends State<QRScanningPage> {
             MediaQuery.of(context).size.height < 400)
         ? 300.0
         : 300.0;
-    //titleSet();
     return Scaffold(
       body: Stack(
         children: [
@@ -103,8 +102,9 @@ class _QRScanningPageState extends State<QRScanningPage> {
 
   void _onQRViewCreated(QRViewController qrViewController) {
     this.qrViewController = qrViewController;
+    final QRHistoryProvider qrHistoryProvider = QRHistoryProvider();
     qrViewController.scannedDataStream.listen(
-      (event) {
+      (event) async {
         // what we want to do
         setState(() {
           result = event;
@@ -112,9 +112,17 @@ class _QRScanningPageState extends State<QRScanningPage> {
 
         try {
           if (result != null) {
+            ScannedQrModel scannedQRModel = ScannedQrModel(
+              title: result!.code.toString(),
+              date: DateTime.now(),
+            );
+
+            // Pause camera and navigate to result page
             qrViewController.pauseCamera();
             AppRouter.router
                 .push("/scan_result", extra: result!.code.toString());
+            await qrHistoryProvider.storeScnQR(scannedQRModel);
+            print("************************${scannedQRModel.title}");
           }
         } catch (err) {
           print(err.toString());
@@ -221,4 +229,3 @@ class _QRScanningPageState extends State<QRScanningPage> {
     );
   }
 }
-

@@ -8,7 +8,7 @@ import 'package:qr_mobile_app/model/generated_qr_model.dart';
 import 'package:qr_mobile_app/utils/colors.dart';
 import 'package:screenshot/screenshot.dart';
 
-import '../../../user_services/hive_db_services/generated_qr_services.dart';
+import '../../../provider/qr_history_provider.dart';
 
 class QRGeneratingPage extends StatefulWidget {
   const QRGeneratingPage({super.key});
@@ -21,7 +21,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
   final TextEditingController qrInputController = TextEditingController();
   String? qrData;
   final ScreenshotController screenshotController = ScreenshotController();
-  final GeneratedQRServices generatedQRServices = GeneratedQRServices();
+  final QRHistoryProvider qrHistoryProvider = QRHistoryProvider();
 
   @override
   void dispose() {
@@ -124,7 +124,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
     return TextField(
       maxLines: 2,
       autofocus:
-          true, //  text field will focus itself if nothing else is already focused.
+      true, //  text field will focus itself if nothing else is already focused.
       onTap: () {
         setState(() {
           qrInputController.text = "";
@@ -132,49 +132,50 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
       },
       controller: qrInputController,
       decoration: InputDecoration(
-        suffixIcon: IconButton(
-          onPressed: () async{
-            setState(() async{
-              GeneratedQRModel generatedQRModel = GeneratedQRModel(title: qrInputController.text, date: DateTime.now());
-              qrData = qrInputController.text;
+          suffixIcon: IconButton(
+            onPressed: () async {
+              // instance of GeneratedQRModel
+              GeneratedQRModel generatedQRModel = GeneratedQRModel(
+                title: qrInputController.text,
+                date: DateTime.now(),
+              );
+
+              // qrData = qrInputController.text;
+              // _qrImageView(qrData);
               //print(qrData);
               FocusScope.of(context).unfocus();
-              await generatedQRServices.storeGeneratedQR(generatedQRModel);
-            });
-          },
-          icon: const Icon(
-            Icons.done_outlined,
-            size: 30,
+              await qrHistoryProvider.storeGeneratedQR(generatedQRModel);
+            },
+            icon: const Icon(
+              Icons.done_outlined,
+              size: 30,
+            ),
           ),
-        ),
-        hintText: "Enter text or URL to generate QR code",
-        hintStyle: const TextStyle(
-          color: Colors.grey,
-          fontSize: 18,
-          fontWeight: FontWeight.w100,
-        ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20),
-          borderSide: const BorderSide(
+          hintText: "Enter text or URL to generate QR code",
+          hintStyle: const TextStyle(
             color: Colors.grey,
-            width: 1,
+            fontSize: 18,
+            fontWeight: FontWeight.w100,
           ),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20),
-          borderSide: const BorderSide(
-            color: AppColors.kMainColor,
-            width: 2,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: const BorderSide(
+              color: Colors.grey,
+              width: 1,
+            ),
           ),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20),
-          borderSide: BorderSide(
-            color: AppColors.kBlackColor.withOpacity(0.3),
-            width: 2
-          )
-        )
-      ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: const BorderSide(
+              color: AppColors.kMainColor,
+              width: 2,
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: BorderSide(
+                  color: AppColors.kBlackColor.withOpacity(0.3),
+                  width: 2))),
 
       // when tap the tik icon on keyboard or enter of keyboard
       onSubmitted: (value) {
@@ -243,8 +244,11 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
                   result['isSuccess']
                       ? "Image Saved Successfully."
                       : "Failed to Save Image.",
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white.withOpacity(0.7)
+                        : Colors.black,
                   ),
                 ),
               ),
@@ -272,14 +276,10 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
         width: double.infinity,
         height: 50,
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              AppColors.kMainColor,
-              AppColors.kMainColor.withOpacity(0.5),
-            ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter
-          ),
+          gradient: LinearGradient(colors: [
+            AppColors.kMainColor,
+            AppColors.kMainColor.withOpacity(0.5),
+          ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
           // color: AppColors.kMainColor,
           borderRadius: BorderRadius.circular(100),
           //color: AppColors.kMainColor,
