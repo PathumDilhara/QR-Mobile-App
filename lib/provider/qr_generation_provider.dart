@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:qr_mobile_app/model/generated_qr_model.dart';
 
-class QRGenerationProviderer extends ChangeNotifier{
+class QRGenerationProvider extends ChangeNotifier{
 
   // Empty list to store qr data as qr model objects
   List<GeneratedQRModel> allQRCodes = [];

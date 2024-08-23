@@ -3,9 +3,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_mobile_app/model/generated_qr_model.dart';
+import 'package:qr_mobile_app/provider/dark_mode_provider.dart';
 import 'package:qr_mobile_app/provider/qr_history_provider.dart';
 import 'package:qr_mobile_app/utils/colors.dart';
 import 'package:qr_mobile_app/utils/routers.dart';
+import 'package:qr_mobile_app/utils/theme_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'model/scanned_qr_model.dart';
@@ -18,9 +20,17 @@ void main() async {
   Hive.registerAdapter(ScannedQrModelAdapter());
   await Hive.openBox("generated_qr");
   await Hive.openBox("scanned_qr");
+  await Hive.openBox("settings");
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => QRHistoryProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => QRHistoryProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ThemeProvider(),
+        ),
+      ],
       child: const MyApp(),
     ),
   );
@@ -36,35 +46,21 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routerConfig: AppRouter.router,
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        scaffoldBackgroundColor: AppColors.kWhiteColor,
-        appBarTheme: const AppBarTheme(color: AppColors.kWhiteColor),
-        textTheme: GoogleFonts.dmSansTextTheme(
-          Theme.of(context).textTheme,
-        ),
-        colorScheme: ColorScheme.fromSwatch().copyWith(
-          secondary: AppColors.kMainColor,
-        ),
-      ),
-      darkTheme: ThemeData(
-        scaffoldBackgroundColor: Colors.black.withOpacity(0.5),
-        appBarTheme: const AppBarTheme(color: Colors.black),
-        textTheme: GoogleFonts.dmSansTextTheme(
-          Theme.of(context).textTheme.apply(
-                bodyColor: Colors.white,
-                displayColor: Colors.white,
-              ),
-        ),
-        colorScheme:
-            ColorScheme.fromSwatch(brightness: Brightness.dark).copyWith(
-          secondary: AppColors.kMainColor,
-        ),
-      ),
-      themeMode: ThemeMode
-          .system, // Automatically switches between dark and light theme
+    final Color bgColor = Theme.of(context).brightness == Brightness.dark
+        ? Colors.black
+        : Colors.white;
+    return Consumer2<ThemeProvider, QRHistoryProvider>(
+      builder: (BuildContext context, ThemeProvider themeProvider, QRHistoryProvider qrHistoryProvider, Widget? child) {
+        return MaterialApp.router(
+          routerConfig: AppRouter.router,
+          debugShowCheckedModeBanner: false,
+          theme: CustomThemeData.lightTheme(context),
+          darkTheme: CustomThemeData.darkTheme(context),
+          themeMode: themeProvider.currentTheme,
+          // themeMode: ThemeMode
+          //     .system, // Automatically switches between dark and light theme
+        );
+      },
     );
   }
 }
@@ -84,3 +80,4 @@ class _MyAppState extends State<MyApp> {
 // google font style
 // copy to clipboard button
 // qr save button
+// if scanned on url open browser

@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:qr_mobile_app/model/generated_qr_model.dart';
 import 'package:qr_mobile_app/utils/colors.dart';
@@ -21,8 +22,6 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
   final TextEditingController qrInputController = TextEditingController();
   String? qrData;
   final ScreenshotController screenshotController = ScreenshotController();
-  final QRHistoryProvider qrHistoryProvider = QRHistoryProvider();
-
   @override
   void dispose() {
     qrInputController.dispose();
@@ -121,6 +120,10 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
 
   // Text input field for provide data to create QR code
   Widget _buildTextField() {
+    // Don't create a new instance of QRHistoryProvider inside the onPressed callback,
+    // instead of using the one provided by the Provider.
+    // get existing instance
+    final qrHistoryProvider = Provider.of<QRHistoryProvider>(context);
     return TextField(
       maxLines: 2,
       autofocus:

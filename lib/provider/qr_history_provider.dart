@@ -60,6 +60,7 @@ class QRHistoryProvider extends ChangeNotifier {
   // Method to clear storage
   Future<void> clearGeneratedQRBox() async {
     await _myGenQRBox.clear();
+    notifyListeners();
   }
 
   // ******************************************************************************************
@@ -107,5 +108,6 @@ class QRHistoryProvider extends ChangeNotifier {
   // Method to clear storage
   Future<void> clearScnQRBox() async {
     await _myScnQRBox.clear();
+    notifyListeners();
   }
 }

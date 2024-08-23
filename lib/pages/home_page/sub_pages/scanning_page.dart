@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_mobile_app/model/scanned_qr_model.dart';
 import 'package:qr_mobile_app/provider/qr_history_provider.dart';
@@ -17,6 +18,15 @@ class _QRScanningPageState extends State<QRScanningPage> {
   final GlobalKey qrKey = GlobalKey(debugLabel: "QR");
   QRViewController? qrViewController;
   Barcode? result; // Variable to save the scanned QR code data
+
+  late QRHistoryProvider qrHistoryProvider; // Declare the provider
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize the provider
+    qrHistoryProvider = Provider.of<QRHistoryProvider>(context, listen: false);
+  }
 
 
   @override
@@ -102,7 +112,6 @@ class _QRScanningPageState extends State<QRScanningPage> {
 
   void _onQRViewCreated(QRViewController qrViewController) {
     this.qrViewController = qrViewController;
-    final QRHistoryProvider qrHistoryProvider = QRHistoryProvider();
     qrViewController.scannedDataStream.listen(
       (event) async {
         // what we want to do
@@ -122,7 +131,7 @@ class _QRScanningPageState extends State<QRScanningPage> {
             AppRouter.router
                 .push("/scan_result", extra: result!.code.toString());
             await qrHistoryProvider.storeScnQR(scannedQRModel);
-            print("************************${scannedQRModel.title}");
+            // print("************************${scannedQRModel.title}");
           }
         } catch (err) {
           print(err.toString());

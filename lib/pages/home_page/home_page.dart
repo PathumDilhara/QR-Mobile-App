@@ -42,9 +42,10 @@ class HomePage extends StatelessWidget {
         context,
         controller: persistentTabController,
         screens: const [
-          HistoryPage(),
+
           QRScanningPage(),
           QRGeneratingPage(),
+          HistoryPage(),
           SettingsPage(),
         ],
         items: _navBarItems(context),
