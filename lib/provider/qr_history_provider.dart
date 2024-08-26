@@ -19,10 +19,6 @@ class QRHistoryProvider extends ChangeNotifier {
     return _myGenQRBox.isEmpty;
   }
 
-  // QRHistoryProvider() {
-  //   loadGeneratedQRCodes();
-  // }
-
   // method to store new generated qr code to generated hive box
   Future<void> storeGeneratedQR(GeneratedQRModel generatedQRModel) async {
     try {

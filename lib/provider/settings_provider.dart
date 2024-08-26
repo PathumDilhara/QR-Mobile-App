@@ -1,24 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-class ThemeProvider extends ChangeNotifier {
+class SettingsProvider extends ChangeNotifier {
   final String _themeKey = 'themeMode';
+  final String _historyKey = "historySaving";
   late Box _box;
   late bool _isDarkMode;
+  late bool _isHistorySaving;
 
-  ThemeProvider() {
+  SettingsProvider() {
     _box = Hive.box('settings');
     _isDarkMode = _box.get(_themeKey, defaultValue: false); // Load the theme from Hive
+    _isHistorySaving = _box.get(_historyKey, defaultValue: true);
   }
 
   bool get isDarkMode => _isDarkMode;
+  bool get isHistorySaving => _isHistorySaving;
 
+  // Inbuilt parameters relevant to dark, light theme are in  main file and they
+  // are implemented in a separate file
+  // when we call them load the data that we defined
   ThemeMode get currentTheme => _isDarkMode ? ThemeMode.dark : ThemeMode.light;
 
   void toggleTheme() {
     _isDarkMode = !_isDarkMode;
     _box.put(_themeKey, _isDarkMode); // Save the new theme to Hive
     notifyListeners(); // Notify listeners to rebuild the UI with ThemeProvider Consumer
+  }
+
+  void toggleHistorySaving(){
+    _isHistorySaving = !_isHistorySaving;
+    _box.put(_historyKey, _isHistorySaving);
+    notifyListeners();
   }
 }
 

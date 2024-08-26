@@ -55,11 +55,11 @@ class GeneratedHistoryTab extends StatelessWidget {
                 child: Text(
                   "No history available",
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 23,
                     fontWeight: FontWeight.w500,
                     color: Theme.of(context).brightness == Brightness.dark
                         ? Colors.white.withOpacity(0.7)
-                        : Colors.black,
+                        : Colors.black.withOpacity(0.5),
                   ),
                 ),
               );

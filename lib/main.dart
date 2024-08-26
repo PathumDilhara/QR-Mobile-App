@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_mobile_app/model/generated_qr_model.dart';
-import 'package:qr_mobile_app/provider/dark_mode_provider.dart';
+import 'package:qr_mobile_app/provider/settings_provider.dart';
 import 'package:qr_mobile_app/provider/qr_history_provider.dart';
 import 'package:qr_mobile_app/utils/routers.dart';
 import 'package:qr_mobile_app/utils/theme_data.dart';
@@ -15,10 +15,10 @@ void main() async {
   await SharedPreferences.getInstance();
   await Hive.initFlutter();
   Hive.registerAdapter(GeneratedQRModelAdapter());
-  Hive.registerAdapter(ScannedQrModelAdapter());
+  Hive.registerAdapter(ScannedQrModelAdapter()); // data type ScannedQrModel
   await Hive.openBox("generated_qr");
   await Hive.openBox("scanned_qr");
-  await Hive.openBox("settings");
+  await Hive.openBox("settings"); // no need to register adapter bca setting contains primitive data type
   runApp(
     MultiProvider(
       providers: [
@@ -26,7 +26,7 @@ void main() async {
           create: (context) => QRHistoryProvider(),
         ),
         ChangeNotifierProvider(
-          create: (context) => ThemeProvider(),
+          create: (context) => SettingsProvider(),
         ),
       ],
       child: const MyApp(),
@@ -44,14 +44,14 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return Consumer2<ThemeProvider, QRHistoryProvider>(
-      builder: (BuildContext context, ThemeProvider themeProvider, QRHistoryProvider qrHistoryProvider, Widget? child) {
+    return Consumer2<SettingsProvider, QRHistoryProvider>(
+      builder: (BuildContext context, SettingsProvider themeProvider, QRHistoryProvider qrHistoryProvider, Widget? child) {
         return MaterialApp.router(
           routerConfig: AppRouter.router,
           debugShowCheckedModeBanner: false,
           theme: CustomThemeData.lightTheme(context),
           darkTheme: CustomThemeData.darkTheme(context),
-          themeMode: themeProvider.currentTheme,
+          themeMode: themeProvider.currentTheme, // load using "theme" & "darkTheme"
           // themeMode: ThemeMode
           //     .system, // Automatically switches between dark and light theme
         );

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qr_mobile_app/provider/dark_mode_provider.dart';
 import 'package:qr_mobile_app/utils/colors.dart';
 import 'package:qr_mobile_app/widgets/setting_widget.dart';
+
+import '../../provider/settings_provider.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-
-    final themeProvider  = Provider.of<ThemeProvider>(context);
+    final settingsProvider = Provider.of<SettingsProvider>(context);
     final Color textColor = Theme.of(context).brightness == Brightness.dark
         ? Colors.white.withOpacity(0.7)
         : Colors.black;
@@ -80,14 +80,13 @@ class SettingsPage extends StatelessWidget {
                         const SettingsContentWidget(title: "Dark Mode"),
                         const Spacer(),
                         Switch(
-                          value: themeProvider.isDarkMode,
+                          value: settingsProvider.isDarkMode,
                           activeColor: AppColors.kWhiteColor.withOpacity(0.7),
                           activeTrackColor: AppColors.kMainColor,
                           inactiveThumbColor: Colors.grey,
                           inactiveTrackColor: Colors.grey.withOpacity(0.3),
-
                           onChanged: (value) {
-                            themeProvider.toggleTheme();
+                            settingsProvider.toggleTheme();
                           },
                         ),
                       ],
@@ -95,7 +94,22 @@ class SettingsPage extends StatelessWidget {
                     Divider(
                       color: dividerColor,
                     ),
-                    const SettingsContentWidget(title: "History Auto save"),
+                    Row(
+                      children: [
+                        const SettingsContentWidget(title: "History Auto save"),
+                        const Spacer(),
+                        Switch(
+                          value: settingsProvider.isHistorySaving,
+                          activeColor: AppColors.kWhiteColor.withOpacity(0.7),
+                          activeTrackColor: AppColors.kMainColor,
+                          inactiveThumbColor: Colors.grey,
+                          inactiveTrackColor: Colors.grey.withOpacity(0.3),
+                          onChanged: (value) {
+                            settingsProvider.toggleHistorySaving();
+                          },
+                        )
+                      ],
+                    ),
                   ],
                 ),
               ),

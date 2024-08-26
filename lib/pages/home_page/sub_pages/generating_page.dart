@@ -10,6 +10,7 @@ import 'package:qr_mobile_app/utils/colors.dart';
 import 'package:screenshot/screenshot.dart';
 
 import '../../../provider/qr_history_provider.dart';
+import '../../../provider/settings_provider.dart';
 
 class QRGeneratingPage extends StatefulWidget {
   const QRGeneratingPage({super.key});
@@ -124,10 +125,11 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
     // instead of using the one provided by the Provider.
     // get existing instance
     final qrHistoryProvider = Provider.of<QRHistoryProvider>(context);
+    final settingsProvider = Provider.of<SettingsProvider>(context);
     return TextField(
       maxLines: 2,
       autofocus:
-      true, //  text field will focus itself if nothing else is already focused.
+          true, //  text field will focus itself if nothing else is already focused.
       onTap: () {
         setState(() {
           qrInputController.text = "";
@@ -147,7 +149,9 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
               // _qrImageView(qrData);
               //print(qrData);
               FocusScope.of(context).unfocus();
-              await qrHistoryProvider.storeGeneratedQR(generatedQRModel);
+              if (settingsProvider.isHistorySaving && qrInputController.text.isNotEmpty) {
+                await qrHistoryProvider.storeGeneratedQR(generatedQRModel);
+              }
             },
             icon: const Icon(
               Icons.done_outlined,
@@ -177,8 +181,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
           enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
               borderSide: BorderSide(
-                  color: AppColors.kBlackColor.withOpacity(0.3),
-                  width: 2))),
+                  color: AppColors.kBlackColor.withOpacity(0.3), width: 2))),
 
       // when tap the tik icon on keyboard or enter of keyboard
       onSubmitted: (value) {

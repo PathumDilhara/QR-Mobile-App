@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_mobile_app/model/scanned_qr_model.dart';
 import 'package:qr_mobile_app/provider/qr_history_provider.dart';
+import 'package:qr_mobile_app/provider/settings_provider.dart';
 import 'package:qr_mobile_app/utils/colors.dart';
 import 'package:qr_mobile_app/utils/routers.dart';
 import 'package:qr_mobile_app/utils/text_styles.dart';
@@ -20,6 +21,7 @@ class _QRScanningPageState extends State<QRScanningPage> {
   Barcode? result; // Variable to save the scanned QR code data
 
   late QRHistoryProvider qrHistoryProvider; // Declare the provider
+  late SettingsProvider settingsProvider; // Declare the provider
 
   // @override
   // void initState() {
@@ -110,7 +112,14 @@ class _QRScanningPageState extends State<QRScanningPage> {
   }
 
   void _onQRViewCreated(QRViewController qrViewController) {
+    // When you set listen: false, you're telling the Provider.of method that
+    // this widget does not need to rebuild when the QRHistoryProvider changes.
+    // This is useful when you only need to access the provider to call methods
+    // on it or perform some non-UI-related actions, like saving data or invoking
+    // a function, but you don't need to reflect any changes from the provider in
+    // the UI.
     qrHistoryProvider = Provider.of<QRHistoryProvider>(context, listen: false);
+    settingsProvider = Provider.of<SettingsProvider>(context, listen: false);
     this.qrViewController = qrViewController;
     qrViewController.scannedDataStream.listen(
       (event) async {
@@ -130,7 +139,9 @@ class _QRScanningPageState extends State<QRScanningPage> {
             qrViewController.pauseCamera();
             AppRouter.router
                 .push("/scan_result", extra: result!.code.toString());
-            await qrHistoryProvider.storeScnQR(scannedQRModel);
+            if(settingsProvider.isHistorySaving) {
+              await qrHistoryProvider.storeScnQR(scannedQRModel);
+            }
             // print("************************${scannedQRModel.title}");
           }
         } catch (err) {

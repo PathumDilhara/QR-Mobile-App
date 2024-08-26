@@ -69,13 +69,20 @@ class _ScanResultPageState extends State<ScanResultPage> {
                                 textAlign: TextAlign.center,
                               ),
                               Text(
-                                widget.result,
+                                widget.result.isNotEmpty
+                                    ? widget.result
+                                    : "Empty",
                                 style: TextStyle(
-                                    fontSize: 24,
-                                    color: Theme.of(context).brightness ==
-                                            Brightness.dark
-                                        ? AppColors.kWhiteColor.withOpacity(0.7)
-                                        : AppColors.kBlackColor.withOpacity(0.5)),
+                                  fontSize: 24,
+                                  color: widget.result.isNotEmpty
+                                      ? Theme.of(context).brightness ==
+                                              Brightness.dark
+                                          ? AppColors.kWhiteColor
+                                              .withOpacity(0.7)
+                                          : AppColors.kBlackColor
+                                              .withOpacity(0.5)
+                                      : Colors.red,
+                                ),
                                 textAlign: TextAlign.center,
                               ),
                             ],
@@ -90,7 +97,7 @@ class _ScanResultPageState extends State<ScanResultPage> {
             const Spacer(),
             IconButton(
               onPressed: () async {
-               await  Clipboard.setData(ClipboardData(text: widget.result));
+                await Clipboard.setData(ClipboardData(text: widget.result));
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     duration: const Duration(seconds: 1),
