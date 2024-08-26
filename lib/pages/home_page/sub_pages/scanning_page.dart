@@ -21,12 +21,11 @@ class _QRScanningPageState extends State<QRScanningPage> {
 
   late QRHistoryProvider qrHistoryProvider; // Declare the provider
 
-  @override
-  void initState() {
-    super.initState();
-    // Initialize the provider
-    qrHistoryProvider = Provider.of<QRHistoryProvider>(context, listen: false);
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   // Initialize the provider
+  // }
 
 
   @override
@@ -111,6 +110,7 @@ class _QRScanningPageState extends State<QRScanningPage> {
   }
 
   void _onQRViewCreated(QRViewController qrViewController) {
+    qrHistoryProvider = Provider.of<QRHistoryProvider>(context, listen: false);
     this.qrViewController = qrViewController;
     qrViewController.scannedDataStream.listen(
       (event) async {

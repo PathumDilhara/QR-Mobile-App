@@ -18,6 +18,11 @@ class ThemeProvider extends ChangeNotifier {
   void toggleTheme() {
     _isDarkMode = !_isDarkMode;
     _box.put(_themeKey, _isDarkMode); // Save the new theme to Hive
-    notifyListeners(); // Notify listeners to rebuild the UI
+    notifyListeners(); // Notify listeners to rebuild the UI with ThemeProvider Consumer
   }
 }
+
+// you don't need an adapter to store a simple bool value in Hive. Hive natively
+// supports basic data types like bool, int, double, String, List, and Map. For
+// storing a single bool value (such as for dark mode on/off), you can directly
+// open a box and put the data without needing an adapter.

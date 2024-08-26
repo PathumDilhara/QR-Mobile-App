@@ -10,7 +10,6 @@ import '../utils/floating_action_button_location.dart';
 class ScanHistoryTab extends StatelessWidget {
   const ScanHistoryTab({super.key});
 
-
   // @override
   @override
   Widget build(BuildContext context) {

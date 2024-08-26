@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_mobile_app/model/generated_qr_model.dart';
 import 'package:qr_mobile_app/provider/dark_mode_provider.dart';
 import 'package:qr_mobile_app/provider/qr_history_provider.dart';
-import 'package:qr_mobile_app/utils/colors.dart';
 import 'package:qr_mobile_app/utils/routers.dart';
 import 'package:qr_mobile_app/utils/theme_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -46,9 +44,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    final Color bgColor = Theme.of(context).brightness == Brightness.dark
-        ? Colors.black
-        : Colors.white;
     return Consumer2<ThemeProvider, QRHistoryProvider>(
       builder: (BuildContext context, ThemeProvider themeProvider, QRHistoryProvider qrHistoryProvider, Widget? child) {
         return MaterialApp.router(

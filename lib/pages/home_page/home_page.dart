@@ -33,16 +33,15 @@ class HomePage extends StatelessWidget {
               Theme.of(context).brightness == Brightness.dark
                   ? Colors.transparent
                   : Colors.white,
-          Theme.of(context).brightness == Brightness.dark
-              ? Colors.transparent
-              : Colors.white,
+              Theme.of(context).brightness == Brightness.dark
+                  ? Colors.transparent
+                  : Colors.white,
             ],
           ),
         ),
         context,
         controller: persistentTabController,
         screens: const [
-
           QRScanningPage(),
           QRGeneratingPage(),
           HistoryPage(),

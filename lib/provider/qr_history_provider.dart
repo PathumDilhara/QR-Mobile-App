@@ -5,6 +5,7 @@ import 'package:qr_mobile_app/model/scanned_qr_model.dart';
 import '../model/generated_qr_model.dart';
 
 class QRHistoryProvider extends ChangeNotifier {
+
   // Empty list to store qr data as qr model objects
   List<GeneratedQRModel> storedGenQRCodes = [];
   List<ScannedQrModel> storedScnQRCodes = [];
@@ -48,7 +49,8 @@ class QRHistoryProvider extends ChangeNotifier {
   // Method to delete a single history
   Future<void> deleteGeneratedQRCode(GeneratedQRModel generatedQRModel) async {
     try {
-      final dynamic allGenQRCodes = _myGenQRBox.get("generated_qr", defaultValue: []);
+      final dynamic allGenQRCodes =
+          _myGenQRBox.get("generated_qr", defaultValue: []);
       allGenQRCodes.remove(generatedQRModel);
       await _myGenQRBox.put("generated_qr", allGenQRCodes);
     } catch (err) {
@@ -96,7 +98,8 @@ class QRHistoryProvider extends ChangeNotifier {
   // Method to delete a single scn history
   Future<void> deleteScnQRCode(ScannedQrModel scannedQRModel) async {
     try {
-      final dynamic allScnQRCodes = _myScnQRBox.get("scanned_qr", defaultValue: []);
+      final dynamic allScnQRCodes =
+          _myScnQRBox.get("scanned_qr", defaultValue: []);
       allScnQRCodes.remove(scannedQRModel);
       await _myScnQRBox.put("scanned_qr", allScnQRCodes);
     } catch (err) {
