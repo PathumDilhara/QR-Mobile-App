@@ -8,6 +8,8 @@ import 'package:qr_mobile_app/utils/colors.dart';
 import 'package:qr_mobile_app/utils/routers.dart';
 import 'package:qr_mobile_app/utils/text_styles.dart';
 
+import '../../../utils/floating_action_button_location.dart';
+
 class QRScanningPage extends StatefulWidget {
   const QRScanningPage({super.key});
 
@@ -28,7 +30,6 @@ class _QRScanningPageState extends State<QRScanningPage> {
   //   super.initState();
   //   // Initialize the provider
   // }
-
 
   @override
   void dispose() {
@@ -58,6 +59,13 @@ class _QRScanningPageState extends State<QRScanningPage> {
         ? 300.0
         : 300.0;
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          openBottomSheet();
+        },
+        child: Icon(Icons.add),
+      ),
+      floatingActionButtonLocation: CustomFabLocation(),
       body: Stack(
         children: [
           Column(
@@ -139,7 +147,7 @@ class _QRScanningPageState extends State<QRScanningPage> {
             qrViewController.pauseCamera();
             AppRouter.router
                 .push("/scan_result", extra: result!.code.toString());
-            if(settingsProvider.isHistorySaving) {
+            if (settingsProvider.isHistorySaving) {
               await qrHistoryProvider.storeScnQR(scannedQRModel);
             }
             // print("************************${scannedQRModel.title}");
@@ -246,6 +254,29 @@ class _QRScanningPageState extends State<QRScanningPage> {
           },
         ),
       ),
+    );
+  }
+
+  // Open bottom sheet
+  void openBottomSheet() {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          height: MediaQuery.of(context).size.height * 0.45,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30),
+            color: Colors.grey.withOpacity(0.3),
+          ),
+          child: Center(
+            child: Column(
+              children: <Widget>[
+                const Text('Modal BottomSheet'),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

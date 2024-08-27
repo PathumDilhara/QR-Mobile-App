@@ -1,8 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
+import 'package:qr_mobile_app/pages/settings_page/content/faq_page.dart';
+import 'package:qr_mobile_app/pages/settings_page/content/feedback_page.dart';
 import 'package:qr_mobile_app/pages/home_page/home_page.dart';
 import 'package:qr_mobile_app/pages/home_page/sub_pages/scan_result_page.dart';
 import 'package:qr_mobile_app/pages/onboarding_screen/onboarding_screens.dart';
+import 'package:qr_mobile_app/pages/settings_page/content/privacy_policy_page.dart';
+import 'package:qr_mobile_app/pages/settings_page/settings_page.dart';
 import 'package:qr_mobile_app/user_services/shared_preferences_services/user_services.dart';
 
 class AppRouter {
@@ -50,6 +54,32 @@ class AppRouter {
             result: result,
           );
         },
+      ),
+
+      // Settings page
+      GoRoute(
+        name: "settings page",
+        path: "/settings",
+        builder: (context, state) => const SettingsPage(),
+      ),
+      GoRoute(
+        name: "faq page",
+        path: "/faq",
+        builder: (context, state) => const FAQPage(),
+      ),
+
+      // Feedback page
+      GoRoute(
+        name: "feedback page",
+        path: "/feedback",
+        builder: (context, state) => const FeedbackPages(),
+      ),
+
+      // Privacy policy page
+      GoRoute(
+        name: "privacy policy page",
+        path: "/privacy_policy",
+        builder: (context, state) => const PrivacyPolicyPage(),
       ),
     ],
   );

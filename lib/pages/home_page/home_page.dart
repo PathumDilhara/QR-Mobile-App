@@ -32,10 +32,10 @@ class HomePage extends StatelessWidget {
             colors: [
               Theme.of(context).brightness == Brightness.dark
                   ? Colors.transparent
-                  : Colors.white,
+                  : AppColors.kScaffoldBgColor,
               Theme.of(context).brightness == Brightness.dark
                   ? Colors.transparent
-                  : Colors.white,
+                  : AppColors.kScaffoldBgColor,
             ],
           ),
         ),

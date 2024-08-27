@@ -4,6 +4,7 @@ import 'package:qr_mobile_app/utils/colors.dart';
 import 'package:qr_mobile_app/widgets/setting_widget.dart';
 
 import '../../provider/settings_provider.dart';
+import '../../utils/routers.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -24,6 +25,7 @@ class SettingsPage extends StatelessWidget {
         ? Colors.grey.withOpacity(0.3)
         : Colors.grey.withOpacity(0.6);
     return Scaffold(
+      backgroundColor: AppColors.kScaffoldBgColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         title: Text(
@@ -140,28 +142,42 @@ class SettingsPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SettingsContentWidget(title: "Dark mode"),
+                    GestureDetector(
+                      onTap: () {
+                        AppRouter.router.push("/faq");
+                      },
+                      child: Container(
+                          color: Colors.transparent,
+                          width: double.infinity,
+                          child: const SettingsContentWidget(title: "FAQ")),
+                    ),
                     Divider(
                       color: dividerColor,
                     ),
-                    const SettingsContentWidget(title: "Dark mode"),
+                    GestureDetector(
+                      onTap: () {
+                        AppRouter.router.push("/feedback");
+                      },
+                        child: Container(
+                            color: Colors.transparent,
+                            width: double.infinity,
+                            child: const SettingsContentWidget(title: "Feedback"))),
                     Divider(
                       color: dividerColor,
                     ),
-                    const SettingsContentWidget(title: "Dark mode"),
+                    GestureDetector(
+                      onTap: () {
+                        AppRouter.router.push("/privacy_policy");
+                      },
+                        child: Container(
+                            color: Colors.transparent,
+                            width: double.infinity,
+                            child: const SettingsContentWidget(title: "Privacy policy"))),
                   ],
                 ),
               ),
               const SizedBox(
                 height: 10,
-              ),
-              Container(
-                width: double.infinity,
-                height: 500,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: bgColor,
-                ),
               ),
             ],
           ),
