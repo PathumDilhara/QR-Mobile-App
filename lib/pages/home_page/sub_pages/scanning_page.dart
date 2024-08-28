@@ -1,14 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_mobile_app/model/scanned_qr_model.dart';
 import 'package:qr_mobile_app/provider/qr_history_provider.dart';
 import 'package:qr_mobile_app/provider/settings_provider.dart';
 import 'package:qr_mobile_app/utils/colors.dart';
-import 'package:qr_mobile_app/utils/routers.dart';
 import 'package:qr_mobile_app/utils/text_styles.dart';
-
-import '../../../utils/floating_action_button_location.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class QRScanningPage extends StatefulWidget {
   const QRScanningPage({super.key});
@@ -43,11 +44,11 @@ class _QRScanningPageState extends State<QRScanningPage> {
   @override
   void reassemble() {
     super.reassemble();
-    // if (Platform.isAndroid) {
-    //   qrViewController!.pauseCamera();
-    // } else if (Platform.isIOS) {
-    //   qrViewController!.resumeCamera();
-    // }
+    if (Platform.isAndroid) {
+      qrViewController?.pauseCamera();
+    } else if (Platform.isIOS) {
+      qrViewController?.resumeCamera();
+    }
   }
 
   bool isCameraPaused = false; // State variable to track camera status
@@ -59,13 +60,13 @@ class _QRScanningPageState extends State<QRScanningPage> {
         ? 300.0
         : 300.0;
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          openBottomSheet();
-        },
-        child: Icon(Icons.add),
-      ),
-      floatingActionButtonLocation: CustomFabLocation(),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     openBottomSheet();
+      //   },
+      //   child: const Icon(Icons.add),
+      // ),
+      // floatingActionButtonLocation: CustomFabLocation(),
       body: Stack(
         children: [
           Column(
@@ -145,8 +146,8 @@ class _QRScanningPageState extends State<QRScanningPage> {
 
             // Pause camera and navigate to result page
             qrViewController.pauseCamera();
-            AppRouter.router
-                .push("/scan_result", extra: result!.code.toString());
+            openBottomSheet(result!.code.toString());
+            // AppRouter.router.push("/scan_result", extra: result!.code.toString());
             if (settingsProvider.isHistorySaving) {
               await qrHistoryProvider.storeScnQR(scannedQRModel);
             }
@@ -258,25 +259,234 @@ class _QRScanningPageState extends State<QRScanningPage> {
   }
 
   // Open bottom sheet
-  void openBottomSheet() {
+  void openBottomSheet(String qrCode) {
+    const urlPattern =
+        r'^(https?:\/\/)?([\w-]+(\.[\w-]+)+)(\/[\w- ;,./?%&=]*)?$';
+    final regExp = RegExp(urlPattern);
     showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) {
+        // bottom sheet main container
         return Container(
           height: MediaQuery.of(context).size.height * 0.45,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
             color: Colors.grey.withOpacity(0.3),
           ),
-          child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
             child: Column(
-              children: <Widget>[
-                const Text('Modal BottomSheet'),
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // draggable indicator
+                Container(
+                  width: 50,
+                  height: 5,
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                ),
+
+                const SizedBox(
+                  height: 10,
+                ),
+
+                // Qr code result container
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Container(
+                      width: double.infinity,
+                      // Set minimum height
+                      constraints: BoxConstraints(
+                        minHeight: MediaQuery.of(context).size.height * 0.1,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: Colors.grey.withOpacity(0.3),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text(
+                          qrCode,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontStyle: FontStyle.italic,
+                            fontSize: 23,
+                            color: regExp.hasMatch(qrCode)
+                                ? Colors.blue
+                                : Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(
+                  height: 10,
+                ),
+
+                // advertisement area and copy button
+                Column(
+                  children: [
+                    // advertisement area
+                    Image.asset(
+                      "assets/images/Screenshot 2024-08-27 214725.png",
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+
+                    // buttons
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        // Open in browser
+                        // InkWell(
+                        //   onTap: () {
+                        //     _launchURL(qrCode);
+                        //   },
+                        //   borderRadius: BorderRadius.circular(10),
+                        //   child: Material(
+                        //     color: Colors.transparent, // Set the background color to transparent
+                        //     borderRadius: BorderRadius.circular(10),
+                        //     child: Container(
+                        //       // margin: const EdgeInsets.symmetric(
+                        //       //   horizontal: 30,
+                        //       // ),
+                        //       width: MediaQuery.of(context).size.width * 0.43,
+                        //       height: 50,
+                        //       decoration: BoxDecoration(
+                        //         borderRadius: BorderRadius.circular(10),
+                        //         color: AppColors.kMainColor,
+                        //       ),
+                        //       child: Center(
+                        //         child: Text(
+                        //           "Open in browser",
+                        //           style: AppTextStyles.appTitleStyle.copyWith(
+                        //             color: AppColors.kWhiteColor,
+                        //             fontSize: 20,
+                        //           ),
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
+
+                        // Open in browser
+                        ElevatedButton(
+                          onPressed: regExp.hasMatch(qrCode)?() {
+                            _launchURL(qrCode);
+                          }
+                          : null,
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(horizontal: 0),
+                            minimumSize: Size(MediaQuery.of(context).size.width* 0.9, 50),
+                            backgroundColor: regExp.hasMatch(qrCode)? AppColors.kMainColor : Colors.grey,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: Text(
+                            "Open in browser",
+                            style: AppTextStyles.appTitleStyle.copyWith(
+                              color: AppColors.kWhiteColor,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10,),
+                        // Copy to clipboard
+                        ElevatedButton(
+                          onPressed: () async {
+                            try {
+                              await Clipboard.setData(
+                                ClipboardData(text: qrCode),
+                              );
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  duration: const Duration(seconds: 1),
+                                  backgroundColor: AppColors.kMainColor,
+                                  content: Text(
+                                    "Copied to clipboard",
+                                    style: AppTextStyles.appDescriptionTextStyle
+                                        .copyWith(
+                                      fontSize: 16,
+                                      color: AppColors.kWhiteColor,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            } catch (err) {
+                              SnackBar(
+                                duration: const Duration(seconds: 1),
+                                backgroundColor: AppColors.kMainColor,
+                                content: Text(
+                                  "Error copying to clipboard",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: AppTextStyles.appDescriptionTextStyle
+                                      .copyWith(
+                                    fontSize: 16,
+                                    color: AppColors.kWhiteColor,
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: Size(MediaQuery.of(context).size.width* 0.9, 50),
+                            //maximumSize: Size(MediaQuery.of(context).size.width* 0.48, 50),
+                            backgroundColor: AppColors.kMainColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: Text(
+                            "Copy to clipboard",
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTextStyles.appTitleStyle.copyWith(
+                              color: AppColors.kWhiteColor,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: kBottomNavigationBarHeight + 15,
+                ),
               ],
             ),
           ),
         );
       },
-    );
+    ).whenComplete(() {
+      // Resume the camera when the bottom sheet is dismissed
+      qrViewController?.resumeCamera();
+    });
+  }
+
+  Future<void> _launchURL(String qrCode) async {
+    final Uri url = Uri.parse(qrCode);
+
+    // Regular expression for validating URLs
+    const urlPattern =
+        r'^(https?:\/\/)?([\w-]+(\.[\w-]+)+)(\/[\w- ;,./?%&=]*)?$';
+    final regExp = RegExp(urlPattern);
+
+    // print(regExp.hasMatch(qrCode));
+    if (regExp.hasMatch(qrCode) && await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      throw Exception("Invalid URL or could not launch $url");
+    }
   }
 }

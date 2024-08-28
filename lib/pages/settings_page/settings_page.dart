@@ -25,7 +25,7 @@ class SettingsPage extends StatelessWidget {
         ? Colors.grey.withOpacity(0.3)
         : Colors.grey.withOpacity(0.6);
     return Scaffold(
-      backgroundColor: AppColors.kScaffoldBgColor,
+      // backgroundColor: AppColors.kScaffoldBgColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         title: Text(

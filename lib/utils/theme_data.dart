@@ -7,7 +7,7 @@ class CustomThemeData {
   static ThemeData lightTheme(BuildContext context) {
     final Color bgColor = Theme.of(context).brightness == Brightness.dark
         ? Colors.black
-        : Colors.white;
+        : AppColors.kScaffoldBgColor;
     return ThemeData(
       scaffoldBackgroundColor: bgColor,
       appBarTheme: const AppBarTheme(color: AppColors.kWhiteColor),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:qr_mobile_app/utils/routers.dart';
 import 'package:qr_mobile_app/utils/text_styles.dart';
 
 class FAQPage extends StatelessWidget {

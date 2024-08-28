@@ -38,23 +38,25 @@ class AppRouter {
         path: "/onboarding_screen",
         builder: (context, state) => const OnboardingScreen(),
       ),
+
       // Home page
       GoRoute(
         name: "home",
         path: "/home",
         builder: (context, state) => const HomePage(),
       ),
+
       // Scan result page
-      GoRoute(
-        name: "scan result",
-        path: "/scan_result",
-        builder: (context, state) {
-          final result = state.extra as String;
-          return ScanResultPage(
-            result: result,
-          );
-        },
-      ),
+      // GoRoute(
+      //   name: "scan result",
+      //   path: "/scan_result",
+      //   builder: (context, state) {
+      //     final result = state.extra as String;
+      //     return ScanResultPage(
+      //       result: result,
+      //     );
+      //   },
+      // ),
 
       // Settings page
       GoRoute(
@@ -62,6 +64,8 @@ class AppRouter {
         path: "/settings",
         builder: (context, state) => const SettingsPage(),
       ),
+
+      // FAQ page
       GoRoute(
         name: "faq page",
         path: "/faq",
