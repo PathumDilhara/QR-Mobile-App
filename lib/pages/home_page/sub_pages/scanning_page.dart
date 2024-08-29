@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -44,11 +43,11 @@ class _QRScanningPageState extends State<QRScanningPage> {
   @override
   void reassemble() {
     super.reassemble();
-    if (Platform.isAndroid) {
-      qrViewController?.pauseCamera();
-    } else if (Platform.isIOS) {
-      qrViewController?.resumeCamera();
-    }
+    // if (Platform.isAndroid) {
+    //   qrViewController?.pauseCamera();
+    // } else if (Platform.isIOS) {
+    //   qrViewController?.resumeCamera();
+    // }
   }
 
   bool isCameraPaused = false; // State variable to track camera status

@@ -17,7 +17,7 @@ class SettingsContentWidget extends StatelessWidget {
             title,
             textAlign: TextAlign.start,
             style: TextStyle(
-              fontSize: 23,
+              fontSize: 18,
               fontWeight: FontWeight.bold,
               color: Theme.of(context).brightness == Brightness.dark
                   ? Colors.white.withOpacity(0.7)
