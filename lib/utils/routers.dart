@@ -3,16 +3,17 @@ import 'package:go_router/go_router.dart';
 import 'package:qr_mobile_app/pages/settings_page/content/faq_page.dart';
 import 'package:qr_mobile_app/pages/settings_page/content/feedback_page.dart';
 import 'package:qr_mobile_app/pages/home_page/home_page.dart';
-import 'package:qr_mobile_app/pages/home_page/sub_pages/scan_result_page.dart';
 import 'package:qr_mobile_app/pages/onboarding_screen/onboarding_screens.dart';
 import 'package:qr_mobile_app/pages/settings_page/content/privacy_policy_page.dart';
 import 'package:qr_mobile_app/pages/settings_page/settings_page.dart';
 import 'package:qr_mobile_app/user_services/shared_preferences_services/user_services.dart';
 
+import '../pages/custom_splash_screen/custom_splash_screen.dart';
+
 class AppRouter {
   static final router = GoRouter(
     navigatorKey: GlobalKey<NavigatorState>(),
-    initialLocation: "/onboarding_screen",
+    initialLocation: "/splash_screen",
     redirect: (context, state) async {
       bool loginState = await UserServices.checkLoginState();
 
@@ -32,6 +33,11 @@ class AppRouter {
       return null;
     },
     routes: [
+      GoRoute(
+        name: "splash_screen",
+        path: "/splash_screen",
+        builder: (context, state) => const CustomSplashScreen(),
+      ),
       // Onboarding screens
       GoRoute(
         name: "onboarding_screen",
