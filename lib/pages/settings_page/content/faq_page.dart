@@ -6,8 +6,15 @@ class FAQPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    bool isDark = Theme.of(context).brightness == Brightness.dark;
+    Color backgroundColor = isDark ? Colors.black : Colors.white.withOpacity(0.95);
+    Color titleColor = isDark ? Colors.white.withOpacity(0.7) : Colors.black;
+
     return Scaffold(
+      backgroundColor: backgroundColor,
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
         // automaticallyImplyLeading: false,
         // leading: IconButton(
         //     onPressed: () {
@@ -16,7 +23,7 @@ class FAQPage extends StatelessWidget {
         //     icon: const Icon(Icons.arrow_back),),
         title: Text(
           "FAQ",
-          style: AppTextStyles.appTitleStyle,
+          style: AppTextStyles.appTitleStyle.copyWith(color: titleColor),
         ),
       ),
       body: const Center(

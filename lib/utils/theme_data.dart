@@ -4,12 +4,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'colors.dart';
 
 class CustomThemeData {
+
   static ThemeData lightTheme(BuildContext context) {
-    final Color bgColor = Theme.of(context).brightness == Brightness.dark
-        ? Colors.black
-        : AppColors.kScaffoldBgColor;
+    // final Color bgColor = Theme.of(context).brightness == Brightness.dark
+    //     ? Colors.black
+    //     : AppColors.kScaffoldBgColor;
     return ThemeData(
-      scaffoldBackgroundColor: bgColor,
+      scaffoldBackgroundColor: AppColors.kScaffoldBgColor,
       appBarTheme: const AppBarTheme(color: AppColors.kWhiteColor),
       textTheme: GoogleFonts.dmSansTextTheme(
         Theme.of(context).textTheme,

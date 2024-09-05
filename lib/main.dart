@@ -76,3 +76,4 @@ class _MyAppState extends State<MyApp> {
 // copy to clipboard button
 // qr save button
 // if scanned on url open browser
+// change splash screen

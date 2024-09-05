@@ -16,14 +16,17 @@ class SettingsPage extends StatelessWidget {
         ? Colors.white.withOpacity(0.7)
         : Colors.black;
     final Color titleColor = Theme.of(context).brightness == Brightness.dark
-        ? AppColors.kMainColor
-        : AppColors.kMainColor;
+        ? Colors.grey
+        : Colors.grey;
     final Color bgColor = Theme.of(context).brightness == Brightness.dark
         ? Colors.grey.withOpacity(0.3)
         : Colors.white;
-    final Color dividerColor = Theme.of(context).brightness == Brightness.dark
-        ? Colors.grey.withOpacity(0.3)
-        : Colors.grey.withOpacity(0.6);
+    // final Color dividerColor = Theme.of(context).brightness == Brightness.dark
+    //     ? Colors.grey.withOpacity(0.3)
+    //     : Colors.grey.withOpacity(0.3);
+
+    const double adHeight = 30;
+
     return Scaffold(
       // backgroundColor: AppColors.kScaffoldBgColor,
       appBar: AppBar(
@@ -36,12 +39,11 @@ class SettingsPage extends StatelessWidget {
             color: textColor,
           ),
         ),
-        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.only(
-          left: 10,
-          right: 10,
+          left: 20,
+          right: 20,
           bottom: 76,
           top: 10,
         ),
@@ -50,134 +52,269 @@ class SettingsPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(
-                height: 10,
+                height: 30,
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Text(
-                  "General settings",
-                  style: TextStyle(
-                    fontSize: 23,
-                    fontWeight: FontWeight.bold,
-                    color: titleColor,
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: AppColors.kMainColor,
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        spreadRadius: 3, // How much the shadow spreads
+                        blurRadius: 6, // How soft the shadow looks
+                        offset: const Offset(0, 3) // position of the shadow
+                        ),
+                  ],
+                ),
+                child: const Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: Center(
+                    child: Text(
+                      "Update to pro",
+                      style: TextStyle(
+                        fontSize: 28,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
+                ),
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+              Text(
+                "General settings",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: titleColor,
                 ),
               ),
               const SizedBox(
                 height: 10,
               ),
-              Container(
-                padding: const EdgeInsets.all(10),
-                width: double.infinity,
-                // height: 200,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: bgColor,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        const SettingsContentWidget(title: "Dark Mode"),
-                        const Spacer(),
-                        Switch(
-                          value: settingsProvider.isDarkMode,
-                          activeColor: AppColors.kWhiteColor.withOpacity(0.7),
-                          activeTrackColor: AppColors.kMainColor,
-                          inactiveThumbColor: Colors.grey,
-                          inactiveTrackColor: Colors.grey.withOpacity(0.3),
-                          onChanged: (value) {
-                            settingsProvider.toggleTheme();
-                          },
-                        ),
-                      ],
-                    ),
-                    Divider(
-                      color: dividerColor,
-                    ),
-                    Row(
-                      children: [
-                        const SettingsContentWidget(title: "History Auto save"),
-                        const Spacer(),
-                        Switch(
-                          value: settingsProvider.isHistorySaving,
-                          activeColor: AppColors.kWhiteColor.withOpacity(0.7),
-                          activeTrackColor: AppColors.kMainColor,
-                          inactiveThumbColor: Colors.grey,
-                          inactiveTrackColor: Colors.grey.withOpacity(0.3),
-                          onChanged: (value) {
-                            settingsProvider.toggleHistorySaving();
-                          },
-                        )
-                      ],
-                    ),
-                  ],
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  width: double.infinity,
+                  // height: 200,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: bgColor,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          const SettingsContentWidget(title: "Dark Mode"),
+                          const Spacer(),
+                          Switch(
+                            value: settingsProvider.isDarkMode,
+                            activeColor:
+                                AppColors.kWhiteColor.withOpacity(0.7),
+                            activeTrackColor: AppColors.kMainColor,
+                            inactiveThumbColor: Colors.grey,
+                            inactiveTrackColor:
+                                Colors.grey.withOpacity(0.3),
+                            onChanged: (value) {
+                              settingsProvider.toggleTheme();
+                            },
+                          ),
+                        ],
+                      ),
+                      Divider(
+                        color: Colors.grey.withOpacity(0.6),
+                      ),
+                      Row(
+                        children: [
+                          const SettingsContentWidget(
+                              title: "History Auto save"),
+                          const Spacer(),
+                          Switch(
+                            value: settingsProvider.isHistorySaving,
+                            activeColor:
+                                AppColors.kWhiteColor.withOpacity(0.7),
+                            activeTrackColor: AppColors.kMainColor,
+                            inactiveThumbColor: Colors.grey,
+                            inactiveTrackColor:
+                                Colors.grey.withOpacity(0.3),
+                            onChanged: (value) {
+                              settingsProvider.toggleHistorySaving();
+                            },
+                          )
+                        ],
+                      ),
+                      Divider(
+                        color: Colors.grey.withOpacity(0.6),
+                      ),
+                      Row(
+                        children: [
+                          const SettingsContentWidget(
+                              title: "Enable notifications"),
+                          const Spacer(),
+                          Switch(
+                            value: settingsProvider.notificationEnabled,
+                            activeColor:
+                                AppColors.kWhiteColor.withOpacity(0.7),
+                            activeTrackColor: AppColors.kMainColor,
+                            inactiveThumbColor: Colors.grey,
+                            inactiveTrackColor:
+                                Colors.grey.withOpacity(0.3),
+                            onChanged: (value) {
+                              settingsProvider.toggleNotificationsShowing();
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(
                 height: 30,
               ),
+
+              // Help area
+              Text(
+                "Help",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: titleColor,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Text(
-                  "Help",
-                  style: TextStyle(
-                    fontSize: 23,
-                    fontWeight: FontWeight.bold,
-                    color: titleColor,
+                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: bgColor,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          AppRouter.router.push("/faq");
+                        },
+                        child: Container(
+                          color: Colors.transparent,
+                          width: double.infinity,
+                          child: const SettingsContentWidget(title: "FAQ"),
+                        ),
+                      ),
+                      Divider(
+                        color: Colors.grey.withOpacity(0.6),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          AppRouter.router.push("/feedback");
+                        },
+                        child: Container(
+                          color: Colors.transparent,
+                          width: double.infinity,
+                          child: const SettingsContentWidget(
+                              title: "Feedback"),
+                        ),
+                      ),
+                      Divider(
+                        color: Colors.grey.withOpacity(0.6),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          AppRouter.router.push("/privacy_policy");
+                        },
+                        child: Container(
+                          color: Colors.transparent,
+                          width: double.infinity,
+                          child: const SettingsContentWidget(
+                              title: "Privacy policy"),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
               const SizedBox(
-                height: 10,
+                height: 30,
               ),
-              Container(
-                padding: const EdgeInsets.all(10),
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: bgColor,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        AppRouter.router.push("/faq");
-                      },
-                      child: Container(
-                          color: Colors.transparent,
-                          width: double.infinity,
-                          child: const SettingsContentWidget(title: "FAQ")),
-                    ),
-                    Divider(
-                      color: dividerColor,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        AppRouter.router.push("/feedback");
-                      },
-                        child: Container(
-                            color: Colors.transparent,
-                            width: double.infinity,
-                            child: const SettingsContentWidget(title: "Feedback"))),
-                    Divider(
-                      color: dividerColor,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        AppRouter.router.push("/privacy_policy");
-                      },
-                        child: Container(
-                            color: Colors.transparent,
-                            width: double.infinity,
-                            child: const SettingsContentWidget(title: "Privacy policy"))),
-                  ],
+
+              // More info area
+              Text(
+                "More info",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: titleColor,
                 ),
               ),
               const SizedBox(
                 height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: bgColor,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          AppRouter.router.push("/update");
+                        },
+                        child: Container(
+                          color: Colors.transparent,
+                          width: double.infinity,
+                          child: const SettingsContentWidget(
+                              title: "Check for updates"),
+                        ),
+                      ),
+                      Divider(
+                        color: Colors.grey.withOpacity(0.6),
+                      ),
+                      Container(
+                        color: Colors.transparent,
+                        width: double.infinity,
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 10.0),
+                          child: Row(
+                            children: [
+                              const SettingsContentWidget(title: "Version"),
+                              const Spacer(),
+                              Text(
+                                "10.01.5",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  fontStyle: FontStyle.italic,
+                                  color: Theme.of(context).brightness ==
+                                          Brightness.dark
+                                      ? Colors.white.withOpacity(0.7)
+                                      : Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),
@@ -186,3 +323,25 @@ class SettingsPage extends StatelessWidget {
     );
   }
 }
+
+
+
+// Positioned(
+// left: 0,
+// right: 0,
+// bottom: kBottomNavigationBarHeight + 20,
+// child: Padding(
+// padding: const EdgeInsets.symmetric(horizontal: 10.0),
+// child: Container(
+// width: double.infinity,
+// height: 100,
+// color: AppColors.kMainColor.withOpacity(0.3),
+// child: const Center(
+// child: Text(
+// "Advertisement here",
+// style: TextStyle(fontSize: 20, color: Colors.white),
+// ),
+// ),
+// ),
+// ),
+// ),

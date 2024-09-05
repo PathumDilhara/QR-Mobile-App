@@ -20,9 +20,11 @@ class QRGeneratingPage extends StatefulWidget {
 }
 
 class _QRGeneratingPageState extends State<QRGeneratingPage> {
+
   final TextEditingController qrInputController = TextEditingController();
   String? qrData;
   final ScreenshotController screenshotController = ScreenshotController();
+
   @override
   void dispose() {
     qrInputController.dispose();

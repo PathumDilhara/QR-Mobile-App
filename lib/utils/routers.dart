@@ -9,6 +9,7 @@ import 'package:qr_mobile_app/pages/settings_page/settings_page.dart';
 import 'package:qr_mobile_app/user_services/shared_preferences_services/user_services.dart';
 
 import '../pages/custom_splash_screen/custom_splash_screen.dart';
+import '../pages/update_page/update_page.dart';
 
 class AppRouter {
   static final router = GoRouter(
@@ -90,6 +91,13 @@ class AppRouter {
         name: "privacy policy page",
         path: "/privacy_policy",
         builder: (context, state) => const PrivacyPolicyPage(),
+      ),
+
+      // Update page
+      GoRoute(
+        name: "update page",
+        path: "/update",
+        builder: (context, state) => const UpdatePage(),
       ),
     ],
   );

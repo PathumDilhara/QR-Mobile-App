@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../utils/text_styles.dart';
-
-class PrivacyPolicyPage extends StatelessWidget {
-  const PrivacyPolicyPage({super.key});
+class UpdatePage extends StatelessWidget {
+  const UpdatePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,10 +14,7 @@ class PrivacyPolicyPage extends StatelessWidget {
       backgroundColor: backgroundColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: Text(
-          "privacy policy",
-          style: AppTextStyles.appTitleStyle.copyWith(color: titleColor),
-        ),
+        title: Text("Update page"),
       ),
     );
   }
