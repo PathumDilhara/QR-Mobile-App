@@ -233,65 +233,58 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
 
   // Save button
   Widget _saveButton() {
-    return GestureDetector(
-      onTap: () async {
-        try {
-          await _requestPermission();
-          // check unnecessary imports
-          await Future.delayed(const Duration(milliseconds: 300));
-          final Uint8List? image = await screenshotController.capture();
-          if (image != null) {
-            final result =
-                await ImageGallerySaver.saveImage(image, name: "MyQrImage");
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                elevation: 3,
-                backgroundColor: AppColors.kMainColor,
-                duration: const Duration(seconds: 1),
-                content: Text(
-                  result['isSuccess']
-                      ? "Image Saved Successfully."
-                      : "Failed to Save Image.",
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Theme.of(context).brightness == Brightness.dark
-                        ? Colors.white.withOpacity(0.7)
-                        : Colors.black,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 20),
+      child: ElevatedButton(
+        style: ButtonStyle(
+          overlayColor: WidgetStatePropertyAll(Colors.white.withOpacity(0.1)),
+          minimumSize: const WidgetStatePropertyAll(
+            Size(double.infinity, 50),
+          ),
+          backgroundColor: const WidgetStatePropertyAll(AppColors.kMainColor),
+        ),
+        onPressed: () async {
+          try {
+            await _requestPermission();
+            // check unnecessary imports
+            await Future.delayed(const Duration(milliseconds: 300));
+            final Uint8List? image = await screenshotController.capture();
+            if (image != null) {
+              final result =
+                  await ImageGallerySaver.saveImage(image, name: "MyQrImage");
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  elevation: 3,
+                  backgroundColor: AppColors.kMainColor,
+                  duration: const Duration(seconds: 1),
+                  content: Text(
+                    result['isSuccess']
+                        ? "Image Saved Successfully."
+                        : "Failed to Save Image.",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white.withOpacity(0.7)
+                          : Colors.black,
+                    ),
                   ),
+                ),
+              );
+            }
+          } catch (err) {
+            // print('Error saving image: $err');
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                backgroundColor: Colors.red,
+                duration: Duration(seconds: 1),
+                content: Text(
+                  "Failed to capture image.",
+                  style: TextStyle(fontSize: 18),
                 ),
               ),
             );
           }
-        } catch (err) {
-          // print('Error saving image: $err');
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              backgroundColor: Colors.red,
-              duration: Duration(seconds: 1),
-              content: Text(
-                "Failed to capture image.",
-                style: TextStyle(fontSize: 18),
-              ),
-            ),
-          );
-        }
-      },
-      child: Container(
-        margin: const EdgeInsets.symmetric(
-          horizontal: 50,
-          vertical: 20,
-        ),
-        width: double.infinity,
-        height: 50,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(colors: [
-            AppColors.kMainColor,
-            AppColors.kMainColor.withOpacity(0.5),
-          ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
-          // color: AppColors.kMainColor,
-          borderRadius: BorderRadius.circular(100),
-          //color: AppColors.kMainColor,
-        ),
+        },
         child: const Center(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:qr_mobile_app/widgets/generated_history_tab.dart';
-import 'package:qr_mobile_app/widgets/scan_history_tab.dart';
+import 'package:qr_mobile_app/pages/history_page/history_tabs/generated_history_tab.dart';
+import 'package:qr_mobile_app/pages/history_page/history_tabs/scan_history_tab.dart';
 
 import '../../utils/colors.dart';
 

@@ -5,7 +5,6 @@ import 'package:qr_mobile_app/model/scanned_qr_model.dart';
 import '../model/generated_qr_model.dart';
 
 class QRHistoryProvider extends ChangeNotifier {
-
   // Empty list to store qr data as qr model objects
   List<GeneratedQRModel> storedGenQRCodes = [];
   List<ScannedQrModel> storedScnQRCodes = [];

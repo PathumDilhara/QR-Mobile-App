@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_mobile_app/utils/colors.dart';
-import 'package:qr_mobile_app/widgets/setting_widget.dart';
+import 'package:qr_mobile_app/widgets/setting_content_widget.dart';
 
 import '../../provider/settings_provider.dart';
 import '../../utils/routers.dart';
@@ -54,30 +54,25 @@ class SettingsPage extends StatelessWidget {
               const SizedBox(
                 height: 30,
               ),
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: AppColors.kMainColor,
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        spreadRadius: 3, // How much the shadow spreads
-                        blurRadius: 6, // How soft the shadow looks
-                        offset: const Offset(0, 3) // position of the shadow
-                        ),
-                  ],
+              ElevatedButton(
+                onPressed: () {
+                  print("clicked add free");
+                },
+                style: ButtonStyle(
+                  overlayColor: WidgetStatePropertyAll(Colors.white.withOpacity(0.1),),
+                  elevation: const WidgetStatePropertyAll(5),
+                  minimumSize: const WidgetStatePropertyAll(
+                    Size(120, 50),
+                  ),
+                  backgroundColor: const WidgetStatePropertyAll(AppColors.kMainColor),
                 ),
-                child: const Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: Center(
-                    child: Text(
-                      "Update to pro",
-                      style: TextStyle(
-                        fontSize: 28,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
+                child: const Center(
+                  child: Text(
+                    "Add free",
+                    style: TextStyle(
+                      fontSize: 28,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
@@ -115,12 +110,10 @@ class SettingsPage extends StatelessWidget {
                           const Spacer(),
                           Switch(
                             value: settingsProvider.isDarkMode,
-                            activeColor:
-                                AppColors.kWhiteColor.withOpacity(0.7),
+                            activeColor: AppColors.kWhiteColor.withOpacity(0.7),
                             activeTrackColor: AppColors.kMainColor,
                             inactiveThumbColor: Colors.grey,
-                            inactiveTrackColor:
-                                Colors.grey.withOpacity(0.3),
+                            inactiveTrackColor: Colors.grey.withOpacity(0.3),
                             onChanged: (value) {
                               settingsProvider.toggleTheme();
                             },
@@ -137,12 +130,10 @@ class SettingsPage extends StatelessWidget {
                           const Spacer(),
                           Switch(
                             value: settingsProvider.isHistorySaving,
-                            activeColor:
-                                AppColors.kWhiteColor.withOpacity(0.7),
+                            activeColor: AppColors.kWhiteColor.withOpacity(0.7),
                             activeTrackColor: AppColors.kMainColor,
                             inactiveThumbColor: Colors.grey,
-                            inactiveTrackColor:
-                                Colors.grey.withOpacity(0.3),
+                            inactiveTrackColor: Colors.grey.withOpacity(0.3),
                             onChanged: (value) {
                               settingsProvider.toggleHistorySaving();
                             },
@@ -159,12 +150,10 @@ class SettingsPage extends StatelessWidget {
                           const Spacer(),
                           Switch(
                             value: settingsProvider.notificationEnabled,
-                            activeColor:
-                                AppColors.kWhiteColor.withOpacity(0.7),
+                            activeColor: AppColors.kWhiteColor.withOpacity(0.7),
                             activeTrackColor: AppColors.kMainColor,
                             inactiveThumbColor: Colors.grey,
-                            inactiveTrackColor:
-                                Colors.grey.withOpacity(0.3),
+                            inactiveTrackColor: Colors.grey.withOpacity(0.3),
                             onChanged: (value) {
                               settingsProvider.toggleNotificationsShowing();
                             },
@@ -223,8 +212,7 @@ class SettingsPage extends StatelessWidget {
                         child: Container(
                           color: Colors.transparent,
                           width: double.infinity,
-                          child: const SettingsContentWidget(
-                              title: "Feedback"),
+                          child: const SettingsContentWidget(title: "Feedback"),
                         ),
                       ),
                       Divider(
@@ -323,8 +311,6 @@ class SettingsPage extends StatelessWidget {
     );
   }
 }
-
-
 
 // Positioned(
 // left: 0,

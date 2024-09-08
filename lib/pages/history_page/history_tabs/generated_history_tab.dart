@@ -5,7 +5,7 @@ import 'package:qr_mobile_app/model/generated_qr_model.dart';
 import 'package:qr_mobile_app/utils/colors.dart';
 import 'package:qr_mobile_app/utils/floating_action_button_location.dart';
 
-import '../provider/qr_history_provider.dart';
+import '../../../provider/qr_history_provider.dart';
 
 class GeneratedHistoryTab extends StatelessWidget {
   const GeneratedHistoryTab({super.key});
@@ -17,11 +17,10 @@ class GeneratedHistoryTab extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.transparent,
       floatingActionButton: SizedBox(
-        width: 100,
-        height: 40,
+        width: 120,
+        height: 50,
         child: FloatingActionButton(
           backgroundColor: AppColors.kMainColor,
-          
           onPressed: () async {
             await qrHistoryProvider.clearGeneratedQRBox();
             qrHistoryProvider.loadGeneratedQRCodes();
@@ -29,7 +28,12 @@ class GeneratedHistoryTab extends StatelessWidget {
           child: const Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text("Clear all", style: TextStyle(fontSize: 15),),
+              Text(
+                "Clear all",
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
               Icon(
                 Icons.auto_delete_outlined,
                 size: 25,
@@ -79,50 +83,58 @@ class GeneratedHistoryTab extends StatelessWidget {
                   padding: const EdgeInsets.only(
                     bottom: 5.0,
                   ),
-                  child: ListTile(
-                    tileColor: AppColors.kMainColor.withOpacity(0.3),
-                    trailing: IconButton(
-                      onPressed: () async {
-                        await qrHistoryProvider
-                            .deleteGeneratedQRCode(qrCode);
-                      },
-                      icon: Icon(
-                        Icons.delete_outline,
-                        size: 25,
-                        color:
-                            Theme.of(context).brightness == Brightness.dark
-                                ? AppColors.kWhiteColor.withOpacity(0.7)
-                                : Colors.purple,
-                      ),
-                    ),
-                    title: Text(
-                      qrCode.title,
-                      style: TextStyle(
-                        fontSize: 20,
-                        color:
-                            Theme.of(context).brightness == Brightness.dark
-                                ? Colors.white.withOpacity(0.7)
-                                : Colors.black,
-                      ),
-                    ),
-                    subtitle: Text(
-                      "${DateFormat.yMMMd().format(
-                        DateTime.parse(
-                          qrCode.date.toString(),
+                  child: Consumer<QRHistoryProvider>(
+                    builder: (BuildContext context,
+                        QRHistoryProvider qrHistoryProvider, Widget? child) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: ListTile(
+                          tileColor: AppColors.kMainColor.withOpacity(0.3),
+                          trailing: IconButton(
+                            onPressed: () async {
+                              await qrHistoryProvider
+                                  .deleteGeneratedQRCode(qrCode);
+                            },
+                            icon: Icon(
+                              Icons.delete_outline,
+                              size: 25,
+                              color:
+                                  Theme.of(context).brightness == Brightness.dark
+                                      ? AppColors.kWhiteColor.withOpacity(0.7)
+                                      : Colors.purple,
+                            ),
+                          ),
+                          title: Text(
+                            qrCode.title,
+                            style: TextStyle(
+                              fontSize: 20,
+                              color:
+                                  Theme.of(context).brightness == Brightness.dark
+                                      ? Colors.white.withOpacity(0.7)
+                                      : Colors.black,
+                            ),
+                          ),
+                          subtitle: Text(
+                            "${DateFormat.yMMMd().format(
+                              DateTime.parse(
+                                qrCode.date.toString(),
+                              ),
+                            )} ${DateFormat.Hm().format(
+                              DateTime.parse(
+                                qrCode.date.toString(),
+                              ),
+                            )}",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color:
+                                  Theme.of(context).brightness == Brightness.dark
+                                      ? Colors.white.withOpacity(0.7)
+                                      : Colors.black,
+                            ),
+                          ),
                         ),
-                      )} ${DateFormat.Hm().format(
-                        DateTime.parse(
-                          qrCode.date.toString(),
-                        ),
-                      )}",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color:
-                            Theme.of(context).brightness == Brightness.dark
-                                ? Colors.white.withOpacity(0.7)
-                                : Colors.black,
-                      ),
-                    ),
+                      );
+                    },
                   ),
                 );
               },

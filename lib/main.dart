@@ -18,7 +18,8 @@ void main() async {
   Hive.registerAdapter(ScannedQrModelAdapter()); // data type ScannedQrModel
   await Hive.openBox("generated_qr");
   await Hive.openBox("scanned_qr");
-  await Hive.openBox("settings"); // no need to register adapter bca setting contains primitive data type
+  await Hive.openBox(
+      "settings"); // no need to register adapter bca setting contains primitive data type
   runApp(
     MultiProvider(
       providers: [
@@ -44,14 +45,16 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return Consumer2<SettingsProvider, QRHistoryProvider>(
-      builder: (BuildContext context, SettingsProvider themeProvider, QRHistoryProvider qrHistoryProvider, Widget? child) {
+    return Consumer<SettingsProvider>(
+      builder: (BuildContext context, SettingsProvider themeProvider,
+          Widget? child) {
         return MaterialApp.router(
           routerConfig: AppRouter.router,
           debugShowCheckedModeBanner: false,
           theme: CustomThemeData.lightTheme(context),
           darkTheme: CustomThemeData.darkTheme(context),
-          themeMode: themeProvider.currentTheme, // load using "theme" & "darkTheme"
+          themeMode:
+              themeProvider.currentTheme, // load using "theme" & "darkTheme"
           // themeMode: ThemeMode
           //     .system, // Automatically switches between dark and light theme
         );
@@ -77,3 +80,4 @@ class _MyAppState extends State<MyApp> {
 // qr save button
 // if scanned on url open browser
 // change splash screen
+// URL opening error

@@ -77,24 +77,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               bottom: 60,
               left: 0,
               right: 0,
-              child: GestureDetector(
-                onTap: () async {
-                  if(!isLastPage){
-                  pageController.animateToPage(
-                    pageController.page!.toInt() + 1, // pageController.page is double ---> int
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                  );
-                  } else if(isLastPage){
-                    await UserServices.storeLoginState("LoggedIn");
-                    // bool loginState = await UserServices.checkLoginState();
-                    // print(loginState);
-                    AppRouter.router.push("/home");
-                  }
-                },
-                child: RoundedCustomButton(
-                  isLastPage: isLastPage,
-                ),
+              child: RoundedCustomButton(
+                isLastPage: isLastPage,
+                pageController: pageController,
               ),
             ),
           ],

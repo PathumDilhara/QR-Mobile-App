@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
-import 'package:qr_mobile_app/pages/history/history_page.dart';
+import 'package:qr_mobile_app/pages/history_page/history_page.dart';
 import 'package:qr_mobile_app/utils/colors.dart';
 import '../settings_page/settings_page.dart';
 import 'sub_pages/generating_page.dart';
