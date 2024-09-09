@@ -9,6 +9,8 @@ import 'package:qr_mobile_app/utils/colors.dart';
 import 'package:qr_mobile_app/utils/text_styles.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../widgets/bottom_shadow_painter.dart';
+
 class QRScanningPage extends StatefulWidget {
   const QRScanningPage({super.key});
 
@@ -16,14 +18,34 @@ class QRScanningPage extends StatefulWidget {
   State<QRScanningPage> createState() => _QRScanningPageState();
 }
 
-class _QRScanningPageState extends State<QRScanningPage> with SingleTickerProviderStateMixin{
-
+class _QRScanningPageState extends State<QRScanningPage>
+    with SingleTickerProviderStateMixin {
   final GlobalKey qrKey = GlobalKey(debugLabel: "QR");
   QRViewController? qrViewController;
   Barcode? result; // Variable to save the scanned QR code data
 
   late QRHistoryProvider qrHistoryProvider; // Declare the provider
   late SettingsProvider settingsProvider; // Declare the provider
+
+  // Animation controller and tween
+  late AnimationController _animationController;
+  late Animation<double> _animation;
+
+  double _previousValue = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Initialize animation controller
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    )..repeat(reverse: true); // Makes the animation move back and forth
+
+    // Tween the animation between 0 and 1 for the full height movement
+    _animation = Tween<double>(begin: 0, end: 1).animate(_animationController);
+  }
 
   // @override
   // void initState() {
@@ -33,6 +55,7 @@ class _QRScanningPageState extends State<QRScanningPage> with SingleTickerProvid
 
   @override
   void dispose() {
+    _animationController.dispose();
     qrViewController?.dispose();
     super.dispose();
   }
@@ -113,10 +136,57 @@ class _QRScanningPageState extends State<QRScanningPage> with SingleTickerProvid
             ],
           ),
           // Scanning animation bar
+          _buildScanningAnimation(scanArea),
           _flashButton(),
           _cameraControlButton(),
         ],
       ),
+    );
+  }
+
+  // Scanning animation widget
+  Widget _buildScanningAnimation(double scanArea) {
+    return AnimatedBuilder(
+      animation: _animationController,
+      builder: (context, child) {
+        bool isGoingDown = _animation.value > _previousValue;
+        _previousValue = _animation.value;
+
+        return Positioned(
+          // (scanArea - 10) * _animation.value + MediaQuery.of(context).size.height * 0.22,
+          top: (scanArea - 70) * _animation.value +
+              MediaQuery.of(context).size.height *
+                  0.22, // Moves from top to bottom
+          left: MediaQuery.of(context).size.width * 0.18,
+          right: MediaQuery.of(context).size.width * 0.18,
+          child: Stack(
+            children: [
+              // Container(
+              //   height: 1, // Thickness of the scanning bar
+              //   color:
+              //       AppColors.kMainColor, // Purple color for the scanning bar
+              // ),
+              Container(
+                height: 60,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: const [
+                      AppColors.kMainColor,
+                      Colors.transparent,
+                    ],
+                    begin: !isGoingDown
+                        ? Alignment.topCenter
+                        : Alignment.bottomCenter,
+                    end: !isGoingDown
+                        ? Alignment.bottomCenter
+                        : Alignment.topCenter,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -144,10 +214,10 @@ class _QRScanningPageState extends State<QRScanningPage> with SingleTickerProvid
               date: DateTime.now(),
             );
 
-            // Pause camera and navigate to result page
+            // Pause camera, animation and open a bottom sheet
             qrViewController.pauseCamera();
+            _animationController.stop();
             openBottomSheet(result!.code.toString());
-            // AppRouter.router.push("/scan_result", extra: result!.code.toString());
             if (settingsProvider.isHistorySaving) {
               await qrHistoryProvider.storeScnQR(scannedQRModel);
             }
@@ -177,8 +247,10 @@ class _QRScanningPageState extends State<QRScanningPage> with SingleTickerProvid
           onPressed: () async {
             if (isCameraPaused) {
               await qrViewController!.resumeCamera();
+              _animationController.repeat(reverse: true);
             } else {
               await qrViewController!.pauseCamera();
+              _animationController.stop();
             }
             setState(() {
               isCameraPaused = !isCameraPaused;
@@ -379,14 +451,18 @@ class _QRScanningPageState extends State<QRScanningPage> with SingleTickerProvid
 
                         // Open in browser
                         ElevatedButton(
-                          onPressed: regExp.hasMatch(qrCode)?() {
-                            _launchURL(qrCode);
-                          }
-                          : null,
+                          onPressed: regExp.hasMatch(qrCode)
+                              ? () {
+                                  _launchURL(qrCode);
+                                }
+                              : null,
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(horizontal: 0),
-                            minimumSize: Size(MediaQuery.of(context).size.width* 0.9, 50),
-                            backgroundColor: regExp.hasMatch(qrCode)? AppColors.kMainColor : Colors.grey,
+                            minimumSize: Size(
+                                MediaQuery.of(context).size.width * 0.9, 50),
+                            backgroundColor: regExp.hasMatch(qrCode)
+                                ? AppColors.kMainColor
+                                : Colors.grey,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
@@ -399,7 +475,9 @@ class _QRScanningPageState extends State<QRScanningPage> with SingleTickerProvid
                             ),
                           ),
                         ),
-                        const SizedBox(height: 10,),
+                        const SizedBox(
+                          height: 10,
+                        ),
                         // Copy to clipboard
                         ElevatedButton(
                           onPressed: () async {
@@ -439,7 +517,8 @@ class _QRScanningPageState extends State<QRScanningPage> with SingleTickerProvid
                             }
                           },
                           style: ElevatedButton.styleFrom(
-                            minimumSize: Size(MediaQuery.of(context).size.width* 0.9, 50),
+                            minimumSize: Size(
+                                MediaQuery.of(context).size.width * 0.9, 50),
                             //maximumSize: Size(MediaQuery.of(context).size.width* 0.48, 50),
                             backgroundColor: AppColors.kMainColor,
                             shape: RoundedRectangleBorder(
@@ -471,6 +550,7 @@ class _QRScanningPageState extends State<QRScanningPage> with SingleTickerProvid
     ).whenComplete(() {
       // Resume the camera when the bottom sheet is dismissed
       qrViewController?.resumeCamera();
+      _animationController.repeat(reverse: true);
     });
   }
 
