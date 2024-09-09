@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_mobile_app/utils/colors.dart';
 import 'package:qr_mobile_app/widgets/setting_content_widget.dart';
@@ -6,8 +7,33 @@ import 'package:qr_mobile_app/widgets/setting_content_widget.dart';
 import '../../provider/settings_provider.dart';
 import '../../utils/routers.dart';
 
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
+
+  @override
+  State<SettingsPage> createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
+
+  String _version = "";
+
+  @override
+  void initState() {
+    super.initState();
+    _getVersionInfo();
+  }
+
+  Future<void> _getVersionInfo() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String version = packageInfo.version;
+    // String buildNumber = packageInfo.buildNumber;
+
+    setState(() {
+      _version = version;
+
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -285,7 +311,7 @@ class SettingsPage extends StatelessWidget {
                               const SettingsContentWidget(title: "Version"),
                               const Spacer(),
                               Text(
-                                "10.01.5",
+                                _version,
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,

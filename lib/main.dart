@@ -71,6 +71,8 @@ class _MyAppState extends State<MyApp> {
 // flutter pub add qr_code_scanner
 // flutter pub add intl
 // flutter pub add provider
+// flutter pub add url_launcher
+// flutter pub add package_info_plus
 
 // improvements
 
@@ -81,3 +83,5 @@ class _MyAppState extends State<MyApp> {
 // if scanned on url open browser
 // change splash screen
 // URL opening error
+
+// App updating using google play store console https://www.youtube.com/watch?v=Hfn_PvKMyIs
