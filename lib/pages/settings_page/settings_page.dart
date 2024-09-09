@@ -80,29 +80,7 @@ class _SettingsPageState extends State<SettingsPage> {
               const SizedBox(
                 height: 30,
               ),
-              ElevatedButton(
-                onPressed: () {
-                  print("clicked add free");
-                },
-                style: ButtonStyle(
-                  overlayColor: WidgetStatePropertyAll(Colors.white.withOpacity(0.1),),
-                  elevation: const WidgetStatePropertyAll(5),
-                  minimumSize: const WidgetStatePropertyAll(
-                    Size(120, 50),
-                  ),
-                  backgroundColor: const WidgetStatePropertyAll(AppColors.kMainColor),
-                ),
-                child: const Center(
-                  child: Text(
-                    "Add free",
-                    style: TextStyle(
-                      fontSize: 28,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
+              _customElevatedButton(),
               const SizedBox(
                 height: 50,
               ),
@@ -331,6 +309,32 @@ class _SettingsPageState extends State<SettingsPage> {
                 ),
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _customElevatedButton(){
+    return ElevatedButton(
+      onPressed: () {
+        print("clicked add free");
+      },
+      style: ButtonStyle(
+        overlayColor: WidgetStatePropertyAll(Colors.white.withOpacity(0.1),),
+        elevation: const WidgetStatePropertyAll(5),
+        minimumSize: const WidgetStatePropertyAll(
+          Size(120, 50),
+        ),
+        backgroundColor: const WidgetStatePropertyAll(AppColors.kMainColor),
+      ),
+      child: const Center(
+        child: Text(
+          "Add free",
+          style: TextStyle(
+            fontSize: 28,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
           ),
         ),
       ),

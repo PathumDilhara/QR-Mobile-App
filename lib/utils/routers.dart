@@ -9,7 +9,7 @@ import 'package:qr_mobile_app/pages/settings_page/settings_page.dart';
 import 'package:qr_mobile_app/user_services/shared_preferences_services/user_services.dart';
 
 import '../pages/custom_splash_screen/custom_splash_screen.dart';
-import '../pages/update_page/update_page.dart';
+import '../pages/settings_page/content/update_page.dart';
 
 class AppRouter {
   static final router = GoRouter(
