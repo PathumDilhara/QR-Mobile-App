@@ -20,11 +20,15 @@ class GeneratedHistoryTab extends StatelessWidget {
         width: 120,
         height: 50,
         child: FloatingActionButton(
-          backgroundColor: AppColors.kMainColor,
-          onPressed: () async {
-            await qrHistoryProvider.clearGeneratedQRBox();
-            qrHistoryProvider.loadGeneratedQRCodes();
-          },
+          backgroundColor: qrHistoryProvider.storedGenQRCodes.isEmpty
+              ? Colors.grey
+              : AppColors.kMainColor,
+          onPressed: qrHistoryProvider.storedGenQRCodes.isEmpty
+              ? () {}
+              : () async {
+                  await qrHistoryProvider.clearGeneratedQRBox();
+                  qrHistoryProvider.loadGeneratedQRCodes();
+                },
           child: const Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -35,7 +39,7 @@ class GeneratedHistoryTab extends StatelessWidget {
                 ),
               ),
               Icon(
-                Icons.auto_delete_outlined,
+                Icons.clear_all_outlined,
                 size: 25,
                 color: Colors.white,
               ),
@@ -59,7 +63,7 @@ class GeneratedHistoryTab extends StatelessWidget {
                 child: Text(
                   "No history available",
                   style: TextStyle(
-                    fontSize: 23,
+                    fontSize: 20,
                     fontWeight: FontWeight.w500,
                     color: Theme.of(context).brightness == Brightness.dark
                         ? Colors.white.withOpacity(0.7)
@@ -98,20 +102,20 @@ class GeneratedHistoryTab extends StatelessWidget {
                             icon: Icon(
                               Icons.delete_outline,
                               size: 25,
-                              color:
-                                  Theme.of(context).brightness == Brightness.dark
-                                      ? AppColors.kWhiteColor.withOpacity(0.7)
-                                      : Colors.purple,
+                              color: Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? AppColors.kWhiteColor.withOpacity(0.7)
+                                  : Colors.purple,
                             ),
                           ),
                           title: Text(
                             qrCode.title,
                             style: TextStyle(
-                              fontSize: 20,
-                              color:
-                                  Theme.of(context).brightness == Brightness.dark
-                                      ? Colors.white.withOpacity(0.7)
-                                      : Colors.black,
+                              fontSize: 16,
+                              color: Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? Colors.white.withOpacity(0.7)
+                                  : Colors.black,
                             ),
                           ),
                           subtitle: Text(
@@ -126,10 +130,10 @@ class GeneratedHistoryTab extends StatelessWidget {
                             )}",
                             style: TextStyle(
                               fontSize: 14,
-                              color:
-                                  Theme.of(context).brightness == Brightness.dark
-                                      ? Colors.white.withOpacity(0.7)
-                                      : Colors.black,
+                              color: Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? Colors.white.withOpacity(0.7)
+                                  : Colors.black.withOpacity(0.5),
                             ),
                           ),
                         ),

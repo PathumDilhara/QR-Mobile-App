@@ -83,5 +83,6 @@ class _MyAppState extends State<MyApp> {
 // if scanned on url open browser
 // change splash screen
 // URL opening error
+// scan area
 
 // App updating using google play store console https://www.youtube.com/watch?v=Hfn_PvKMyIs

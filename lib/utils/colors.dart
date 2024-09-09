@@ -10,6 +10,7 @@ class AppColors {
   static const Color kWhiteColor = Color(0xFFFFFFFF);
   static Color kScaffoldBgColor = Colors.black.withOpacity(0.1);
   static const Color kPurpleColor = Color(0xFFEDE7F6);
+  static const Color kSnackBarColor = Color(0xFF470557);
 
   // settings contents page
   static Color kSettingsContentsPageBgColor = Colors.white.withOpacity(0.3);

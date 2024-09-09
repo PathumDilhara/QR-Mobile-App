@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +16,8 @@ class QRScanningPage extends StatefulWidget {
   State<QRScanningPage> createState() => _QRScanningPageState();
 }
 
-class _QRScanningPageState extends State<QRScanningPage> {
+class _QRScanningPageState extends State<QRScanningPage> with SingleTickerProviderStateMixin{
+
   final GlobalKey qrKey = GlobalKey(debugLabel: "QR");
   QRViewController? qrViewController;
   Barcode? result; // Variable to save the scanned QR code data
@@ -112,6 +112,7 @@ class _QRScanningPageState extends State<QRScanningPage> {
               ),
             ],
           ),
+          // Scanning animation bar
           _flashButton(),
           _cameraControlButton(),
         ],

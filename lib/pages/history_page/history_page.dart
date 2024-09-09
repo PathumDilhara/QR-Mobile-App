@@ -48,13 +48,13 @@ class _HistoryPageState extends State<HistoryPage>
               Tab(
                 child: Text(
                   "Generated",
-                  style: TextStyle(fontSize: 20),
+                  style: TextStyle(fontSize: 18),
                 ),
               ),
               Tab(
                 child: Text(
                   "Scanned",
-                  style: TextStyle(fontSize: 20),
+                  style: TextStyle(fontSize: 18),
                 ),
               ),
             ],

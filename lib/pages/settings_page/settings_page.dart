@@ -54,9 +54,10 @@ class _SettingsPageState extends State<SettingsPage> {
     const double adHeight = 30;
 
     return Scaffold(
-      // backgroundColor: AppColors.kScaffoldBgColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
+        elevation: 0,
+        scrolledUnderElevation: 0,
         title: Text(
           "Settings",
           style: TextStyle(
@@ -68,8 +69,8 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.only(
-          left: 20,
-          right: 20,
+          left: 10,
+          right: 10,
           bottom: 76,
           top: 10,
         ),
@@ -293,7 +294,6 @@ class _SettingsPageState extends State<SettingsPage> {
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
-                                  fontStyle: FontStyle.italic,
                                   color: Theme.of(context).brightness ==
                                           Brightness.dark
                                       ? Colors.white.withOpacity(0.7)

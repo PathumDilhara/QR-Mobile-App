@@ -20,7 +20,6 @@ class QRGeneratingPage extends StatefulWidget {
 }
 
 class _QRGeneratingPageState extends State<QRGeneratingPage> {
-
   final TextEditingController qrInputController = TextEditingController();
   String? qrData;
   final ScreenshotController screenshotController = ScreenshotController();
@@ -90,7 +89,9 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
                                   // "Error: ${snapshot.error}
                                   content: Text(
                                     "No QR code data provided.",
-                                    style: TextStyle(fontSize: 18),
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                    ),
                                   ),
                                   duration: Duration(seconds: 1),
                                 ), //
@@ -151,7 +152,8 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
               // _qrImageView(qrData);
               //print(qrData);
               FocusScope.of(context).unfocus();
-              if (settingsProvider.isHistorySaving && qrInputController.text.isNotEmpty) {
+              if (settingsProvider.isHistorySaving &&
+                  qrInputController.text.isNotEmpty) {
                 await qrHistoryProvider.storeGeneratedQR(generatedQRModel);
               }
             },
@@ -163,7 +165,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
           hintText: "Enter text or URL to generate QR code",
           hintStyle: const TextStyle(
             color: Colors.grey,
-            fontSize: 18,
+            fontSize: 15,
             fontWeight: FontWeight.w100,
           ),
           border: OutlineInputBorder(
@@ -205,7 +207,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
           Text(
             "No data provided",
             style: TextStyle(
-              fontSize: 25,
+              fontSize: 20,
               color: Theme.of(context).brightness == Brightness.dark
                   ? AppColors.kWhiteColor.withOpacity(0.7)
                   : AppColors.kSubtitleColor.withOpacity(0.3),
@@ -265,7 +267,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
                       fontSize: 16,
                       color: Theme.of(context).brightness == Brightness.dark
                           ? Colors.white.withOpacity(0.7)
-                          : Colors.black,
+                          : Colors.white,
                     ),
                   ),
                 ),

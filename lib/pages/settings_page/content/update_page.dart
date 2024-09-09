@@ -61,6 +61,7 @@ class _UpdatePageState extends State<UpdatePage> {
     Color backgroundColor =
         isDark ? Colors.black : Colors.white.withOpacity(0.95);
     Color titleColor = isDark ? Colors.white.withOpacity(0.7) : Colors.black;
+    Color buttonColor = isDark ? Colors.grey.withOpacity(0.3) : Colors.grey.withOpacity(0.8);
 
     return Scaffold(
       backgroundColor: backgroundColor,
@@ -88,14 +89,15 @@ class _UpdatePageState extends State<UpdatePage> {
               ),
             ),
             const SizedBox(height: 10,),
-            Text(
+            _isUpdateAvailable ? Text(
               "This update includes improvements to the QR scanning and generating features, enhancing performance and user experience.",
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
                 color: titleColor.withOpacity(0.6),
               ),
-            ),
+            ):
+            const SizedBox(),
             const SizedBox(height: 20),
             _isUpdateAvailable
                 ? _isUpdating
@@ -123,7 +125,7 @@ class _UpdatePageState extends State<UpdatePage> {
                       Center(
                         child: _customElevatedButton(
                           "Up to date",
-                          Colors.grey.withOpacity(0.5),
+                          buttonColor,
                           () {},
                         ),
                       ),
@@ -139,7 +141,7 @@ class _UpdatePageState extends State<UpdatePage> {
   }
 
   Widget _customElevatedButton(
-      String title, Color color, VoidCallback onPressed) {
+      String title, Color buttonBgColor, VoidCallback onPressed) {
     return ElevatedButton(
       onPressed: onPressed,
       style: ButtonStyle(
@@ -150,13 +152,13 @@ class _UpdatePageState extends State<UpdatePage> {
         maximumSize: const WidgetStatePropertyAll(
           Size(400, 60),
         ),
-        backgroundColor: WidgetStatePropertyAll(color),
+        backgroundColor: WidgetStatePropertyAll(buttonBgColor),
       ),
       child: Center(
         child: Text(
           title,
           style: const TextStyle(
-            fontSize: 24,
+            fontSize: 20,
             color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
