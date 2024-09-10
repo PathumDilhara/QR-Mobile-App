@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart' as qr;
 import 'package:qr_mobile_app/model/scanned_qr_model.dart';
 import 'package:qr_mobile_app/provider/qr_history_provider.dart';
 import 'package:qr_mobile_app/provider/settings_provider.dart';
@@ -18,9 +21,10 @@ class QRScanningPage extends StatefulWidget {
 
 class _QRScanningPageState extends State<QRScanningPage>
     with SingleTickerProviderStateMixin {
+
   final GlobalKey qrKey = GlobalKey(debugLabel: "QR");
-  QRViewController? qrViewController;
-  Barcode? result; // Variable to save the scanned QR code data
+  qr.QRViewController? qrViewController;
+  qr.Barcode? result; // Variable to save the scanned QR code data
 
   late QRHistoryProvider qrHistoryProvider; // Declare the provider
   late SettingsProvider settingsProvider; // Declare the provider
@@ -30,6 +34,34 @@ class _QRScanningPageState extends State<QRScanningPage>
   late Animation<double> _animation;
 
   double _previousValue = 0.0;
+
+  // For image picker obj
+  final ImagePicker _picker = ImagePicker();
+  File? _image;
+
+  // Method to pick image
+  Future<void> _pickImage() async {
+    try {
+      // Add a print statement before image picker action
+      print('################Opening image picker...');
+
+      final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+
+      // Check if the pickedFile is null or valid
+      if (pickedFile != null) {
+        print('##############Image selected: ${pickedFile.path}');
+        setState(() {
+          _image = File(pickedFile.path);
+        });
+        // *************** Function call here
+      } else {
+        print('#############No image selected.');
+      }
+    } catch (e) {
+      // If there is an error, print the error details
+      print('####################Error picking image: $e');
+    }
+  }
 
   @override
   void initState() {
@@ -45,12 +77,7 @@ class _QRScanningPageState extends State<QRScanningPage>
     _animation = Tween<double>(begin: 0, end: 1).animate(_animationController);
   }
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   // Initialize the provider
-  // }
-
+  // Controllers disposing methods
   @override
   void dispose() {
     _animationController.dispose();
@@ -93,10 +120,10 @@ class _QRScanningPageState extends State<QRScanningPage>
             children: <Widget>[
               Expanded(
                 flex: 6,
-                child: QRView(
+                child: qr.QRView(
                   key: qrKey,
                   onQRViewCreated: _onQRViewCreated,
-                  overlay: QrScannerOverlayShape(
+                  overlay: qr.QrScannerOverlayShape(
                     borderColor: AppColors.kMainColor,
                     borderRadius: 10,
                     borderLength: 50,
@@ -115,6 +142,7 @@ class _QRScanningPageState extends State<QRScanningPage>
                       horizontal: 20.0, vertical: 10),
                   child: Column(
                     children: [
+                      // Text("RecognizedText$_recognizedText"),
                       Text(
                         "Scan code",
                         style: AppTextStyles.appDescriptionTextStyle.copyWith(
@@ -189,7 +217,7 @@ class _QRScanningPageState extends State<QRScanningPage>
     );
   }
 
-  void _onQRViewCreated(QRViewController qrViewController) {
+  void _onQRViewCreated(qr.QRViewController qrViewController) {
     // When you set listen: false, you're telling the Provider.of method that
     // this widget does not need to rebuild when the QRHistoryProvider changes.
     // This is useful when you only need to access the provider to call methods
@@ -319,7 +347,7 @@ class _QRScanningPageState extends State<QRScanningPage>
             return Icon(
               Icons.flip_camera_ios_outlined,
               size: 24,
-              color: snapshot.data == CameraFacing.back || snapshot.data == null
+              color: snapshot.data == qr.CameraFacing.back || snapshot.data == null
                   ? AppColors.kMainColor
                   : AppColors.kWhiteColor,
             );
@@ -337,7 +365,10 @@ class _QRScanningPageState extends State<QRScanningPage>
       child: ElevatedButton(
         style: const ButtonStyle(
             backgroundColor: WidgetStatePropertyAll(Colors.transparent)),
-        onPressed: () {},
+        onPressed: () {
+          print("**************************** Gallery button");
+          _pickImage();
+        },
         child: const Icon(
           Icons.photo_album_outlined,
           size: 24,
