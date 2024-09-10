@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -82,7 +83,9 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
-                            return const CircularProgressIndicator(color: AppColors.kMainColor,); // Show a loading indicator while waiting
+                            return const CircularProgressIndicator(
+                              color: AppColors.kMainColor,
+                            ); // Show a loading indicator while waiting
                           } else if (snapshot.hasError) {
                             WidgetsBinding.instance.addPostFrameCallback((_) {
                               ScaffoldMessenger.of(context).showSnackBar(
@@ -140,15 +143,15 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
         FocusScope.of(context).unfocus();
       },
       onTap: () {
-          if (isCreated){
-            qrInputController.text = "" ;
-          }
-          isCreated = false;
+        if (isCreated) {
+          qrInputController.text = "";
+        }
+        isCreated = false;
       },
       controller: qrInputController,
       decoration: InputDecoration(
-        filled: true,
-        fillColor: Colors.white,
+          filled: true,
+          fillColor: Colors.white,
           suffixIcon: IconButton(
             onPressed: () async {
               isCreated = true;
@@ -245,6 +248,10 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
 
   // Save button
   Widget _saveButton() {
+    DateTime datetime = DateTime.now();
+    String formattedDateTime =
+        "${datetime.toLocal().toString().split(' ')[0].replaceAll('-', '')}_${datetime.toLocal().toString().split(' ')[1].split('.')[0].replaceAll(':', '')}";
+    // print("***********************$formattedDateTime");
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 20),
       child: ElevatedButton(
@@ -263,8 +270,9 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
             await Future.delayed(const Duration(milliseconds: 300));
             final Uint8List? image = await screenshotController.capture();
             if (image != null) {
+              // print("***********************$datetime");
               final result =
-                  await ImageGallerySaver.saveImage(image, name: "MyQrImage");
+                  await ImageGallerySaver.saveImage(image, name: "QR_$formattedDateTime");
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   elevation: 3,

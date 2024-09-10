@@ -35,33 +35,13 @@ class _QRScanningPageState extends State<QRScanningPage>
 
   double _previousValue = 0.0;
 
+  bool isCameraPaused = false; // State variable to track camera status
+
   // For image picker obj
   final ImagePicker _picker = ImagePicker();
   File? _image;
 
-  // Method to pick image
-  Future<void> _pickImage() async {
-    try {
-      // Add a print statement before image picker action
-      print('################Opening image picker...');
 
-      final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-
-      // Check if the pickedFile is null or valid
-      if (pickedFile != null) {
-        print('##############Image selected: ${pickedFile.path}');
-        setState(() {
-          _image = File(pickedFile.path);
-        });
-        // *************** Function call here
-      } else {
-        print('#############No image selected.');
-      }
-    } catch (e) {
-      // If there is an error, print the error details
-      print('####################Error picking image: $e');
-    }
-  }
 
   @override
   void initState() {
@@ -98,7 +78,29 @@ class _QRScanningPageState extends State<QRScanningPage>
     // }
   }
 
-  bool isCameraPaused = false; // State variable to track camera status
+  // Method to pick image
+  Future<void> _pickImage() async {
+    try {
+      // Add a print statement before image picker action
+      print('################Opening image picker...');
+
+      final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+
+      // Check if the pickedFile is null or valid
+      if (pickedFile != null) {
+        print('##############Image selected: ${pickedFile.path}');
+        setState(() {
+          _image = File(pickedFile.path);
+        });
+        // *************** Function call here
+      } else {
+        print('#############No image selected.');
+      }
+    } catch (e) {
+      // If there is an error, print the error details
+      print('####################Error picking image: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
