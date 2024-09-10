@@ -9,8 +9,6 @@ import 'package:qr_mobile_app/utils/colors.dart';
 import 'package:qr_mobile_app/utils/text_styles.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../widgets/bottom_shadow_painter.dart';
-
 class QRScanningPage extends StatefulWidget {
   const QRScanningPage({super.key});
 
@@ -139,6 +137,7 @@ class _QRScanningPageState extends State<QRScanningPage>
           _buildScanningAnimation(scanArea),
           _flashButton(),
           _cameraControlButton(),
+          _galleryButton(),
         ],
       ),
     );
@@ -273,7 +272,7 @@ class _QRScanningPageState extends State<QRScanningPage>
 
   Widget _flashButton() {
     return Positioned(
-      right: 10,
+      right: 20,
       top: MediaQuery.of(context).size.height * 0.06,
       child: ElevatedButton(
         style: const ButtonStyle(
@@ -306,7 +305,7 @@ class _QRScanningPageState extends State<QRScanningPage>
 
   Widget _cameraControlButton() {
     return Positioned(
-      right: 10,
+      right: 20,
       bottom: 260,
       child: ElevatedButton(
         style: const ButtonStyle(backgroundColor: WidgetStateColor.transparent),
@@ -325,6 +324,24 @@ class _QRScanningPageState extends State<QRScanningPage>
                   : AppColors.kWhiteColor,
             );
           },
+        ),
+      ),
+    );
+  }
+
+  Widget _galleryButton() {
+    return Positioned(
+      left: 20,
+      //right: 0,
+      bottom: 260,
+      child: ElevatedButton(
+        style: const ButtonStyle(
+            backgroundColor: WidgetStatePropertyAll(Colors.transparent)),
+        onPressed: () {},
+        child: const Icon(
+          Icons.photo_album_outlined,
+          size: 24,
+          color: AppColors.kMainColor,
         ),
       ),
     );
