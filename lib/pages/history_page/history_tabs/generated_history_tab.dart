@@ -92,48 +92,55 @@ class GeneratedHistoryTab extends StatelessWidget {
                         QRHistoryProvider qrHistoryProvider, Widget? child) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: ListTile(
-                          tileColor: AppColors.kMainColor.withOpacity(0.3),
-                          trailing: IconButton(
-                            onPressed: () async {
-                              await qrHistoryProvider
-                                  .deleteGeneratedQRCode(qrCode);
-                            },
-                            icon: Icon(
-                              Icons.delete_outline,
-                              size: 25,
-                              color: Theme.of(context).brightness ==
-                                      Brightness.dark
-                                  ? AppColors.kWhiteColor.withOpacity(0.7)
-                                  : Colors.purple,
-                            ),
-                          ),
-                          title: Text(
-                            qrCode.title,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Theme.of(context).brightness ==
-                                      Brightness.dark
-                                  ? Colors.white.withOpacity(0.7)
-                                  : Colors.black,
-                            ),
-                          ),
-                          subtitle: Text(
-                            "${DateFormat.yMMMd().format(
-                              DateTime.parse(
-                                qrCode.date.toString(),
+                        child: Dismissible(
+                          key: ValueKey<String>(qrCode.id),
+                          onDismissed: (DismissDirection direction) async {
+                            await qrHistoryProvider
+                                .deleteGeneratedQRCode(qrCode);
+                          },
+                          child: ListTile(
+                            tileColor: AppColors.kMainColor.withOpacity(0.3),
+                            trailing: IconButton(
+                              onPressed: () async {
+                                await qrHistoryProvider
+                                    .deleteGeneratedQRCode(qrCode);
+                              },
+                              icon: Icon(
+                                Icons.delete_outline,
+                                size: 25,
+                                color: Theme.of(context).brightness ==
+                                        Brightness.dark
+                                    ? AppColors.kWhiteColor.withOpacity(0.7)
+                                    : Colors.purple,
                               ),
-                            )} ${DateFormat.Hm().format(
-                              DateTime.parse(
-                                qrCode.date.toString(),
+                            ),
+                            title: Text(
+                              qrCode.title,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Theme.of(context).brightness ==
+                                        Brightness.dark
+                                    ? Colors.white.withOpacity(0.7)
+                                    : Colors.black,
                               ),
-                            )}",
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Theme.of(context).brightness ==
-                                      Brightness.dark
-                                  ? Colors.white.withOpacity(0.7)
-                                  : Colors.black.withOpacity(0.5),
+                            ),
+                            subtitle: Text(
+                              "${DateFormat.yMMMd().format(
+                                DateTime.parse(
+                                  qrCode.date.toString(),
+                                ),
+                              )} ${DateFormat.Hm().format(
+                                DateTime.parse(
+                                  qrCode.date.toString(),
+                                ),
+                              )}",
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Theme.of(context).brightness ==
+                                        Brightness.dark
+                                    ? Colors.white.withOpacity(0.7)
+                                    : Colors.black.withOpacity(0.5),
+                              ),
                             ),
                           ),
                         ),

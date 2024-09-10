@@ -20,10 +20,10 @@ class ScanHistoryTab extends StatelessWidget {
         width: 120,
         height: 50,
         child: FloatingActionButton(
-          backgroundColor: qrHistoryProvider.storedGenQRCodes.isEmpty
+          backgroundColor: qrHistoryProvider.storedScnQRCodes.isEmpty
               ? Colors.grey
               : AppColors.kMainColor,
-          onPressed: qrHistoryProvider.storedGenQRCodes.isEmpty
+          onPressed: qrHistoryProvider.storedScnQRCodes.isEmpty
               ? () {}
               : () async {
                   await qrHistoryProvider.clearScnQRBox();
@@ -39,7 +39,7 @@ class ScanHistoryTab extends StatelessWidget {
                 ),
               ),
               Icon(
-                Icons.auto_delete_outlined,
+                Icons.clear_all_outlined,
                 size: 25,
                 color: Colors.white,
               ),
@@ -89,46 +89,52 @@ class ScanHistoryTab extends StatelessWidget {
                     builder: (context, value, child) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: ListTile(
-                          tileColor: AppColors.kMainColor.withOpacity(0.3),
-                          trailing: IconButton(
-                            onPressed: () async {
-                              await qrHistoryProvider.deleteScnQRCode(qrCode);
-                            },
-                            icon: Icon(
-                              Icons.clear_all_outlined,
-                              size: 25,
-                              color: Theme.of(context).brightness ==
-                                      Brightness.dark
-                                  ? AppColors.kWhiteColor.withOpacity(0.7)
-                                  : Colors.purple,
-                            ),
-                          ),
-                          title: Text(
-                            qrCode.title,
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Theme.of(context).brightness ==
-                                      Brightness.dark
-                                  ? Colors.white.withOpacity(0.7)
-                                  : Colors.black,
-                            ),
-                          ),
-                          subtitle: Text(
-                            "${DateFormat.yMMMd().format(
-                              DateTime.parse(
-                                qrCode.date.toString(),
+                        child: Dismissible(
+                          key: ValueKey<String>(qrCode.id),
+                          onDismissed: (direction) async {
+                            await qrHistoryProvider.deleteScnQRCode(qrCode);
+                          },
+                          child: ListTile(
+                            tileColor: AppColors.kMainColor.withOpacity(0.3),
+                            trailing: IconButton(
+                              onPressed: () async {
+                                await qrHistoryProvider.deleteScnQRCode(qrCode);
+                              },
+                              icon: Icon(
+                                Icons.delete_outline,
+                                size: 25,
+                                color: Theme.of(context).brightness ==
+                                        Brightness.dark
+                                    ? AppColors.kWhiteColor.withOpacity(0.7)
+                                    : Colors.purple,
                               ),
-                            )} ${DateFormat.Hm().format(
-                              DateTime.parse(
-                                qrCode.date.toString(),
+                            ),
+                            title: Text(
+                              qrCode.title,
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Theme.of(context).brightness ==
+                                        Brightness.dark
+                                    ? Colors.white.withOpacity(0.7)
+                                    : Colors.black,
                               ),
-                            )}",
-                            style: TextStyle(
-                              color: Theme.of(context).brightness ==
-                                      Brightness.dark
-                                  ? Colors.white.withOpacity(0.7)
-                                  : Colors.black,
+                            ),
+                            subtitle: Text(
+                              "${DateFormat.yMMMd().format(
+                                DateTime.parse(
+                                  qrCode.date.toString(),
+                                ),
+                              )} ${DateFormat.Hm().format(
+                                DateTime.parse(
+                                  qrCode.date.toString(),
+                                ),
+                              )}",
+                              style: TextStyle(
+                                color: Theme.of(context).brightness ==
+                                        Brightness.dark
+                                    ? Colors.white.withOpacity(0.7)
+                                    : Colors.black,
+                              ),
                             ),
                           ),
                         ),

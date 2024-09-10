@@ -11,7 +11,7 @@ class CustomThemeData {
     //     : AppColors.kScaffoldBgColor;
     return ThemeData(
       scaffoldBackgroundColor: AppColors.kScaffoldBgColor,
-      appBarTheme: const AppBarTheme(color: AppColors.kWhiteColor),
+      appBarTheme: const AppBarTheme(color: Colors.transparent,scrolledUnderElevation: 0, elevation: 0),
       textTheme: GoogleFonts.dmSansTextTheme(
         Theme.of(context).textTheme,
       ),

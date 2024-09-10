@@ -24,6 +24,8 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
   String? qrData;
   final ScreenshotController screenshotController = ScreenshotController();
 
+  bool isCreated = false;
+
   @override
   void dispose() {
     qrInputController.dispose();
@@ -80,7 +82,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
-                            return const CircularProgressIndicator(); // Show a loading indicator while waiting
+                            return const CircularProgressIndicator(color: AppColors.kMainColor,); // Show a loading indicator while waiting
                           } else if (snapshot.hasError) {
                             WidgetsBinding.instance.addPostFrameCallback((_) {
                               ScaffoldMessenger.of(context).showSnackBar(
@@ -129,19 +131,27 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
     // get existing instance
     final qrHistoryProvider = Provider.of<QRHistoryProvider>(context);
     final settingsProvider = Provider.of<SettingsProvider>(context);
+
     return TextField(
       maxLines: 2,
       autofocus:
           true, //  text field will focus itself if nothing else is already focused.
+      onTapOutside: (event) {
+        FocusScope.of(context).unfocus();
+      },
       onTap: () {
-        setState(() {
-          qrInputController.text = "";
-        });
+          if (isCreated){
+            qrInputController.text = "" ;
+          }
+          isCreated = false;
       },
       controller: qrInputController,
       decoration: InputDecoration(
+        filled: true,
+        fillColor: Colors.white,
           suffixIcon: IconButton(
             onPressed: () async {
+              isCreated = true;
               // instance of GeneratedQRModel
               GeneratedQRModel generatedQRModel = GeneratedQRModel(
                 title: qrInputController.text,
@@ -239,6 +249,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
       padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 20),
       child: ElevatedButton(
         style: ButtonStyle(
+          elevation: const WidgetStatePropertyAll(3),
           overlayColor: WidgetStatePropertyAll(Colors.white.withOpacity(0.1)),
           minimumSize: const WidgetStatePropertyAll(
             Size(double.infinity, 50),
