@@ -7,7 +7,7 @@ class AppColors {
   static const Color kMainColor = Color(0xFFD053F3);
   // static const Color kMainColor = Colors.blue;
   static const Color kSubtitleColor = Color(0xB2000000);
-  static const Color kWhiteColor = Color(0xFFFFFFFF);
+  static const Color kWhiteColor = Colors.white;
   static Color kScaffoldBgColor = Colors.black.withOpacity(0.1);
   static const Color kPurpleColor = Color(0xFFEDE7F6);
   static const Color kSnackBarColor = Color(0xFF470557);

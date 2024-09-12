@@ -272,6 +272,7 @@ class _QRScanningPageState extends State<QRScanningPage>
           style: ElevatedButton.styleFrom(
             fixedSize: const Size(60, 60),
             padding: const EdgeInsets.all(10),
+            overlayColor: AppColors.kMainColor.withOpacity(0.3)
           ),
           onPressed: () async {
             if (isCameraPaused) {
