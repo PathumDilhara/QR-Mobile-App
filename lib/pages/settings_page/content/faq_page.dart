@@ -15,23 +15,19 @@ class _FAQPageState extends State<FAQPage> {
   final List<FAQModel> faqData = FAQData.faqData;
   @override
   Widget build(BuildContext context) {
+
     bool isDark = Theme.of(context).brightness == Brightness.dark;
+
     Color backgroundColor = isDark
         ? AppColors.kSettingsContentsPageBgColor
-        : Colors.white.withOpacity(0.95);
-    Color titleColor = isDark ? Colors.white.withOpacity(0.7) : Colors.black;
-    Color panelListBgColor = isDark ? Colors.white.withOpacity(0.7) : AppColors.kPurpleColor;
+        : AppColors.kWhiteColor.withOpacity(0.95);
+    Color titleColor = isDark ? AppColors.kWhiteColor.withOpacity(0.7) : AppColors.kBlackColor;
+    // Color panelListBgColor = isDark ? AppColors.kWhiteColor.withOpacity(0.7) : AppColors.kPurpleColor;
 
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        // automaticallyImplyLeading: false,
-        // leading: IconButton(
-        //     onPressed: () {
-        //       AppRouter.router.push("/settings");
-        //     },
-        //     icon: const Icon(Icons.arrow_back),),
         title: Text(
           "FAQ",
           style: AppTextStyles.appTitleStyle.copyWith(color: titleColor),
@@ -39,7 +35,7 @@ class _FAQPageState extends State<FAQPage> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          child: _buildPanel(panelListBgColor),
+          child: _buildPanel(AppColors.getFAQPanelBgColor(context)),
         ),
       ),
     );
@@ -56,7 +52,7 @@ class _FAQPageState extends State<FAQPage> {
                 borderRadius: BorderRadius.circular(15),
                 child: ExpansionPanelList(
                   elevation: 2,
-                  expandIconColor: AppColors.kMainColor,
+                  expandIconColor: AppColors.kMainPurpleColor,
                   materialGapSize: 10,
                   expansionCallback: (int panelIndex, bool isExpanded) {
                     setState(() {
@@ -74,8 +70,8 @@ class _FAQPageState extends State<FAQPage> {
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                               color: isExpanded
-                                  ? AppColors.kMainColor
-                                  : Colors.black,
+                                  ? AppColors.kMainPurpleColor
+                                  : AppColors.kBlackColor,
                             ),
                           ),
                         );

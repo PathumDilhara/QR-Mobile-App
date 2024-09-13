@@ -37,21 +37,8 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final settingsProvider = Provider.of<SettingsProvider>(context);
-    final Color textColor = Theme.of(context).brightness == Brightness.dark
-        ? Colors.white.withOpacity(0.7)
-        : Colors.black;
-    final Color titleColor = Theme.of(context).brightness == Brightness.dark
-        ? Colors.grey
-        : Colors.grey;
-    final Color bgColor = Theme.of(context).brightness == Brightness.dark
-        ? Colors.grey.withOpacity(0.3)
-        : Colors.white;
-    // final Color dividerColor = Theme.of(context).brightness == Brightness.dark
-    //     ? Colors.grey.withOpacity(0.3)
-    //     : Colors.grey.withOpacity(0.3);
 
-    const double adHeight = 30;
+    final settingsProvider = Provider.of<SettingsProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -59,11 +46,12 @@ class _SettingsPageState extends State<SettingsPage> {
         title: Text(
           "Settings",
           style: TextStyle(
-            fontSize: 30,
+            fontSize: 35,
             fontWeight: FontWeight.bold,
-            color: textColor,
+            color: AppColors.getTextColor(context),
           ),
         ),
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.only(
@@ -88,7 +76,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: titleColor,
+                  color: AppColors.kGreyColor,
                 ),
               ),
               const SizedBox(
@@ -102,7 +90,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   // height: 200,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    color: bgColor,
+                    color: AppColors.getSettingsContainerBgColor(context),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,9 +102,9 @@ class _SettingsPageState extends State<SettingsPage> {
                           Switch(
                             value: settingsProvider.isDarkMode,
                             activeColor: AppColors.kWhiteColor.withOpacity(0.7),
-                            activeTrackColor: AppColors.kMainColor,
-                            inactiveThumbColor: Colors.grey,
-                            inactiveTrackColor: Colors.grey.withOpacity(0.3),
+                            activeTrackColor: AppColors.kMainPurpleColor,
+                            inactiveThumbColor: AppColors.kGreyColor,
+                            inactiveTrackColor: AppColors.kGreyColor.withOpacity(0.3),
                             onChanged: (value) {
                               settingsProvider.toggleTheme();
                             },
@@ -134,9 +122,9 @@ class _SettingsPageState extends State<SettingsPage> {
                           Switch(
                             value: settingsProvider.isHistorySaving,
                             activeColor: AppColors.kWhiteColor.withOpacity(0.7),
-                            activeTrackColor: AppColors.kMainColor,
-                            inactiveThumbColor: Colors.grey,
-                            inactiveTrackColor: Colors.grey.withOpacity(0.3),
+                            activeTrackColor: AppColors.kMainPurpleColor,
+                            inactiveThumbColor: AppColors.kGreyColor,
+                            inactiveTrackColor: AppColors.kGreyColor.withOpacity(0.3),
                             onChanged: (value) {
                               settingsProvider.toggleHistorySaving();
                             },
@@ -154,9 +142,9 @@ class _SettingsPageState extends State<SettingsPage> {
                           Switch(
                             value: settingsProvider.notificationEnabled,
                             activeColor: AppColors.kWhiteColor.withOpacity(0.7),
-                            activeTrackColor: AppColors.kMainColor,
-                            inactiveThumbColor: Colors.grey,
-                            inactiveTrackColor: Colors.grey.withOpacity(0.3),
+                            activeTrackColor: AppColors.kMainPurpleColor,
+                            inactiveThumbColor: AppColors.kGreyColor,
+                            inactiveTrackColor: AppColors.kGreyColor.withOpacity(0.3),
                             onChanged: (value) {
                               settingsProvider.toggleNotificationsShowing();
                             },
@@ -177,7 +165,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: titleColor,
+                  color: AppColors.kGreyColor,
                 ),
               ),
               const SizedBox(
@@ -190,7 +178,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   width: double.infinity,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    color: bgColor,
+                    color: AppColors.getSettingsContainerBgColor(context),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -246,7 +234,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: titleColor,
+                  color: AppColors.kGreyColor,
                 ),
               ),
               const SizedBox(
@@ -259,7 +247,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   width: double.infinity,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    color: bgColor,
+                    color: AppColors.getSettingsContainerBgColor(context),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -294,8 +282,8 @@ class _SettingsPageState extends State<SettingsPage> {
                                   fontWeight: FontWeight.bold,
                                   color: Theme.of(context).brightness ==
                                           Brightness.dark
-                                      ? Colors.white.withOpacity(0.7)
-                                      : Colors.black,
+                                      ? AppColors.kWhiteColor.withOpacity(0.7)
+                                      : AppColors.kBlackColor,
                                 ),
                               ),
                             ],
@@ -324,14 +312,14 @@ class _SettingsPageState extends State<SettingsPage> {
         minimumSize: const WidgetStatePropertyAll(
           Size(120, 50),
         ),
-        backgroundColor: const WidgetStatePropertyAll(AppColors.kMainColor),
+        backgroundColor: const WidgetStatePropertyAll(AppColors.kMainPurpleColor),
       ),
       child: const Center(
         child: Text(
           "Add free",
           style: TextStyle(
             fontSize: 28,
-            color: Colors.white,
+            color: AppColors.kWhiteColor,
             fontWeight: FontWeight.bold,
           ),
         ),

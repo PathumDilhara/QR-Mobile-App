@@ -22,7 +22,7 @@ class GeneratedHistoryTab extends StatelessWidget {
         child: FloatingActionButton(
           backgroundColor: qrHistoryProvider.storedGenQRCodes.isEmpty
               ? Colors.grey
-              : AppColors.kMainColor,
+              : AppColors.kMainPurpleColor,
           onPressed: qrHistoryProvider.storedGenQRCodes.isEmpty
               ? () {}
               : () async {
@@ -99,7 +99,7 @@ class GeneratedHistoryTab extends StatelessWidget {
                                 .deleteGeneratedQRCode(qrCode);
                           },
                           child: ListTile(
-                            tileColor: AppColors.kMainColor.withOpacity(0.3),
+                            tileColor: AppColors.kMainPurpleColor.withOpacity(0.3),
                             trailing: IconButton(
                               onPressed: () async {
                                 await qrHistoryProvider
@@ -111,7 +111,7 @@ class GeneratedHistoryTab extends StatelessWidget {
                                 color: Theme.of(context).brightness ==
                                         Brightness.dark
                                     ? AppColors.kWhiteColor.withOpacity(0.7)
-                                    : Colors.purple,
+                                    : AppColors.kPurpleColor,
                               ),
                             ),
                             title: Text(
@@ -120,8 +120,8 @@ class GeneratedHistoryTab extends StatelessWidget {
                                 fontSize: 16,
                                 color: Theme.of(context).brightness ==
                                         Brightness.dark
-                                    ? Colors.white.withOpacity(0.7)
-                                    : Colors.black,
+                                    ? AppColors.kWhiteColor.withOpacity(0.7)
+                                    : AppColors.kBlackColor,
                               ),
                             ),
                             subtitle: Text(
@@ -138,8 +138,8 @@ class GeneratedHistoryTab extends StatelessWidget {
                                 fontSize: 14,
                                 color: Theme.of(context).brightness ==
                                         Brightness.dark
-                                    ? Colors.white.withOpacity(0.7)
-                                    : Colors.black.withOpacity(0.5),
+                                    ? AppColors.kWhiteColor.withOpacity(0.7)
+                                    : AppColors.kBlackColor.withOpacity(0.5),
                               ),
                             ),
                           ),

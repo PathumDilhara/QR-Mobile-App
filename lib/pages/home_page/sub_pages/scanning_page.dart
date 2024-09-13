@@ -126,7 +126,7 @@ class _QRScanningPageState extends State<QRScanningPage>
                   key: qrKey,
                   onQRViewCreated: _onQRViewCreated,
                   overlay: qr.QrScannerOverlayShape(
-                    borderColor: AppColors.kMainColor,
+                    borderColor: AppColors.kMainPurpleColor,
                     borderRadius: 10,
                     borderLength: 50,
                     borderWidth: 10,
@@ -200,7 +200,7 @@ class _QRScanningPageState extends State<QRScanningPage>
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: const [
-                      AppColors.kMainColor,
+                      AppColors.kMainPurpleColor,
                       Colors.transparent,
                     ],
                     begin: !isGoingDown
@@ -272,7 +272,7 @@ class _QRScanningPageState extends State<QRScanningPage>
           style: ElevatedButton.styleFrom(
             fixedSize: const Size(60, 60),
             padding: const EdgeInsets.all(10),
-            overlayColor: AppColors.kMainColor.withOpacity(0.3)
+            overlayColor: AppColors.kMainPurpleColor.withOpacity(0.3)
           ),
           onPressed: () async {
             if (isCameraPaused) {
@@ -290,7 +290,7 @@ class _QRScanningPageState extends State<QRScanningPage>
             child: Icon(
               isCameraPaused ? Icons.play_arrow_outlined : Icons.pause,
               size: 30,
-              color: AppColors.kMainColor,
+              color: AppColors.kMainPurpleColor,
             ),
           ),
         ),
@@ -325,7 +325,7 @@ class _QRScanningPageState extends State<QRScanningPage>
               flash,
               size: 24,
               color: snapshot.data == false || snapshot.data == null
-                  ? AppColors.kMainColor
+                  ? AppColors.kMainPurpleColor
                   : AppColors.kWhiteColor,
             );
           },
@@ -351,7 +351,7 @@ class _QRScanningPageState extends State<QRScanningPage>
               Icons.flip_camera_ios_outlined,
               size: 24,
               color: snapshot.data == qr.CameraFacing.back || snapshot.data == null
-                  ? AppColors.kMainColor
+                  ? AppColors.kMainPurpleColor
                   : AppColors.kWhiteColor,
             );
           },
@@ -375,7 +375,7 @@ class _QRScanningPageState extends State<QRScanningPage>
         child: const Icon(
           Icons.photo_album_outlined,
           size: 24,
-          color: AppColors.kMainColor,
+          color: AppColors.kMainPurpleColor,
         ),
       ),
     );
@@ -431,7 +431,7 @@ class _QRScanningPageState extends State<QRScanningPage>
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
-                        child: Text(
+                        child: SelectableText(
                           qrCode,
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -512,7 +512,7 @@ class _QRScanningPageState extends State<QRScanningPage>
                             minimumSize: Size(
                                 MediaQuery.of(context).size.width * 0.9, 50),
                             backgroundColor: regExp.hasMatch(qrCode)
-                                ? AppColors.kMainColor
+                                ? AppColors.kMainPurpleColor
                                 : Colors.grey,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
@@ -539,7 +539,7 @@ class _QRScanningPageState extends State<QRScanningPage>
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   duration: const Duration(seconds: 1),
-                                  backgroundColor: AppColors.kMainColor,
+                                  backgroundColor: AppColors.kMainPurpleColor,
                                   content: Text(
                                     "Copied to clipboard",
                                     style: AppTextStyles.appDescriptionTextStyle
@@ -553,7 +553,7 @@ class _QRScanningPageState extends State<QRScanningPage>
                             } catch (err) {
                               SnackBar(
                                 duration: const Duration(seconds: 1),
-                                backgroundColor: AppColors.kMainColor,
+                                backgroundColor: AppColors.kMainPurpleColor,
                                 content: Text(
                                   "Error copying to clipboard",
                                   maxLines: 1,
@@ -571,7 +571,7 @@ class _QRScanningPageState extends State<QRScanningPage>
                             minimumSize: Size(
                                 MediaQuery.of(context).size.width * 0.9, 50),
                             //maximumSize: Size(MediaQuery.of(context).size.width* 0.48, 50),
-                            backgroundColor: AppColors.kMainColor,
+                            backgroundColor: AppColors.kMainPurpleColor,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),

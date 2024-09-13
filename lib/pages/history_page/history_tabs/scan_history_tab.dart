@@ -22,7 +22,7 @@ class ScanHistoryTab extends StatelessWidget {
         child: FloatingActionButton(
           backgroundColor: qrHistoryProvider.storedScnQRCodes.isEmpty
               ? Colors.grey
-              : AppColors.kMainColor,
+              : AppColors.kMainPurpleColor,
           onPressed: qrHistoryProvider.storedScnQRCodes.isEmpty
               ? () {}
               : () async {
@@ -95,7 +95,7 @@ class ScanHistoryTab extends StatelessWidget {
                             await qrHistoryProvider.deleteScnQRCode(qrCode);
                           },
                           child: ListTile(
-                            tileColor: AppColors.kMainColor.withOpacity(0.3),
+                            tileColor: AppColors.kMainPurpleColor.withOpacity(0.3),
                             trailing: IconButton(
                               onPressed: () async {
                                 await qrHistoryProvider.deleteScnQRCode(qrCode);
@@ -106,17 +106,17 @@ class ScanHistoryTab extends StatelessWidget {
                                 color: Theme.of(context).brightness ==
                                         Brightness.dark
                                     ? AppColors.kWhiteColor.withOpacity(0.7)
-                                    : Colors.purple,
+                                    : AppColors.kPurpleColor,
                               ),
                             ),
                             title: Text(
                               qrCode.title,
                               style: TextStyle(
-                                fontSize: 20,
+                                fontSize: 16,
                                 color: Theme.of(context).brightness ==
                                         Brightness.dark
-                                    ? Colors.white.withOpacity(0.7)
-                                    : Colors.black,
+                                    ? AppColors.kWhiteColor.withOpacity(0.7)
+                                    : AppColors.kBlackColor,
                               ),
                             ),
                             subtitle: Text(
@@ -130,10 +130,11 @@ class ScanHistoryTab extends StatelessWidget {
                                 ),
                               )}",
                               style: TextStyle(
+                                fontSize: 14,
                                 color: Theme.of(context).brightness ==
                                         Brightness.dark
-                                    ? Colors.white.withOpacity(0.7)
-                                    : Colors.black,
+                                    ? AppColors.kWhiteColor.withOpacity(0.7)
+                                    : AppColors.kBlackColor.withOpacity(0.5),
                               ),
                             ),
                           ),

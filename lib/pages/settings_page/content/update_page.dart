@@ -59,9 +59,9 @@ class _UpdatePageState extends State<UpdatePage> {
   Widget build(BuildContext context) {
     bool isDark = Theme.of(context).brightness == Brightness.dark;
     Color backgroundColor =
-        isDark ? Colors.black : Colors.white.withOpacity(0.95);
-    Color titleColor = isDark ? Colors.white.withOpacity(0.7) : Colors.black;
-    Color buttonColor = isDark ? Colors.grey.withOpacity(0.3) : Colors.grey.withOpacity(0.8);
+        isDark ? AppColors.kBlackColor : AppColors.kWhiteColor.withOpacity(0.95);
+    Color titleColor = isDark ? AppColors.kWhiteColor.withOpacity(0.7) : AppColors.kBlackColor;
+    Color buttonColor = isDark ? AppColors.kGreyColor.withOpacity(0.3) : AppColors.kGreyColor.withOpacity(0.8);
 
     return Scaffold(
       backgroundColor: backgroundColor,
@@ -109,7 +109,7 @@ class _UpdatePageState extends State<UpdatePage> {
                           ),
                           _customElevatedButton(
                             "Update now",
-                            AppColors.kMainColor,
+                            AppColors.kMainPurpleColor,
                             _startUpdate,
                           ),
                           SizedBox(
@@ -159,7 +159,7 @@ class _UpdatePageState extends State<UpdatePage> {
           title,
           style: const TextStyle(
             fontSize: 20,
-            color: Colors.white,
+            color: AppColors.kWhiteColor,
             fontWeight: FontWeight.bold,
           ),
         ),

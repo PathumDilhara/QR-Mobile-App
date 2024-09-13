@@ -5,22 +5,21 @@ import 'colors.dart';
 
 class CustomThemeData {
 
+  // Light theme
   static ThemeData lightTheme(BuildContext context) {
-    // final Color bgColor = Theme.of(context).brightness == Brightness.dark
-    //     ? Colors.black
-    //     : AppColors.kScaffoldBgColor;
     return ThemeData(
-      scaffoldBackgroundColor: AppColors.kScaffoldBgColor,
+      scaffoldBackgroundColor: AppColors.kScaffoldBgColorLight,
       appBarTheme: const AppBarTheme(color: Colors.transparent,scrolledUnderElevation: 0, elevation: 0),
       textTheme: GoogleFonts.dmSansTextTheme(
         Theme.of(context).textTheme,
       ),
       colorScheme: ColorScheme.fromSwatch().copyWith(
-        secondary: AppColors.kMainColor,
+        secondary: AppColors.kMainPurpleColor,
       ),
     );
   }
 
+  // Dark theme
   static ThemeData darkTheme(BuildContext context) {
     return ThemeData(
       scaffoldBackgroundColor: Colors.black.withOpacity(0.5),
@@ -32,7 +31,7 @@ class CustomThemeData {
             ),
       ),
       colorScheme: ColorScheme.fromSwatch(brightness: Brightness.dark).copyWith(
-        secondary: AppColors.kMainColor,
+        secondary: AppColors.kMainPurpleColor,
       ),
     );
   }

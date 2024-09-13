@@ -20,9 +20,11 @@ class _FeedbackPagesState extends State<FeedbackPages> {
     bool isDark = Theme.of(context).brightness == Brightness.dark;
     Color backgroundColor = isDark
         ? AppColors.kSettingsContentsPageBgColor
-        : Colors.white.withOpacity(0.95);
-    Color titleColor = isDark ? Colors.white.withOpacity(0.7) : Colors.black;
-    Color headingColor = isDark ? Colors.white.withOpacity(0.7) : Colors.black;
+        : AppColors.kWhiteColor.withOpacity(0.95);
+    Color titleColor =
+        isDark ? AppColors.kWhiteColor.withOpacity(0.7) : Colors.black;
+    Color headingColor =
+        isDark ? AppColors.kWhiteColor.withOpacity(0.7) : Colors.black;
 
     return Scaffold(
       backgroundColor: backgroundColor,
@@ -70,14 +72,14 @@ class _FeedbackPagesState extends State<FeedbackPages> {
                         : FloatingLabelBehavior.auto,
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(
-                        color: Colors.grey,
+                      borderSide: BorderSide(
+                        color: AppColors.kGreyColor,
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: const BorderSide(
-                        color: AppColors.kMainColor,
+                        color: AppColors.kMainPurpleColor,
                       ),
                     ),
                     errorBorder: OutlineInputBorder(
@@ -89,14 +91,14 @@ class _FeedbackPagesState extends State<FeedbackPages> {
                     focusedErrorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: const BorderSide(
-                        color: AppColors.kMainColor,
+                        color: AppColors.kMainPurpleColor,
                       ),
                     ),
                     filled: true,
-                    fillColor: Colors.white,
-                    labelStyle: const TextStyle(
+                    fillColor: AppColors.kWhiteColor,
+                    labelStyle: TextStyle(
                       fontSize: 16,
-                      color: Colors.grey,
+                      color: AppColors.kGreyColor,
                     ),
                   ),
                   validator: (value) {
@@ -128,12 +130,12 @@ class _FeedbackPagesState extends State<FeedbackPages> {
                         : FloatingLabelBehavior.auto,
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(color: Colors.grey),
+                      borderSide: BorderSide(color: AppColors.kGreyColor),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: const BorderSide(
-                        color: AppColors.kMainColor,
+                        color: AppColors.kMainPurpleColor,
                       ),
                     ),
                     errorBorder: OutlineInputBorder(
@@ -145,14 +147,14 @@ class _FeedbackPagesState extends State<FeedbackPages> {
                     focusedErrorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: const BorderSide(
-                        color: AppColors.kMainColor,
+                        color: AppColors.kMainPurpleColor,
                       ),
                     ),
                     filled: true,
-                    fillColor: Colors.white,
-                    labelStyle: const TextStyle(
+                    fillColor: AppColors.kWhiteColor,
+                    labelStyle: TextStyle(
                       fontSize: 16,
-                      color: Colors.grey,
+                      color: AppColors.kGreyColor,
                     ),
                   ),
                   keyboardType: TextInputType.emailAddress,
@@ -189,12 +191,12 @@ class _FeedbackPagesState extends State<FeedbackPages> {
                     alignLabelWithHint: true,
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(color: Colors.grey),
+                      borderSide: BorderSide(color: AppColors.kGreyColor),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: const BorderSide(
-                        color: AppColors.kMainColor,
+                        color: AppColors.kMainPurpleColor,
                       ),
                     ),
                     errorBorder: OutlineInputBorder(
@@ -206,14 +208,14 @@ class _FeedbackPagesState extends State<FeedbackPages> {
                     focusedErrorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: const BorderSide(
-                        color: AppColors.kMainColor,
+                        color: AppColors.kMainPurpleColor,
                       ),
                     ),
                     filled: true,
-                    fillColor: Colors.white,
-                    labelStyle: const TextStyle(
+                    fillColor: AppColors.kWhiteColor,
+                    labelStyle: TextStyle(
                       fontSize: 16,
-                      color: Colors.grey,
+                      color: AppColors.kGreyColor,
                     ),
                   ),
                   maxLines: 5,
@@ -237,8 +239,8 @@ class _FeedbackPagesState extends State<FeedbackPages> {
                       maximumSize: WidgetStatePropertyAll(
                         Size(MediaQuery.of(context).size.width * 0.6, 50),
                       ),
-                      backgroundColor:
-                          const WidgetStatePropertyAll(AppColors.kMainColor),
+                      backgroundColor: const WidgetStatePropertyAll(
+                          AppColors.kMainPurpleColor),
                     ),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
@@ -250,7 +252,9 @@ class _FeedbackPagesState extends State<FeedbackPages> {
                       child: Text(
                         "Submit",
                         style: TextStyle(
-                            fontSize: 25, color: AppColors.kWhiteColor),
+                          fontSize: 25,
+                          color: AppColors.kWhiteColor,
+                        ),
                       ),
                     ),
                   ),
@@ -284,14 +288,14 @@ class _FeedbackPagesState extends State<FeedbackPages> {
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w500,
-              color: Colors.black,
+              color: AppColors.kBlackColor,
             ),
           ),
           actions: <Widget>[
             TextButton(
               style: ButtonStyle(
                 overlayColor: WidgetStatePropertyAll(
-                  AppColors.kMainColor.withOpacity(0.2),
+                  AppColors.kMainPurpleColor.withOpacity(0.2),
                 ), // Light purple splash
               ),
               onPressed: () {
@@ -299,7 +303,7 @@ class _FeedbackPagesState extends State<FeedbackPages> {
               },
               child: const Text(
                 'OK',
-                style: TextStyle(color: AppColors.kMainColor),
+                style: TextStyle(color: AppColors.kMainPurpleColor),
               ),
             ),
           ],

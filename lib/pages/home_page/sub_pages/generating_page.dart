@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -59,15 +58,16 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
           child: Column(
             children: [
               SizedBox(
-                height: qrData == null || qrData!.isEmpty ? 200 : 10,
+                height: qrData == null || qrData!.isEmpty ? 200 : 60,
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.2,
+                height: MediaQuery.of(context).size.height * 0.15,
                 width: double.infinity,
                 child: Center(
                   child: _buildTextField(),
                 ),
               ),
+              (qrData == null || qrData!.isEmpty) ? _generateButton() : const SizedBox(),
               SizedBox(
                 height: qrData == null || qrData!.isEmpty ? 0 : 30,
               ),
@@ -84,7 +84,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
                           if (snapshot.connectionState ==
                               ConnectionState.waiting) {
                             return const CircularProgressIndicator(
-                              color: AppColors.kMainColor,
+                              color: AppColors.kMainPurpleColor,
                             ); // Show a loading indicator while waiting
                           } else if (snapshot.hasError) {
                             WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -132,8 +132,8 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
     // Don't create a new instance of QRHistoryProvider inside the onPressed callback,
     // instead of using the one provided by the Provider.
     // get existing instance
-    final qrHistoryProvider = Provider.of<QRHistoryProvider>(context);
-    final settingsProvider = Provider.of<SettingsProvider>(context);
+    // final qrHistoryProvider = Provider.of<QRHistoryProvider>(context);
+    // final settingsProvider = Provider.of<SettingsProvider>(context);
 
     return TextField(
       maxLines: 2,
@@ -142,39 +142,56 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
       onTapOutside: (event) {
         FocusScope.of(context).unfocus();
       },
-      onTap: () {
-        if (isCreated) {
-          qrInputController.text = "";
+      onTapAlwaysCalled: true,
+      onChanged: (value) {
+        if(value.isEmpty){
+          setState(() {
+            qrInputController.text = "";
+          });
         }
-        isCreated = false;
       },
+      // onEditingComplete: () {
+      //   setState(() {
+      //     qrInputController.text = "";
+      //   });
+      // },
+      // onTap: () {
+      //   if (isCreated) {
+      //     setState(() {
+      //       qrInputController.text = "";
+      //     });
+      //
+      //   }
+      //   isCreated = false;
+      // },
       controller: qrInputController,
       decoration: InputDecoration(
           filled: true,
           fillColor: Colors.white,
-          suffixIcon: IconButton(
-            onPressed: () async {
-              isCreated = true;
-              // instance of GeneratedQRModel
-              GeneratedQRModel generatedQRModel = GeneratedQRModel(
-                title: qrInputController.text,
-                date: DateTime.now(),
-              );
-
-              // qrData = qrInputController.text;
-              // _qrImageView(qrData);
-              //print(qrData);
-              FocusScope.of(context).unfocus();
-              if (settingsProvider.isHistorySaving &&
-                  qrInputController.text.isNotEmpty) {
-                await qrHistoryProvider.storeGeneratedQR(generatedQRModel);
-              }
-            },
-            icon: const Icon(
-              Icons.done_outlined,
-              size: 30,
-            ),
-          ),
+          // suffixIcon: IconButton(
+          //   onPressed: () async {
+          //     isCreated = true;
+          //     // instance of GeneratedQRModel
+          //     GeneratedQRModel generatedQRModel = GeneratedQRModel(
+          //       title: qrInputController.text,
+          //       date: DateTime.now(),
+          //     );
+          //
+          //     // qrData = qrInputController.text;
+          //     // _qrImageView(qrData);
+          //     //print(qrData);
+          //     FocusScope.of(context).unfocus();
+          //     if (settingsProvider.isHistorySaving &&
+          //         qrInputController.text.isNotEmpty) {
+          //       await qrHistoryProvider.storeGeneratedQR(generatedQRModel);
+          //     }
+          //   },
+          //   icon: Icon(
+          //     Icons.done_outlined,
+          //     size: 30,
+          //     color: AppColors.kGreenColor,
+          //   ),
+          // ),
           hintText: "Enter text or URL to generate QR code",
           hintStyle: const TextStyle(
             color: Colors.grey,
@@ -191,7 +208,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),
             borderSide: const BorderSide(
-              color: AppColors.kMainColor,
+              color: AppColors.kMainPurpleColor,
               width: 2,
             ),
           ),
@@ -223,7 +240,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
               fontSize: 20,
               color: Theme.of(context).brightness == Brightness.dark
                   ? AppColors.kWhiteColor.withOpacity(0.7)
-                  : AppColors.kSubtitleColor.withOpacity(0.3),
+                  : AppColors.kGreyColor,
             ),
           ),
         ],
@@ -261,7 +278,8 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
           minimumSize: const WidgetStatePropertyAll(
             Size(double.infinity, 50),
           ),
-          backgroundColor: const WidgetStatePropertyAll(AppColors.kMainColor),
+          backgroundColor:
+              const WidgetStatePropertyAll(AppColors.kMainPurpleColor),
         ),
         onPressed: () async {
           try {
@@ -271,12 +289,12 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
             final Uint8List? image = await screenshotController.capture();
             if (image != null) {
               // print("***********************$datetime");
-              final result =
-                  await ImageGallerySaver.saveImage(image, name: "QR_$formattedDateTime");
+              final result = await ImageGallerySaver.saveImage(image,
+                  name: "QR_$formattedDateTime");
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   elevation: 3,
-                  backgroundColor: AppColors.kMainColor,
+                  backgroundColor: AppColors.kMainPurpleColor,
                   duration: const Duration(seconds: 1),
                   content: Text(
                     result['isSuccess']
@@ -326,6 +344,47 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
                 color: AppColors.kWhiteColor,
               )
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _generateButton() {
+    final qrHistoryProvider = Provider.of<QRHistoryProvider>(context);
+    final settingsProvider = Provider.of<SettingsProvider>(context);
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 30.0, ),
+      child: ElevatedButton(
+        style: ButtonStyle(
+          elevation: const WidgetStatePropertyAll(3),
+          overlayColor: WidgetStatePropertyAll(Colors.white.withOpacity(0.1)),
+          minimumSize: const WidgetStatePropertyAll(
+            Size(double.infinity, 50),
+          ),
+          backgroundColor:
+              const WidgetStatePropertyAll(AppColors.kMainPurpleColor),
+        ),
+        onPressed: () async{
+          isCreated = true;
+          // instance of GeneratedQRModel
+          GeneratedQRModel generatedQRModel = GeneratedQRModel(
+            title: qrInputController.text,
+            date: DateTime.now(),
+          );
+
+          FocusScope.of(context).unfocus();
+          if (settingsProvider.isHistorySaving &&
+              qrInputController.text.isNotEmpty) {
+            await qrHistoryProvider.storeGeneratedQR(generatedQRModel);
+          }
+        },
+        child: const Text(
+          "Generate",
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+            color: AppColors.kWhiteColor,
           ),
         ),
       ),

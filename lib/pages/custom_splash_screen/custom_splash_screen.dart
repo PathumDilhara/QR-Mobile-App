@@ -19,7 +19,7 @@ class _CustomSplashScreenState extends State<CustomSplashScreen> {
 
   _navigateToHome() async {
     // Simulate loading (e.g., data loading, initialization)
-    await Future.delayed(const Duration(seconds: 3)); // Replace with your actual loading logic
+    await Future.delayed(const Duration(seconds: 1)); // Replace with your actual loading logic
     // Navigate to the main app
     GoRouter.of(context).go('/home'); // Replace '/home' with the appropriate route
   }
@@ -45,7 +45,7 @@ class _CustomSplashScreenState extends State<CustomSplashScreen> {
               padding: EdgeInsets.all(16.0),
               child: LinearProgressIndicator(
                 backgroundColor: Colors.white,
-                color: AppColors.kMainColor,
+                color: AppColors.kMainPurpleColor,
               ),
             ),
           ),

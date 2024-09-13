@@ -90,7 +90,7 @@ class HomePage extends StatelessWidget {
           fontSize: 18,
           fontWeight: FontWeight.bold,
         ),
-        activeColorPrimary: AppColors.kMainColor, // for icon
+        activeColorPrimary: AppColors.kMainPurpleColor, // for icon
         activeColorSecondary: AppColors.kWhiteColor, // for text
         inactiveColorPrimary: inactiveColor, // for when not selected
       ),
@@ -104,7 +104,7 @@ class HomePage extends StatelessWidget {
           fontSize: 18,
           fontWeight: FontWeight.bold,
         ),
-        activeColorPrimary: AppColors.kMainColor,
+        activeColorPrimary: AppColors.kMainPurpleColor,
         activeColorSecondary: AppColors.kWhiteColor,
         inactiveColorPrimary: inactiveColor,
       ),
@@ -118,7 +118,7 @@ class HomePage extends StatelessWidget {
           fontSize: 18,
           fontWeight: FontWeight.bold,
         ),
-        activeColorPrimary: AppColors.kMainColor, // for icon
+        activeColorPrimary: AppColors.kMainPurpleColor, // for icon
         activeColorSecondary: AppColors.kWhiteColor, // for text
         inactiveColorPrimary: inactiveColor, // for when not selected
       ),
@@ -132,7 +132,7 @@ class HomePage extends StatelessWidget {
           fontSize: 18,
           fontWeight: FontWeight.bold,
         ),
-        activeColorPrimary: AppColors.kMainColor, // for icon
+        activeColorPrimary: AppColors.kMainPurpleColor, // for icon
         activeColorSecondary: AppColors.kWhiteColor, // for text
         inactiveColorPrimary: inactiveColor, // for when not selected
       ),

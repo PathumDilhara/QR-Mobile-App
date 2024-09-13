@@ -23,9 +23,6 @@ class _HistoryPageState extends State<HistoryPage>
 
   @override
   Widget build(BuildContext context) {
-    final Color customColor = Theme.of(context).brightness == Brightness.dark
-        ? AppColors.kWhiteColor.withOpacity(0.7)
-        : AppColors.kBlackColor.withOpacity(0.8);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -36,12 +33,12 @@ class _HistoryPageState extends State<HistoryPage>
                 ? Colors.black12
                 : Colors.transparent,
             overlayColor: WidgetStatePropertyAll(
-              AppColors.kMainColor.withOpacity(0.1),
+              AppColors.kMainPurpleColor.withOpacity(0.1),
             ),
             indicatorColor: Theme.of(context).brightness == Brightness.dark
                 ? Colors.white.withOpacity(0.5)
-                : AppColors.kMainColor,
-            labelColor: AppColors.kMainColor,
+                : AppColors.kMainPurpleColor,
+            labelColor: AppColors.kMainPurpleColor,
             unselectedLabelColor: Colors.grey,
             controller: _tabController,
             tabs: const [
@@ -63,9 +60,10 @@ class _HistoryPageState extends State<HistoryPage>
         title: Text(
           "History",
           style: TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-              color: customColor),
+            fontSize: 35,
+            fontWeight: FontWeight.bold,
+            color: AppColors.getTextColor(context),
+          ),
         ),
         centerTitle: true,
       ),

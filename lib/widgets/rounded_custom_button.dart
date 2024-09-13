@@ -37,7 +37,7 @@ class RoundedCustomButton extends StatelessWidget {
         minimumSize: const WidgetStatePropertyAll(
           Size(double.infinity, 50),
         ),
-        backgroundColor: const WidgetStatePropertyAll(AppColors.kMainColor),
+        backgroundColor: const WidgetStatePropertyAll(AppColors.kMainPurpleColor),
       ),
       child: Center(
         child: Text(

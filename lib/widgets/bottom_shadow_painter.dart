@@ -5,7 +5,7 @@ class BottomShadowPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = AppColors.kMainColor.withOpacity(0.5)
+      ..color = AppColors.kMainPurpleColor.withOpacity(0.5)
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 10); // Adjust blur
 
     final rect = Rect.fromLTWH(0, size.height, size.width, 50); // Paint shadow below

@@ -36,19 +36,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               children: const [
                 OnboardingScreenWidget(
                   title: "Easy QR App",
-                  imageUrl: "assets/images/qrnew5.png",
+                  imageUrl: "assets/images/logo2.png",
                   description:
                       "This app is made to create and scan any QR and Barcode",
                 ),
                 OnboardingScreenWidget(
                   title: "QR Scanning",
-                  imageUrl: "assets/images/qrnew3.png",
+                  imageUrl: "assets/images/logo2.png",
                   description:
                       "This app is made to create and scan any QR and Barcode",
                 ),
                 OnboardingScreenWidget(
                   title: "QR Generating",
-                  imageUrl: "assets/images/qrnew3.png",
+                  imageUrl: "assets/images/logo2.png",
                   description:
                       "This app is made to create and scan any QR and Barcode",
                 )
@@ -70,7 +70,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     paintStyle: PaintingStyle.fill,
                     strokeWidth: 1,
                     dotColor: AppColors.kSubtitleColor.withOpacity(0.1),
-                    activeDotColor: AppColors.kMainColor),
+                    activeDotColor: AppColors.kMainPurpleColor),
               ),
             ),
             Positioned(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qr_mobile_app/utils/colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -11,9 +12,9 @@ class PrivacyPolicyPage extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isDark = Theme.of(context).brightness == Brightness.dark;
     Color backgroundColor = isDark
-        ? Colors.white.withOpacity(0.11)
-        : Colors.white.withOpacity(0.95);
-    Color titleColor = isDark ? Colors.white.withOpacity(0.7) : Colors.black;
+        ? AppColors.kWhiteColor.withOpacity(0.11)
+        : AppColors.kWhiteColor.withOpacity(0.95);
+    Color titleColor = isDark ? AppColors.kWhiteColor.withOpacity(0.7) : AppColors.kBlackColor;
 
     return Scaffold(
       backgroundColor: backgroundColor,
@@ -98,7 +99,7 @@ class PrivacyPolicyPage extends StatelessWidget {
         isLink
             ? GestureDetector(
                 onTap: () async {
-                  print("*****************clicked");
+                  // print("*****************clicked");
                   final String url = link!;
                   if (await canLaunchUrlString(url)) {
                     await launchUrlString(url);
@@ -108,10 +109,10 @@ class PrivacyPolicyPage extends StatelessWidget {
                 },
                 child: Text(
                   content,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
-                    color: Colors.blue, // Link color
+                    color: AppColors.kLinkColor, // Link color
                     decoration: TextDecoration.underline,
                   ),
                 ),
