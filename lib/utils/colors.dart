@@ -11,6 +11,7 @@ class AppColors {
   static Color kSettingsContentsPageBgColor = Colors.white.withOpacity(0.3);
   static Color kLinkColor = Colors.blue;
   static Color kGreenColor = Colors.green;
+  static Color kSnackBarBgColor = Colors.black.withOpacity(0.8);
 
   // Purple theme colour
   static const Color kMainPurpleColor = Color(0xFFD053F3);

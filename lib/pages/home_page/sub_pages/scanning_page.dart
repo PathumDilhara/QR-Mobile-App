@@ -686,9 +686,7 @@ class _QRScanningPageState extends State<QRScanningPage>
 
   Widget _customScanScreen() {
     return !_isCameraPermissionPermanentlyDenied
-        ? const Center(
-            child: Text("data"),
-          )
+        ? const SizedBox()
         : Padding(
             padding: const EdgeInsets.all(20.0),
             child: Column(

@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -32,21 +33,40 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
     super.dispose();
   }
 
-  Future<void> _requestPermission() async {
-    final status = await Permission.storage.request();
-    if (status.isGranted) {
-      // Permission granted
-      // print("Permission granted");
-    } else if (status.isDenied) {
-      // Handle permission denied
-      // print("Permission denied");
-      // openAppSettings();
-    } else if (status.isPermanentlyDenied) {
-      // Permission permanently denied, redirect to settings
-      // print("Permission permanently denied");
-      openAppSettings();
+  // Function to check and request permission
+  Future<bool> _checkAndRequestPermission() async {
+    // final status = await Permission.storage.status;
+    bool permissionGranted = await Permission.storage.isGranted ||
+        await Permission.photos.isGranted;
+
+    if (!permissionGranted) {
+      permissionGranted = await Permission.storage.request().isGranted ||
+          await Permission.photos.request().isGranted;
+      // Request permission
+      // final result = await Permission.storage.request();
+      // return result.isGranted;
+      // return permissionGranted;
     }
+
+    // return true; // Permission already granted
+    return permissionGranted;
   }
+
+  // Future<void> _requestPermission() async {
+  //   final status = await Permission.storage.request();
+  //   if (status.isGranted) {
+  //     // Permission granted
+  //     // print("Permission granted");
+  //   } else if (status.isDenied) {
+  //     // Handle permission denied
+  //     // print("Permission denied");
+  //     // openAppSettings();
+  //   } else if (status.isPermanentlyDenied) {
+  //     // Permission permanently denied, redirect to settings
+  //     // print("Permission permanently denied");
+  //     openAppSettings();
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +87,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
                   child: _buildTextField(),
                 ),
               ),
-              isCreated ? const SizedBox(): _generateButton(),
+              isCreated ? const SizedBox() : _generateButton(),
               SizedBox(
                 height: qrData == null || qrData!.isEmpty ? 0 : 30,
               ),
@@ -144,7 +164,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
       },
       onTapAlwaysCalled: true,
       onChanged: (value) {
-        if(value.isEmpty){
+        if (value.isEmpty) {
           setState(() {
             qrInputController.text = "";
             isCreated = false;
@@ -229,9 +249,9 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
   // Save button
   Widget _saveButton() {
     DateTime datetime = DateTime.now();
-    String formattedDateTime =
-        "${datetime.toLocal().toString().split(' ')[0].replaceAll('-', '')}_${datetime.toLocal().toString().split(' ')[1].split('.')[0].replaceAll(':', '')}";
-    // print("***********************$formattedDateTime");
+    // String formattedDateTime =
+    //     "${datetime.toLocal().toString().split(' ')[0].replaceAll('-', '')}_${datetime.toLocal().toString().split(' ')[1].split('.')[0].replaceAll(':', '')}";
+    String formattedDateTime =  DateFormat('yyyyMMdd_HHmmss').format(datetime);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 20),
       child: ElevatedButton(
@@ -245,42 +265,65 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
               const WidgetStatePropertyAll(AppColors.kMainPurpleColor),
         ),
         onPressed: () async {
-          try {
-            await _requestPermission();
-            // check unnecessary imports
-            await Future.delayed(const Duration(milliseconds: 300));
-            final Uint8List? image = await screenshotController.capture();
-            if (image != null) {
-              // print("***********************$datetime");
-              final result = await ImageGallerySaver.saveImage(image,
-                  name: "QR_$formattedDateTime");
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  elevation: 3,
-                  backgroundColor: AppColors.kMainPurpleColor,
-                  duration: const Duration(seconds: 1),
-                  content: Text(
-                    result['isSuccess']
-                        ? "Image Saved Successfully."
-                        : "Failed to Save Image.",
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? Colors.white.withOpacity(0.7)
-                          : Colors.white,
+          bool permissionGranted = await _checkAndRequestPermission();
+          if (permissionGranted) {
+            // await _requestPermission();
+            try {
+              // check unnecessary imports
+              await Future.delayed(const Duration(milliseconds: 300));
+              final Uint8List? image = await screenshotController.capture();
+              if (image != null) {
+                // Save image to gallery
+                final result = await ImageGallerySaver.saveImage(image,
+                    name: "QR_$formattedDateTime");
+
+                // Show success or failure message
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    elevation: 3,
+                    backgroundColor: AppColors.kSnackBarBgColor,
+                    duration: const Duration(seconds: 1),
+                    content: Text(
+                      result['isSuccess']
+                          ? "Image Saved Successfully."
+                          : "Failed to Save Image.",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? Colors.white.withOpacity(0.7)
+                            : Colors.white,
+                      ),
                     ),
+                  ),
+                );
+              }
+            } catch (err) {
+              // print('Error saving image: $err');
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  backgroundColor: Colors.red,
+                  duration: Duration(seconds: 1),
+                  content: Text(
+                    "Failed to save image.",
+                    style: TextStyle(fontSize: 18),
                   ),
                 ),
               );
             }
-          } catch (err) {
-            // print('Error saving image: $err');
+          } else {
+            bool isPermanentlyDenied = await Permission.storage.status.isPermanentlyDenied;
+            if(isPermanentlyDenied){
+              openAppSettings();
+            } else{
+              await Permission.storage.request();
+            }
+            // Permission was denied
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 backgroundColor: Colors.red,
                 duration: Duration(seconds: 1),
                 content: Text(
-                  "Failed to capture image.",
+                  "Permission denied. Unable to save image.",
                   style: TextStyle(fontSize: 18),
                 ),
               ),
@@ -317,7 +360,9 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
     final qrHistoryProvider = Provider.of<QRHistoryProvider>(context);
     final settingsProvider = Provider.of<SettingsProvider>(context);
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 30.0, ),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 30.0,
+      ),
       child: ElevatedButton(
         style: ButtonStyle(
           elevation: const WidgetStatePropertyAll(3),
@@ -328,7 +373,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
           backgroundColor:
               const WidgetStatePropertyAll(AppColors.kMainPurpleColor),
         ),
-        onPressed: () async{
+        onPressed: () async {
           isCreated = true;
           // instance of GeneratedQRModel
           GeneratedQRModel generatedQRModel = GeneratedQRModel(
