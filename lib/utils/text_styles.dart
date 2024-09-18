@@ -10,15 +10,15 @@ class AppTextStyles {
   );
 
   // Subtitle Style
-  static TextStyle appSubtitleStyle = const TextStyle(
+  static TextStyle appSubtitleStyle = TextStyle(
     fontSize: 20,
-    fontWeight: FontWeight.bold,
-    color: AppColors.kBlackColor,
+    fontWeight: FontWeight.w500,
+    color: AppColors.kSubtitleColor,
   );
 
   // Button Style
   static TextStyle appButtonTextStyle = const TextStyle(
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: FontWeight.w500,
     color: AppColors.kWhiteColor,
   );

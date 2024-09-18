@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart' as qr;
 import 'package:qr_mobile_app/model/scanned_qr_model.dart';
@@ -21,7 +22,6 @@ class QRScanningPage extends StatefulWidget {
 
 class _QRScanningPageState extends State<QRScanningPage>
     with SingleTickerProviderStateMixin {
-
   final GlobalKey qrKey = GlobalKey(debugLabel: "QR");
   qr.QRViewController? qrViewController;
   qr.Barcode? result; // Variable to save the scanned QR code data
@@ -41,20 +41,80 @@ class _QRScanningPageState extends State<QRScanningPage>
   final ImagePicker _picker = ImagePicker();
   File? _image;
 
-
+  // Camera permission granted or not
+  bool _isCameraPermissionGranted = false;
+  bool _isCameraPermissionPermanentlyDenied = false;
 
   @override
   void initState() {
     super.initState();
+    // Camera permission
+    _checkCameraPermission();
 
     // Initialize animation controller
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 2),
     )..repeat(reverse: true); // Makes the animation move back and forth
-
     // Tween the animation between 0 and 1 for the full height movement
     _animation = Tween<double>(begin: 0, end: 1).animate(_animationController);
+  }
+
+  Future<void> _checkCameraPermission() async {
+    // Request camera permission
+    PermissionStatus status = await Permission.camera.status;
+    setState(() {
+      _isCameraPermissionGranted = status.isGranted;
+    });
+
+    if (status.isDenied || status.isPermanentlyDenied) {
+      // If permission is denied, request it
+      PermissionStatus requestStatus = await Permission.camera.request();
+
+      if (requestStatus.isDenied) {
+        // Handle the case where the user denies the permission again
+        _showPermissionDeniedDialog();
+      } else if (requestStatus.isPermanentlyDenied) {
+        setState(() {
+          _isCameraPermissionPermanentlyDenied =
+              requestStatus.isPermanentlyDenied;
+        });
+        // If the user permanently denies the permission, prompt them to go to settings
+      }
+      setState(() {
+        _isCameraPermissionGranted = requestStatus.isGranted;
+        _isCameraPermissionPermanentlyDenied = !requestStatus.isGranted;
+      });
+    }
+  }
+
+  void _showPermissionDeniedDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Camera Permission Required"),
+        content: const Text(
+            "This app requires camera access to scan QR codes. Please grant camera permission."),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              _checkCameraPermission(); // Try to request permission again
+            },
+            child: const Text("Retry"),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              setState(() {
+                _isCameraPermissionPermanentlyDenied = true;
+              });
+            },
+            child: const Text("Cancel"),
+          ),
+        ],
+      ),
+    );
   }
 
   // Controllers disposing methods
@@ -68,15 +128,15 @@ class _QRScanningPageState extends State<QRScanningPage>
   // In order to get hot reload to work we need to pause the camera if the platform
   // is android, or resume the camera if the platform is iOS.
   // After a Scanned done automatically pause the camera if no need remove it
-  @override
-  void reassemble() {
-    super.reassemble();
-    // if (Platform.isAndroid) {
-    //   qrViewController?.pauseCamera();
-    // } else if (Platform.isIOS) {
-    //   qrViewController?.resumeCamera();
-    // }
-  }
+  // @override
+  // void reassemble() {
+  //   super.reassemble();
+  //   // if (Platform.isAndroid) {
+  //   //   qrViewController?.pauseCamera();
+  //   // } else if (Platform.isIOS) {
+  //   //   qrViewController?.resumeCamera();
+  //   // }
+  // }
 
   // Method to pick image
   Future<void> _pickImage() async {
@@ -116,60 +176,64 @@ class _QRScanningPageState extends State<QRScanningPage>
       //   child: const Icon(Icons.add),
       // ),
       // floatingActionButtonLocation: CustomFabLocation(),
-      body: Stack(
-        children: [
-          Column(
-            children: <Widget>[
-              Expanded(
-                flex: 6,
-                child: qr.QRView(
-                  key: qrKey,
-                  onQRViewCreated: _onQRViewCreated,
-                  overlay: qr.QrScannerOverlayShape(
-                    borderColor: AppColors.kMainPurpleColor,
-                    borderRadius: 10,
-                    borderLength: 50,
-                    borderWidth: 10,
-                    cutOutSize: scanArea,
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Expanded(
-                flex: 2,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 20.0, vertical: 10),
-                  child: Column(
-                    children: [
-                      // Text("RecognizedText$_recognizedText"),
-                      Text(
-                        "Scan code",
-                        style: AppTextStyles.appDescriptionTextStyle.copyWith(
-                          color: Theme.of(context).brightness == Brightness.dark
-                              ? AppColors.kWhiteColor.withOpacity(0.7)
-                              : AppColors.kBlackColor,
+      body: !_isCameraPermissionGranted
+          ? _customScanScreen()
+          : Stack(
+              children: [
+                Column(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 6,
+                      child: qr.QRView(
+                        key: qrKey,
+                        onQRViewCreated: _onQRViewCreated,
+                        overlay: qr.QrScannerOverlayShape(
+                          borderColor: AppColors.kMainPurpleColor,
+                          borderRadius: 10,
+                          borderLength: 50,
+                          borderWidth: 10,
+                          cutOutSize: scanArea,
                         ),
                       ),
-                      const SizedBox(
-                        height: 10,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20.0, vertical: 10),
+                        child: Column(
+                          children: [
+                            // Text("RecognizedText$_recognizedText"),
+                            Text(
+                              "Scan code",
+                              style: AppTextStyles.appDescriptionTextStyle
+                                  .copyWith(
+                                color: Theme.of(context).brightness ==
+                                        Brightness.dark
+                                    ? AppColors.kWhiteColor.withOpacity(0.7)
+                                    : AppColors.kBlackColor,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            _pauseResumeCameraButton(),
+                          ],
+                        ),
                       ),
-                      _pauseResumeCameraButton(),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
-          // Scanning animation bar
-          _buildScanningAnimation(scanArea),
-          _flashButton(),
-          _cameraControlButton(),
-          _galleryButton(),
-        ],
-      ),
+                // Scanning animation bar
+                _buildScanningAnimation(scanArea),
+                _flashButton(),
+                _cameraControlButton(),
+                _galleryButton(),
+              ],
+            ),
     );
   }
 
@@ -250,7 +314,6 @@ class _QRScanningPageState extends State<QRScanningPage>
             if (settingsProvider.isHistorySaving) {
               await qrHistoryProvider.storeScnQR(scannedQRModel);
             }
-            // print("************************${scannedQRModel.title}");
           }
         } catch (err) {
           print(err.toString());
@@ -270,10 +333,9 @@ class _QRScanningPageState extends State<QRScanningPage>
         ),
         ElevatedButton(
           style: ElevatedButton.styleFrom(
-            fixedSize: const Size(60, 60),
-            padding: const EdgeInsets.all(10),
-            overlayColor: AppColors.kMainPurpleColor.withOpacity(0.3)
-          ),
+              fixedSize: const Size(60, 60),
+              padding: const EdgeInsets.all(10),
+              overlayColor: AppColors.kMainPurpleColor.withOpacity(0.3)),
           onPressed: () async {
             if (isCameraPaused) {
               await qrViewController!.resumeCamera();
@@ -350,9 +412,10 @@ class _QRScanningPageState extends State<QRScanningPage>
             return Icon(
               Icons.flip_camera_ios_outlined,
               size: 24,
-              color: snapshot.data == qr.CameraFacing.back || snapshot.data == null
-                  ? AppColors.kMainPurpleColor
-                  : AppColors.kWhiteColor,
+              color:
+                  snapshot.data == qr.CameraFacing.back || snapshot.data == null
+                      ? AppColors.kMainPurpleColor
+                      : AppColors.kWhiteColor,
             );
           },
         ),
@@ -619,5 +682,59 @@ class _QRScanningPageState extends State<QRScanningPage>
     } else {
       throw Exception("Invalid URL or could not launch $url");
     }
+  }
+
+  Widget _customScanScreen() {
+    return !_isCameraPermissionPermanentlyDenied
+        ? const Center(
+            child: Text("data"),
+          )
+        : Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Why we need access ?",
+                  style: AppTextStyles.appTitleStyle,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "This app requires camera access to scan QR codes. Please grant camera permission.",
+                  style: AppTextStyles.appSubtitleStyle
+                      .copyWith(color: Colors.grey),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      elevation: const WidgetStatePropertyAll(3),
+                      overlayColor:
+                          WidgetStatePropertyAll(Colors.white.withOpacity(0.1)),
+                      minimumSize: const WidgetStatePropertyAll(
+                        Size(double.infinity, 50),
+                      ),
+                      backgroundColor: const WidgetStatePropertyAll(
+                          AppColors.kMainPurpleColor),
+                    ),
+                    onPressed: () {
+                      openAppSettings();
+                      _checkCameraPermission();
+                    },
+                    child: Text(
+                      "Allow",
+                      style: AppTextStyles.appButtonTextStyle,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
   }
 }
