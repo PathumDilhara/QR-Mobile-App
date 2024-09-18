@@ -38,7 +38,11 @@ class QRHistoryProvider extends ChangeNotifier {
     final dynamic allGenQRCodes =
         _myGenQRBox.get("generated_qr", defaultValue: []);
 
-    storedGenQRCodes = allGenQRCodes.cast<GeneratedQRModel>().toList();
+    List<GeneratedQRModel> qrCodeList = allGenQRCodes.cast<GeneratedQRModel>().toList();
+    qrCodeList.sort((a, b) => b.date.compareTo(a.date)); // Newest first
+    storedGenQRCodes = qrCodeList;
+
+   // storedGenQRCodes = allGenQRCodes.cast<GeneratedQRModel>().toList();
   }
 
   // Method to delete a single history
@@ -87,7 +91,11 @@ class QRHistoryProvider extends ChangeNotifier {
     final dynamic allScnQRCodes =
         _myScnQRBox.get("scanned_qr", defaultValue: []);
 
-    storedScnQRCodes = allScnQRCodes.cast<ScannedQrModel>().toList();
+    List<ScannedQrModel> qrCodeList = allScnQRCodes.cast<ScannedQrModel>().toList();
+    qrCodeList.sort((a, b) => b.date.compareTo(a.date)); // Newest first
+    storedScnQRCodes = qrCodeList;
+
+    // storedScnQRCodes = allScnQRCodes.cast<ScannedQrModel>().toList();
   }
 
   // Method to delete a single scn history

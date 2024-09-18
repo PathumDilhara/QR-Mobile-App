@@ -67,7 +67,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
                   child: _buildTextField(),
                 ),
               ),
-              (qrData == null || qrData!.isEmpty) ? _generateButton() : const SizedBox(),
+              isCreated ? const SizedBox(): _generateButton(),
               SizedBox(
                 height: qrData == null || qrData!.isEmpty ? 0 : 30,
               ),
@@ -147,51 +147,14 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
         if(value.isEmpty){
           setState(() {
             qrInputController.text = "";
+            isCreated = false;
           });
         }
       },
-      // onEditingComplete: () {
-      //   setState(() {
-      //     qrInputController.text = "";
-      //   });
-      // },
-      // onTap: () {
-      //   if (isCreated) {
-      //     setState(() {
-      //       qrInputController.text = "";
-      //     });
-      //
-      //   }
-      //   isCreated = false;
-      // },
       controller: qrInputController,
       decoration: InputDecoration(
           filled: true,
           fillColor: Colors.white,
-          // suffixIcon: IconButton(
-          //   onPressed: () async {
-          //     isCreated = true;
-          //     // instance of GeneratedQRModel
-          //     GeneratedQRModel generatedQRModel = GeneratedQRModel(
-          //       title: qrInputController.text,
-          //       date: DateTime.now(),
-          //     );
-          //
-          //     // qrData = qrInputController.text;
-          //     // _qrImageView(qrData);
-          //     //print(qrData);
-          //     FocusScope.of(context).unfocus();
-          //     if (settingsProvider.isHistorySaving &&
-          //         qrInputController.text.isNotEmpty) {
-          //       await qrHistoryProvider.storeGeneratedQR(generatedQRModel);
-          //     }
-          //   },
-          //   icon: Icon(
-          //     Icons.done_outlined,
-          //     size: 30,
-          //     color: AppColors.kGreenColor,
-          //   ),
-          // ),
           hintText: "Enter text or URL to generate QR code",
           hintStyle: const TextStyle(
             color: Colors.grey,
