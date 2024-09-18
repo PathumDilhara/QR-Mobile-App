@@ -238,7 +238,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
               backgroundColor: Colors.white,
               //embeddedImage: const ExactAssetImage("assets/images/flutter.png"),
               version: QrVersions.auto,
-              size: MediaQuery.of(context).size.width * 0.8,
+              size: 576,
             ),
           ],
         ),

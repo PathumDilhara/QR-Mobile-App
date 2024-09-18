@@ -77,16 +77,49 @@ class _FAQPageState extends State<FAQPage> {
                         );
                       },
                       body: ListTile(
-                        title: Text(
-                          faq.description,
-                          style: TextStyle(
-                            fontStyle: FontStyle.italic,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black.withOpacity(0.5),
-                          ),
+                        title: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: faq.description
+                              .split('\n') // Split the description by new lines
+                              .map((line) => Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Icon(
+                                Icons.brightness_1, // Bullet point icon
+                                size: 10, // Customize the size of the bullet
+                                color: AppColors.kGreyColor, // Bullet point color
+                              ),
+                              const SizedBox(width: 8), // Space between bullet and text
+                              Expanded(
+                                child: Text(
+                                  line.trim(), // Text of the description
+                                  style: TextStyle(
+                                    fontStyle: FontStyle.italic,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.black.withOpacity(0.5),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ))
+                              .toList(),
                         ),
                       ),
+
+                      // body: ListTile(
+                      //   leading: Icon(Icons.brightness_1, size: 10, color: AppColors.kGreyColor,),
+                      //   title: Text(
+                      //     faq.description,
+                      //     style: TextStyle(
+                      //       fontStyle: FontStyle.italic,
+                      //       fontSize: 18,
+                      //       fontWeight: FontWeight.w500,
+                      //       color: Colors.black.withOpacity(0.5),
+                      //     ),
+                      //   ),
+                      // ),
                       isExpanded: faq.isExpanded,
                     ),
                   ],

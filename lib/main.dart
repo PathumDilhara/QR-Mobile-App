@@ -49,6 +49,7 @@ class _MyAppState extends State<MyApp> {
       builder: (BuildContext context, SettingsProvider themeProvider,
           Widget? child) {
         return MaterialApp.router(
+          title: "Easy QR App",
           routerConfig: AppRouter.router,
           debugShowCheckedModeBanner: false,
           theme: CustomThemeData.lightTheme(context),
@@ -96,3 +97,5 @@ class _MyAppState extends State<MyApp> {
 // Future updates
 // Themes Blue, purple, green, orange, ...
 // Generating QR categorized Phone number, url, personal details, ...
+
+// if wifi open wifi settings
