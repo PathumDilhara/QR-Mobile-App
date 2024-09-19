@@ -169,13 +169,6 @@ class _QRScanningPageState extends State<QRScanningPage>
         ? 300.0
         : 300.0;
     return Scaffold(
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     openBottomSheet();
-      //   },
-      //   child: const Icon(Icons.add),
-      // ),
-      // floatingActionButtonLocation: CustomFabLocation(),
       body: !_isCameraPermissionGranted
           ? _customScanScreen()
           : Stack(
@@ -310,7 +303,7 @@ class _QRScanningPageState extends State<QRScanningPage>
             // Pause camera, animation and open a bottom sheet
             qrViewController.pauseCamera();
             _animationController.stop();
-            openBottomSheet(result!.code.toString());
+            _openBottomSheet(result!.code.toString());
             if (settingsProvider.isHistorySaving) {
               await qrHistoryProvider.storeScnQR(scannedQRModel);
             }
@@ -445,7 +438,7 @@ class _QRScanningPageState extends State<QRScanningPage>
   }
 
   // Open bottom sheet
-  void openBottomSheet(String qrCode) {
+  void _openBottomSheet(String qrCode) {
     const urlPattern =
         r'^(https?:\/\/)?([\w-]+(\.[\w-]+)+)(\/[\w- ;,./?%&=]*)?$';
     final regExp = RegExp(urlPattern);
@@ -499,7 +492,7 @@ class _QRScanningPageState extends State<QRScanningPage>
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontStyle: FontStyle.italic,
-                            fontSize: 23,
+                            fontSize: 18,
                             color: regExp.hasMatch(qrCode)
                                 ? Colors.blue
                                 : Colors.black,
@@ -518,11 +511,7 @@ class _QRScanningPageState extends State<QRScanningPage>
                 Column(
                   children: [
                     // advertisement area
-                    Image.asset(
-                      "assets/images/Screenshot 2024-08-27 214725.png",
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                    ),
+                    const SizedBox(height: 30,),
                     const SizedBox(
                       height: 10,
                     ),
@@ -570,7 +559,7 @@ class _QRScanningPageState extends State<QRScanningPage>
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   duration: const Duration(seconds: 1),
-                                  backgroundColor: AppColors.kMainPurpleColor,
+                                  backgroundColor: AppColors.kSnackBarBgColor,
                                   content: Text(
                                     "Copied to clipboard",
                                     style: AppTextStyles.appDescriptionTextStyle
@@ -646,7 +635,7 @@ class _QRScanningPageState extends State<QRScanningPage>
 
     // print(regExp.hasMatch(qrCode));
     if (regExp.hasMatch(qrCode) && await canLaunchUrl(url)) {
-      await launchUrl(url);
+      await launchUrl(url, mode: LaunchMode.externalApplication);
     } else {
       throw Exception("Invalid URL or could not launch $url");
     }

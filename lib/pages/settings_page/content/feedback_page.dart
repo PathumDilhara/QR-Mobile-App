@@ -287,8 +287,8 @@ class _FeedbackPagesState extends State<FeedbackPages> {
         ..text = 'Email: $email\nFeedback: $feedback';
 
       try {
-        // final sendReport = await send(message, smtpServer);
-        // print('Message sent: ${sendReport.toString()}');
+        final sendReport = await send(message, smtpServer);
+        print('Message sent: ${sendReport.toString()}');
         // Show confirmation dialog
         showDialog(
           context: context,
@@ -324,7 +324,7 @@ class _FeedbackPagesState extends State<FeedbackPages> {
         //   ),
         // );
         // print(e);
-
+        //
         // showDialog(
         //   context: context,
         //   builder: (BuildContext context) {

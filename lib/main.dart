@@ -78,24 +78,14 @@ class _MyAppState extends State<MyApp> {
 
 // improvements
 
-//MAIN
-// page transition improvements
-// google font style
-// copy to clipboard button
-
-// NATIVE SPLASH SCREEN
-
 // SCAN PAGE
-// if scanned on url open browser
-// URL opening error
-// scan area
-// scan animation passe at initial and after permission resume
 // imported qr decoding
 
 // SETTINGS
 // App updating using google play store console https://www.youtube.com/watch?v=Hfn_PvKMyIs
 // notifications
-// feedback
+// feedback, _submitFeedback
+// ads free feature
 
 // Future updates
 // Themes Blue, purple, green, orange, ...

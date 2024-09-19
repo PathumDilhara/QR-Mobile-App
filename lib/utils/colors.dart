@@ -13,9 +13,9 @@ class AppColors {
   static Color kGreenColor = Colors.green;
   static Color kSnackBarBgColor = Colors.black.withOpacity(0.8);
 
-  // Purple theme colour
-  static const Color kMainPurpleColor = Color(0xFFD053F3);
-  static const Color kPurpleColor = Colors.purple;
+  // main theme colour
+  static const Color kMainPurpleColor = Color(0xFFc5397c);
+  static const Color kPurpleColor = Color(0xFF8c154e);
 
   // // Blue theme color
   // static const Color kMainBlueColor = Colors.blueAccent;

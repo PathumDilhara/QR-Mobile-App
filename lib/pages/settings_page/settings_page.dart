@@ -68,9 +68,9 @@ class _SettingsPageState extends State<SettingsPage> {
                 height: 30,
               ),
               _customElevatedButton(),
-              const SizedBox(
-                height: 50,
-              ),
+              // const SizedBox(
+              //   height: 50,
+              // ),
               Text(
                 "General settings",
                 style: TextStyle(
@@ -302,25 +302,28 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Widget _customElevatedButton(){
-    return ElevatedButton(
-      onPressed: () {
-        print("clicked add free");
-      },
-      style: ButtonStyle(
-        overlayColor: WidgetStatePropertyAll(Colors.white.withOpacity(0.1),),
-        elevation: const WidgetStatePropertyAll(5),
-        minimumSize: const WidgetStatePropertyAll(
-          Size(120, 50),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 50.0),
+      child: ElevatedButton(
+        onPressed: () {
+          // print("clicked add free");
+        },
+        style: ButtonStyle(
+          overlayColor: WidgetStatePropertyAll(Colors.white.withOpacity(0.1),),
+          elevation: const WidgetStatePropertyAll(5),
+          minimumSize: const WidgetStatePropertyAll(
+            Size(120, 50),
+          ),
+          backgroundColor: const WidgetStatePropertyAll(AppColors.kMainPurpleColor),
         ),
-        backgroundColor: const WidgetStatePropertyAll(AppColors.kMainPurpleColor),
-      ),
-      child: const Center(
-        child: Text(
-          "Add free",
-          style: TextStyle(
-            fontSize: 28,
-            color: AppColors.kWhiteColor,
-            fontWeight: FontWeight.bold,
+        child: const Center(
+          child: Text(
+            "Ads free",
+            style: TextStyle(
+              fontSize: 28,
+              color: AppColors.kWhiteColor,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ),

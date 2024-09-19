@@ -8,13 +8,12 @@ import 'package:qr_mobile_app/pages/settings_page/content/privacy_policy_page.da
 import 'package:qr_mobile_app/pages/settings_page/settings_page.dart';
 import 'package:qr_mobile_app/user_services/shared_preferences_services/user_services.dart';
 
-import '../pages/custom_splash_screen/custom_splash_screen.dart';
 import '../pages/settings_page/content/update_page.dart';
 
 class AppRouter {
   static final router = GoRouter(
     navigatorKey: GlobalKey<NavigatorState>(),
-    initialLocation: "/splash_screen",
+    initialLocation: "/onboarding_screen",
     redirect: (context, state) async {
       bool loginState = await UserServices.checkLoginState();
 
@@ -34,11 +33,6 @@ class AppRouter {
       return null;
     },
     routes: [
-      GoRoute(
-        name: "splash_screen",
-        path: "/splash_screen",
-        builder: (context, state) => const CustomSplashScreen(),
-      ),
       // Onboarding screens
       GoRoute(
         name: "onboarding_screen",
@@ -52,18 +46,6 @@ class AppRouter {
         path: "/home",
         builder: (context, state) => const HomePage(),
       ),
-
-      // Scan result page
-      // GoRoute(
-      //   name: "scan result",
-      //   path: "/scan_result",
-      //   builder: (context, state) {
-      //     final result = state.extra as String;
-      //     return ScanResultPage(
-      //       result: result,
-      //     );
-      //   },
-      // ),
 
       // Settings page
       GoRoute(

@@ -94,47 +94,40 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.4,
                 width: double.infinity,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      // For snack bar
-                      FutureBuilder(
-                        future: _qrImageView(qrData),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const CircularProgressIndicator(
-                              color: AppColors.kMainPurpleColor,
-                            ); // Show a loading indicator while waiting
-                          } else if (snapshot.hasError) {
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  backgroundColor: Colors.redAccent,
-                                  // "Error: ${snapshot.error}
-                                  content: Text(
-                                    "No QR code data provided.",
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                  duration: Duration(seconds: 1),
-                                ), //
-                              );
-                            });
-                            return const Icon(
-                              Icons.error,
-                              color: Colors.red,
-                              size: 100,
-                            ); // Return a fallback widget
-                          } else {
-                            return snapshot
-                                .data!; // Display the QR code when done
-                          }
-                        },
-                      )
-                    ],
-                  ),
+                child: FutureBuilder(
+                  future: _qrImageView(qrData),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return const CircularProgressIndicator(
+                        color: AppColors.kMainPurpleColor,
+                      ); // Show a loading indicator while waiting
+                    } else if (snapshot.hasError) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            backgroundColor: Colors.redAccent,
+                            // "Error: ${snapshot.error}
+                            content: Text(
+                              "No QR code data provided.",
+                              style: TextStyle(
+                                fontSize: 18,
+                              ),
+                            ),
+                            duration: Duration(seconds: 1),
+                          ), //
+                        );
+                      });
+                      return const Icon(
+                        Icons.error,
+                        color: Colors.red,
+                        size: 100,
+                      ); // Return a fallback widget
+                    } else {
+                      return snapshot
+                          .data!; // Display the QR code when done
+                    }
+                  },
                 ),
               ),
               qrData == null || qrData!.isEmpty
@@ -163,6 +156,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
         FocusScope.of(context).unfocus();
       },
       onTapAlwaysCalled: true,
+      style: const TextStyle(color: AppColors.kBlackColor),
       onChanged: (value) {
         if (value.isEmpty) {
           setState(() {
@@ -174,17 +168,17 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
       controller: qrInputController,
       decoration: InputDecoration(
           filled: true,
-          fillColor: Colors.white,
+          fillColor: AppColors.kWhiteColor,
           hintText: "Enter text or URL to generate QR code",
-          hintStyle: const TextStyle(
-            color: Colors.grey,
+          hintStyle: TextStyle(
+            color: AppColors.kGreyColor,
             fontSize: 15,
             fontWeight: FontWeight.w100,
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),
-            borderSide: const BorderSide(
-              color: Colors.grey,
+            borderSide: BorderSide(
+              color: AppColors.kGreyColor,
               width: 1,
             ),
           ),
@@ -238,7 +232,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
               backgroundColor: Colors.white,
               //embeddedImage: const ExactAssetImage("assets/images/flutter.png"),
               version: QrVersions.auto,
-              size: 576,
+              size: MediaQuery.of(context).size.height * 0.4,
             ),
           ],
         ),
