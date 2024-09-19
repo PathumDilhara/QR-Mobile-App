@@ -10,8 +10,8 @@ import 'package:qr_mobile_app/model/generated_qr_model.dart';
 import 'package:qr_mobile_app/utils/colors.dart';
 import 'package:screenshot/screenshot.dart';
 
-import '../../../provider/qr_history_provider.dart';
-import '../../../provider/settings_provider.dart';
+import '../../provider/qr_history_provider.dart';
+import '../../provider/settings_provider.dart';
 
 class QRGeneratingPage extends StatefulWidget {
   const QRGeneratingPage({super.key});

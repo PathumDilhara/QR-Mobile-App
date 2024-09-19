@@ -3,6 +3,10 @@ import 'package:in_app_update/in_app_update.dart';
 
 import '../../../utils/colors.dart';
 
+//  the in_app_update package works with Google Play Store services to facilitate
+//  in-app updates for Android apps. Here’s a breakdown of how it integrates with
+//  Play Store services.
+
 class UpdatePage extends StatefulWidget {
   const UpdatePage({super.key});
 

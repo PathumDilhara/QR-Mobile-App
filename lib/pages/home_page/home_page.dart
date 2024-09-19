@@ -4,8 +4,8 @@ import 'package:qr_mobile_app/pages/history_page/history_page.dart';
 import 'package:qr_mobile_app/utils/colors.dart';
 import '../../user_services/shared_preferences_services/user_services.dart';
 import '../settings_page/settings_page.dart';
-import 'sub_pages/generating_page.dart';
-import 'sub_pages/scanning_page.dart';
+import '../generating_page/generating_page.dart';
+import '../scanning_page/scanning_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

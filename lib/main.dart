@@ -74,6 +74,7 @@ class _MyAppState extends State<MyApp> {
 // flutter pub add provider
 // flutter pub add url_launcher
 // flutter pub add package_info_plus
+// flutter pub add mailer
 
 // improvements
 
@@ -93,6 +94,8 @@ class _MyAppState extends State<MyApp> {
 
 // SETTINGS
 // App updating using google play store console https://www.youtube.com/watch?v=Hfn_PvKMyIs
+// notifications
+// feedback
 
 // Future updates
 // Themes Blue, purple, green, orange, ...

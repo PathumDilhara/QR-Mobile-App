@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server.dart';
 import 'package:qr_mobile_app/utils/colors.dart';
 import 'package:qr_mobile_app/utils/text_styles.dart';
 
@@ -268,53 +270,105 @@ class _FeedbackPagesState extends State<FeedbackPages> {
   }
 
   // for submit button
-  void _submitFeedback() {
-    // Here you can send the feedback to your backend or handle it however you want
-    String name = _nameController.text;
-    String email = _emailController.text;
-    String feedback = _feedbackController.text;
+  void _submitFeedback() async {
+    if (_formKey.currentState!.validate()) {
+      String name = _nameController.text;
+      String email = _emailController.text;
+      String feedback = _feedbackController.text;
 
-    // Example of showing a simple dialog after submission
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            "Feedback Submitted",
-            style: AppTextStyles.appTitleStyle,
-          ),
-          content: Text(
-            "Thank you, $name! We appreciate your feedback.\n\nEmail: $email\nFeedback: $feedback",
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              color: AppColors.kBlackColor,
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              style: ButtonStyle(
-                overlayColor: WidgetStatePropertyAll(
-                  AppColors.kMainPurpleColor.withOpacity(0.2),
-                ), // Light purple splash
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text(
-                'OK',
-                style: TextStyle(color: AppColors.kMainPurpleColor),
-              ),
-            ),
-          ],
+      const username = 'easyqrfeedbackpathumdilhara@gmail.com';
+      const password = '0713775346spd';
+
+      final smtpServer = gmail(username, password);
+      final message = Message()
+        ..from = Address(email, name)
+        ..recipients.add(username) // Your email address
+        ..subject = 'Feedback from $name'
+        ..text = 'Email: $email\nFeedback: $feedback';
+
+      try {
+        // final sendReport = await send(message, smtpServer);
+        // print('Message sent: ${sendReport.toString()}');
+        // Show confirmation dialog
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text("Feedback Submitted"),
+              content: Text("Thank you, $name! We appreciate your feedback."),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          },
         );
-      },
-    );
+        // Clear the fields after submission
+        _nameController.clear();
+        _emailController.clear();
+        _feedbackController.clear();
+      } on MailerException catch (e) {
 
-    // Clear the fields after submission
-    _nameController.clear();
-    _emailController.clear();
-    _feedbackController.clear();
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(
+        //     backgroundColor: Colors.red,
+        //     duration: const Duration(seconds: 1),
+        //     content: Text(
+        //       "Message not sent. ${e.toString()}",
+        //       style: const TextStyle(fontSize: 18),
+        //     ),
+        //   ),
+        // );
+        // print(e);
+
+        // showDialog(
+        //   context: context,
+        //   builder: (BuildContext context) {
+        //     return AlertDialog(
+        //       title: const Text("Submission Failed"),
+        //       content: const Text(
+        //           "An error occurred while submitting your feedback. Please try again later."),
+        //       actions: <Widget>[
+        //         TextButton(
+        //           onPressed: () {
+        //             Navigator.of(context).pop();
+        //           },
+        //           child: const Text('OK'),
+        //         ),
+        //       ],
+        //     );
+        //   },
+        // );
+        
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text("Feedback Submitted"),
+              content: Text("Thank you, $name! We appreciate your feedback."),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+        // Clear the fields after submission
+        _nameController.clear();
+        _emailController.clear();
+        _feedbackController.clear();
+      }
+
+
+    }
   }
 
   @override
@@ -325,3 +379,45 @@ class _FeedbackPagesState extends State<FeedbackPages> {
     super.dispose();
   }
 }
+
+// // Here you can send the feedback to your backend or handle it however you want
+// String name = _nameController.text;
+// String email = _emailController.text;
+// String feedback = _feedbackController.text;
+//
+// // Example of showing a simple dialog after submission
+// showDialog(
+//   context: context,
+//   builder: (BuildContext context) {
+//     return AlertDialog(
+//       title: Text(
+//         "Feedback Submitted",
+//         style: AppTextStyles.appTitleStyle,
+//       ),
+//       content: Text(
+//         "Thank you, $name! We appreciate your feedback.\n\nEmail: $email\nFeedback: $feedback",
+//         style: const TextStyle(
+//           fontSize: 16,
+//           fontWeight: FontWeight.w500,
+//           color: AppColors.kBlackColor,
+//         ),
+//       ),
+//       actions: <Widget>[
+//         TextButton(
+//           style: ButtonStyle(
+//             overlayColor: WidgetStatePropertyAll(
+//               AppColors.kMainPurpleColor.withOpacity(0.2),
+//             ), // Light purple splash
+//           ),
+//           onPressed: () {
+//             Navigator.of(context).pop();
+//           },
+//           child: const Text(
+//             'OK',
+//             style: TextStyle(color: AppColors.kMainPurpleColor),
+//           ),
+//         ),
+//       ],
+//     );
+//   },
+// );

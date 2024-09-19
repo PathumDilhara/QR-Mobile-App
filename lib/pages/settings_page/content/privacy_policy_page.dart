@@ -46,7 +46,7 @@ class PrivacyPolicyPage extends StatelessWidget {
           ),
           customText(
             "Third-Party Services",
-            "We use third-party services like Google Analytics and Firebase, which may have access to your data.",
+            "We do not use third-party services in our app. Your data is not shared with or accessed by external providers.",
             titleColor,
           ),
           customText(
@@ -69,14 +69,14 @@ class PrivacyPolicyPage extends StatelessWidget {
             "We may update this Privacy Policy from time to time. Any changes will be notified through the app.",
             titleColor,
           ),
-          customText(
-            "Contact Us",
-            //"If you have any questions about this Privacy Policy, you can contact us at: support@example.com",
-            "https://flutter.dev",
-            titleColor,
-            isLink: true,
-            link: "https://flutter.dev",
-          ),
+          // customText(
+          //   "Contact Us",
+          //   //"If you have any questions about this Privacy Policy, you can contact us at: support@example.com",
+          //   "https://flutter.dev",
+          //   titleColor,
+          //   isLink: true,
+          //   link: "https://flutter.dev",
+          // ),
         ],
       ),
     );

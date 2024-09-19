@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart' as qr;
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_mobile_app/model/scanned_qr_model.dart';
 import 'package:qr_mobile_app/provider/qr_history_provider.dart';
 import 'package:qr_mobile_app/provider/settings_provider.dart';
@@ -23,8 +23,8 @@ class QRScanningPage extends StatefulWidget {
 class _QRScanningPageState extends State<QRScanningPage>
     with SingleTickerProviderStateMixin {
   final GlobalKey qrKey = GlobalKey(debugLabel: "QR");
-  qr.QRViewController? qrViewController;
-  qr.Barcode? result; // Variable to save the scanned QR code data
+  QRViewController? qrViewController;
+  Barcode? result; // Variable to save the scanned QR code data
 
   late QRHistoryProvider qrHistoryProvider; // Declare the provider
   late SettingsProvider settingsProvider; // Declare the provider
@@ -128,15 +128,15 @@ class _QRScanningPageState extends State<QRScanningPage>
   // In order to get hot reload to work we need to pause the camera if the platform
   // is android, or resume the camera if the platform is iOS.
   // After a Scanned done automatically pause the camera if no need remove it
-  // @override
-  // void reassemble() {
-  //   super.reassemble();
-  //   // if (Platform.isAndroid) {
-  //   //   qrViewController?.pauseCamera();
-  //   // } else if (Platform.isIOS) {
-  //   //   qrViewController?.resumeCamera();
-  //   // }
-  // }
+  @override
+  void reassemble() {
+    super.reassemble();
+    // if (Platform.isAndroid) {
+    //   qrViewController?.pauseCamera();
+    // } else if (Platform.isIOS) {
+    //   qrViewController?.resumeCamera();
+    // }
+  }
 
   // Method to pick image
   Future<void> _pickImage() async {
@@ -184,10 +184,10 @@ class _QRScanningPageState extends State<QRScanningPage>
                   children: <Widget>[
                     Expanded(
                       flex: 6,
-                      child: qr.QRView(
+                      child: QRView(
                         key: qrKey,
                         onQRViewCreated: _onQRViewCreated,
-                        overlay: qr.QrScannerOverlayShape(
+                        overlay: QrScannerOverlayShape(
                           borderColor: AppColors.kMainPurpleColor,
                           borderRadius: 10,
                           borderLength: 50,
@@ -283,7 +283,7 @@ class _QRScanningPageState extends State<QRScanningPage>
     );
   }
 
-  void _onQRViewCreated(qr.QRViewController qrViewController) {
+  void _onQRViewCreated(QRViewController qrViewController) {
     // When you set listen: false, you're telling the Provider.of method that
     // this widget does not need to rebuild when the QRHistoryProvider changes.
     // This is useful when you only need to access the provider to call methods
@@ -413,7 +413,7 @@ class _QRScanningPageState extends State<QRScanningPage>
               Icons.flip_camera_ios_outlined,
               size: 24,
               color:
-                  snapshot.data == qr.CameraFacing.back || snapshot.data == null
+                  snapshot.data == CameraFacing.back || snapshot.data == null
                       ? AppColors.kMainPurpleColor
                       : AppColors.kWhiteColor,
             );
@@ -531,38 +531,6 @@ class _QRScanningPageState extends State<QRScanningPage>
                     Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        // Open in browser
-                        // InkWell(
-                        //   onTap: () {
-                        //     _launchURL(qrCode);
-                        //   },
-                        //   borderRadius: BorderRadius.circular(10),
-                        //   child: Material(
-                        //     color: Colors.transparent, // Set the background color to transparent
-                        //     borderRadius: BorderRadius.circular(10),
-                        //     child: Container(
-                        //       // margin: const EdgeInsets.symmetric(
-                        //       //   horizontal: 30,
-                        //       // ),
-                        //       width: MediaQuery.of(context).size.width * 0.43,
-                        //       height: 50,
-                        //       decoration: BoxDecoration(
-                        //         borderRadius: BorderRadius.circular(10),
-                        //         color: AppColors.kMainColor,
-                        //       ),
-                        //       child: Center(
-                        //         child: Text(
-                        //           "Open in browser",
-                        //           style: AppTextStyles.appTitleStyle.copyWith(
-                        //             color: AppColors.kWhiteColor,
-                        //             fontSize: 20,
-                        //           ),
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
-
                         // Open in browser
                         ElevatedButton(
                           onPressed: regExp.hasMatch(qrCode)
@@ -684,6 +652,7 @@ class _QRScanningPageState extends State<QRScanningPage>
     }
   }
 
+  // if the camera permissions was denied this page will show
   Widget _customScanScreen() {
     return !_isCameraPermissionPermanentlyDenied
         ? const SizedBox()
@@ -736,3 +705,35 @@ class _QRScanningPageState extends State<QRScanningPage>
           );
   }
 }
+
+// Open in browser
+// InkWell(
+//   onTap: () {
+//     _launchURL(qrCode);
+//   },
+//   borderRadius: BorderRadius.circular(10),
+//   child: Material(
+//     color: Colors.transparent, // Set the background color to transparent
+//     borderRadius: BorderRadius.circular(10),
+//     child: Container(
+//       // margin: const EdgeInsets.symmetric(
+//       //   horizontal: 30,
+//       // ),
+//       width: MediaQuery.of(context).size.width * 0.43,
+//       height: 50,
+//       decoration: BoxDecoration(
+//         borderRadius: BorderRadius.circular(10),
+//         color: AppColors.kMainColor,
+//       ),
+//       child: Center(
+//         child: Text(
+//           "Open in browser",
+//           style: AppTextStyles.appTitleStyle.copyWith(
+//             color: AppColors.kWhiteColor,
+//             fontSize: 20,
+//           ),
+//         ),
+//       ),
+//     ),
+//   ),
+// ),
