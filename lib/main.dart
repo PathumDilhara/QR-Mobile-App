@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_mobile_app/model/generated_qr_model.dart';
@@ -12,6 +13,7 @@ import 'model/scanned_qr_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  MobileAds.instance.initialize();
   await SharedPreferences.getInstance();
   await Hive.initFlutter();
   Hive.registerAdapter(GeneratedQRModelAdapter());

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_mobile_app/utils/colors.dart';
@@ -16,13 +17,68 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
 
-  String _version = "";
+  BannerAd? _bannerAd;
 
   @override
   void initState() {
     super.initState();
+    _bannerAd = BannerAd(
+      size: AdSize.banner,
+      adUnitId: "ca-app-pub-3940256099942544/6300978111", // Replace with actual ID for release
+      listener: BannerAdListener(
+        onAdLoaded: (Ad ad) {
+          print("Ad loaded");
+          setState(() {});
+        },
+        onAdFailedToLoad: (Ad ad, LoadAdError error) {
+          print("Ad failed to load: $error");
+          ad.dispose();
+        },
+        onAdOpened: (Ad ad) {
+          print("Ad opened");
+        },
+      ),
+      request: const AdRequest(),
+    )..load();
+
     _getVersionInfo();
   }
+
+  @override
+  void dispose() {
+    _bannerAd?.dispose();
+    super.dispose();
+  }
+
+  String _version = "";
+
+
+  // // Banner ads
+  // BannerAd _bannerAd = new BannerAd(
+  //   size: AdSize.banner,
+  //   adUnitId: "ca-app-pub-3940256099942544/6300978111",
+  //   listener: BannerAdListener(
+  //     onAdLoaded: (Ad ad) {
+  //       print("Ad loaded ##############################");
+  //     },
+  //     onAdFailedToLoad: (Ad ad, LoadAdError error) {
+  //       print("Ad failed load ##############################");
+  //       ad.dispose();
+  //     },
+  //     onAdOpened: (Ad ad) {
+  //       print("Ad opened ##############################");
+  //     },
+  //   ),
+  //   request: const AdRequest(),
+  // );
+  //
+  // String _version = "";
+  //
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _getVersionInfo();
+  // }
 
   Future<void> _getVersionInfo() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
@@ -293,6 +349,23 @@ class _SettingsPageState extends State<SettingsPage> {
                     ],
                   ),
                 ),
+              ),
+              // SizedBox(
+              //   height: 50,
+              //   width: double.infinity,
+              //   // color: Colors.black,
+              //   child: AdWidget(
+              //     ad: _bannerAd..load(),
+              //     key: UniqueKey(),
+              //   ),
+              // ),
+              const SizedBox(height: 10,),
+              SizedBox(
+                height: 50,
+                width: double.infinity,
+                child: _bannerAd != null
+                    ? AdWidget(ad: _bannerAd!)
+                    : const SizedBox(), // If ad is null, show an empty container
               ),
             ],
           ),

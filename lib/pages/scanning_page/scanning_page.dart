@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +23,8 @@ class QRScanningPage extends StatefulWidget {
 
 class _QRScanningPageState extends State<QRScanningPage>
     with SingleTickerProviderStateMixin {
+
+  // QR coding
   final GlobalKey qrKey = GlobalKey(debugLabel: "QR");
   QRViewController? qrViewController;
   Barcode? result; // Variable to save the scanned QR code data
@@ -122,6 +125,7 @@ class _QRScanningPageState extends State<QRScanningPage>
   void dispose() {
     _animationController.dispose();
     qrViewController?.dispose();
+    // _bannerAd.dispose();
     super.dispose();
   }
 
@@ -405,10 +409,9 @@ class _QRScanningPageState extends State<QRScanningPage>
             return Icon(
               Icons.flip_camera_ios_outlined,
               size: 24,
-              color:
-                  snapshot.data == CameraFacing.back || snapshot.data == null
-                      ? AppColors.kMainPurpleColor
-                      : AppColors.kWhiteColor,
+              color: snapshot.data == CameraFacing.back || snapshot.data == null
+                  ? AppColors.kMainPurpleColor
+                  : AppColors.kWhiteColor,
             );
           },
         ),
@@ -511,7 +514,7 @@ class _QRScanningPageState extends State<QRScanningPage>
                 Column(
                   children: [
                     // advertisement area
-                    const SizedBox(height: 30,),
+
                     const SizedBox(
                       height: 10,
                     ),

@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -21,6 +22,9 @@ class QRGeneratingPage extends StatefulWidget {
 }
 
 class _QRGeneratingPageState extends State<QRGeneratingPage> {
+  // Advertisement
+  BannerAd? _bannerAd;
+
   final TextEditingController qrInputController = TextEditingController();
   String? qrData;
   final ScreenshotController screenshotController = ScreenshotController();
@@ -28,8 +32,32 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
   bool isCreated = false;
 
   @override
+  void initState() {
+    super.initState();
+    _bannerAd = BannerAd(
+      size: AdSize.banner,
+      adUnitId: "ca-app-pub-3940256099942544/6300978111", // Replace with actual ID for release
+      listener: BannerAdListener(
+        onAdLoaded: (Ad ad) {
+          print("Ad loaded");
+          setState(() {});
+        },
+        onAdFailedToLoad: (Ad ad, LoadAdError error) {
+          print("Ad failed to load: $error");
+          ad.dispose();
+        },
+        onAdOpened: (Ad ad) {
+          print("Ad opened");
+        },
+      ),
+      request: const AdRequest(),
+    )..load();
+  }
+
+  @override
   void dispose() {
     qrInputController.dispose();
+    _bannerAd?.dispose();
     super.dispose();
   }
 
@@ -72,70 +100,86 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
   Widget build(BuildContext context) {
     qrData = qrInputController.text;
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: qrData == null || qrData!.isEmpty ? 200 : 60,
+      body: Stack(
+        children: [
+          Padding(
+            padding: EdgeInsets.only(left: 20.0, right: 20, top: 30, bottom: qrData!.isEmpty? 80 : 150),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: qrData == null || qrData!.isEmpty ? 200 : 60,
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.15,
+                    width: double.infinity,
+                    child: Center(
+                      child: _buildTextField(),
+                    ),
+                  ),
+                  isCreated ? const SizedBox() : _generateButton(),
+                  SizedBox(
+                    height: qrData == null || qrData!.isEmpty ? 0 : 30,
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.4,
+                    width: double.infinity,
+                    child: FutureBuilder(
+                      future: _qrImageView(qrData),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator(
+                            color: AppColors.kMainPurpleColor,
+                          ); // Show a loading indicator while waiting
+                        } else if (snapshot.hasError) {
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                backgroundColor: Colors.redAccent,
+                                // "Error: ${snapshot.error}
+                                content: Text(
+                                  "No QR code data provided.",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                duration: Duration(seconds: 1),
+                              ), //
+                            );
+                          });
+                          return const Icon(
+                            Icons.error,
+                            color: Colors.red,
+                            size: 100,
+                          ); // Return a fallback widget
+                        } else {
+                          return snapshot
+                              .data!; // Display the QR code when done
+                        }
+                      },
+                    ),
+                  ),
+                  qrData == null || qrData!.isEmpty
+                      ? const SizedBox()
+                      : _saveButton(),
+                ],
               ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.15,
-                width: double.infinity,
-                child: Center(
-                  child: _buildTextField(),
-                ),
-              ),
-              isCreated ? const SizedBox() : _generateButton(),
-              SizedBox(
-                height: qrData == null || qrData!.isEmpty ? 0 : 30,
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.4,
-                width: double.infinity,
-                child: FutureBuilder(
-                  future: _qrImageView(qrData),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState ==
-                        ConnectionState.waiting) {
-                      return const CircularProgressIndicator(
-                        color: AppColors.kMainPurpleColor,
-                      ); // Show a loading indicator while waiting
-                    } else if (snapshot.hasError) {
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            backgroundColor: Colors.redAccent,
-                            // "Error: ${snapshot.error}
-                            content: Text(
-                              "No QR code data provided.",
-                              style: TextStyle(
-                                fontSize: 18,
-                              ),
-                            ),
-                            duration: Duration(seconds: 1),
-                          ), //
-                        );
-                      });
-                      return const Icon(
-                        Icons.error,
-                        color: Colors.red,
-                        size: 100,
-                      ); // Return a fallback widget
-                    } else {
-                      return snapshot
-                          .data!; // Display the QR code when done
-                    }
-                  },
-                ),
-              ),
-              qrData == null || qrData!.isEmpty
-                  ? const SizedBox()
-                  : _saveButton(),
-            ],
+            ),
           ),
-        ),
+          // Advertisement
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: _bannerAd != null
+                ? Container(
+                height: 50,
+                // color: Colors.red,
+                child: AdWidget(ad: _bannerAd!))
+                : const SizedBox(),
+          ),
+        ],
       ),
     );
   }
