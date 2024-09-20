@@ -30,6 +30,8 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
 
   bool isCreated = false;
 
+  AdmobHelper admobHelper = new AdmobHelper();
+
   @override
   void dispose() {
     qrInputController.dispose();
@@ -278,6 +280,9 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
               const WidgetStatePropertyAll(AppColors.kMainPurpleColor),
         ),
         onPressed: () async {
+          // interstitial add will show when saving qr code
+          admobHelper.loadInterstitialAds();
+
           bool permissionGranted = await _checkAndRequestPermission();
           if (permissionGranted) {
             // await _requestPermission();
@@ -388,6 +393,10 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
         ),
         onPressed: () async {
           isCreated = true;
+
+          // interstitial add will create when generate qr code
+          admobHelper.createInterstitialAds();
+
           // instance of GeneratedQRModel
           GeneratedQRModel generatedQRModel = GeneratedQRModel(
             title: qrInputController.text,
