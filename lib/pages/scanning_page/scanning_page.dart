@@ -14,6 +14,8 @@ import 'package:qr_mobile_app/utils/colors.dart';
 import 'package:qr_mobile_app/utils/text_styles.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../admob_helper/admob_helper.dart';
+
 class QRScanningPage extends StatefulWidget {
   const QRScanningPage({super.key});
 
@@ -23,6 +25,9 @@ class QRScanningPage extends StatefulWidget {
 
 class _QRScanningPageState extends State<QRScanningPage>
     with SingleTickerProviderStateMixin {
+
+  // Ads
+  AdmobHelper admobHelper = AdmobHelper();
 
   // QR coding
   final GlobalKey qrKey = GlobalKey(debugLabel: "QR");
@@ -307,6 +312,7 @@ class _QRScanningPageState extends State<QRScanningPage>
             // Pause camera, animation and open a bottom sheet
             qrViewController.pauseCamera();
             _animationController.stop();
+            admobHelper.loadRewardAds();
             _openBottomSheet(result!.code.toString());
             if (settingsProvider.isHistorySaving) {
               await qrHistoryProvider.storeScnQR(scannedQRModel);
@@ -514,7 +520,14 @@ class _QRScanningPageState extends State<QRScanningPage>
                 Column(
                   children: [
                     // advertisement area
-
+                    SizedBox(
+                      height: 50,
+                      // color: Colors.red,
+                      child: AdWidget(
+                        ad: AdmobHelper.getBannerAd()..load(),
+                        key: UniqueKey(),
+                      ),
+                    ),
                     const SizedBox(
                       height: 10,
                     ),
@@ -555,6 +568,7 @@ class _QRScanningPageState extends State<QRScanningPage>
                         // Copy to clipboard
                         ElevatedButton(
                           onPressed: () async {
+                            admobHelper.showRewardAds();
                             try {
                               await Clipboard.setData(
                                 ClipboardData(text: qrCode),

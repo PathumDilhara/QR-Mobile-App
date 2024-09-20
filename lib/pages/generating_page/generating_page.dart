@@ -23,7 +23,6 @@ class QRGeneratingPage extends StatefulWidget {
 }
 
 class _QRGeneratingPageState extends State<QRGeneratingPage> {
-
   final TextEditingController qrInputController = TextEditingController();
   String? qrData;
   final ScreenshotController screenshotController = ScreenshotController();
@@ -35,15 +34,14 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
   @override
   void dispose() {
     qrInputController.dispose();
-    // _bannerAd?.dispose();
     super.dispose();
   }
 
   // Function to check and request permission
   Future<bool> _checkAndRequestPermission() async {
     // final status = await Permission.storage.status;
-    bool permissionGranted = await Permission.storage.isGranted ||
-        await Permission.photos.isGranted;
+    bool permissionGranted =
+        await Permission.storage.isGranted || await Permission.photos.isGranted;
 
     if (!permissionGranted) {
       permissionGranted = await Permission.storage.request().isGranted ||
@@ -81,7 +79,11 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
       body: Stack(
         children: [
           Padding(
-            padding: EdgeInsets.only(left: 20.0, right: 20, top: 30, bottom: qrData!.isEmpty? 80 : 150),
+            padding: EdgeInsets.only(
+                left: 20.0,
+                right: 20,
+                top: 30,
+                bottom: qrData!.isEmpty ? 80 : 150),
             child: SingleChildScrollView(
               child: Column(
                 children: [
@@ -151,10 +153,13 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
             right: 0,
             bottom: 0,
             child: SizedBox(
-                height: 50,
-                // color: Colors.red,
-                child: AdWidget(ad: AdmobHelper.getBannerAd()..load(),
-                key: UniqueKey(),))
+              height: 50,
+              // color: Colors.red,
+              child: AdWidget(
+                ad: AdmobHelper.getBannerAd()..load(),
+                key: UniqueKey(),
+              ),
+            ),
           ),
         ],
       ),
@@ -266,7 +271,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
     DateTime datetime = DateTime.now();
     // String formattedDateTime =
     //     "${datetime.toLocal().toString().split(' ')[0].replaceAll('-', '')}_${datetime.toLocal().toString().split(' ')[1].split('.')[0].replaceAll(':', '')}";
-    String formattedDateTime =  DateFormat('yyyyMMdd_HHmmss').format(datetime);
+    String formattedDateTime = DateFormat('yyyyMMdd_HHmmss').format(datetime);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 20),
       child: ElevatedButton(
@@ -329,10 +334,11 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
               );
             }
           } else {
-            bool isPermanentlyDenied = await Permission.storage.status.isPermanentlyDenied;
-            if(isPermanentlyDenied){
+            bool isPermanentlyDenied =
+                await Permission.storage.status.isPermanentlyDenied;
+            if (isPermanentlyDenied) {
               openAppSettings();
-            } else{
+            } else {
               await Permission.storage.request();
             }
             // Permission was denied

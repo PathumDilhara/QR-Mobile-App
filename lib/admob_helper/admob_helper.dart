@@ -1,12 +1,15 @@
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class AdmobHelper {
-
+  // Banner ads
   static String get bannerUnit => "ca-app-pub-3940256099942544/6300978111";
 
+  // Interstitial ads
   InterstitialAd? _interstitialAd;
+  int numOfAttemptLoad = 0;
 
-  int numOfAttemptLoad= 0;
+  // Reward ads
+  RewardedAd? _rewardedAd;
 
   static initialization() {
     if (MobileAds.instance == null) {
@@ -38,9 +41,11 @@ class AdmobHelper {
     return _bannerAd;
   }
 
+  // Interstitial ads
   void createInterstitialAds() {
     InterstitialAd.load(
-      adUnitId: "ca-app-pub-3940256099942544/1033173712",
+      adUnitId:
+          "ca-app-pub-3940256099942544/1033173712", // Replace with actual ID for release
       request: const AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (ad) {
@@ -51,7 +56,7 @@ class AdmobHelper {
           numOfAttemptLoad++;
           _interstitialAd = null;
 
-          if(numOfAttemptLoad <= 2){
+          if (numOfAttemptLoad <= 2) {
             createInterstitialAds();
           }
         },
@@ -59,8 +64,9 @@ class AdmobHelper {
     );
   }
 
-  void loadInterstitialAds(){
-    if(_interstitialAd == null){
+  // Interstitial ads
+  void loadInterstitialAds() {
+    if (_interstitialAd == null) {
       return;
     }
     _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
@@ -79,5 +85,44 @@ class AdmobHelper {
     );
     _interstitialAd!.show();
     _interstitialAd = null;
+  }
+
+  // Reward ads
+  void loadRewardAds() {
+    RewardedAd.load(
+      adUnitId:
+          "ca-app-pub-3940256099942544/5224354917", // Replace with actual ID for release
+      request: const AdRequest(),
+      rewardedAdLoadCallback: RewardedAdLoadCallback(
+        onAdLoaded: (ad) {
+          this._rewardedAd = ad;
+        },
+        onAdFailedToLoad: (error) {
+          // loadRewardAds();
+        },
+      ),
+    );
+  }
+
+  void showRewardAds() {
+    _rewardedAd!.show(
+      onUserEarnedReward: (ad, reward) {
+        print("Reward Earned is ${reward.amount}");
+      },
+    );
+    _rewardedAd!.fullScreenContentCallback  = FullScreenContentCallback(
+      onAdShowedFullScreenContent: (ad) {
+
+      },
+      onAdFailedToShowFullScreenContent: (ad, error) {
+        ad.dispose();
+      },
+      onAdDismissedFullScreenContent: (ad) {
+        ad.dispose();
+      },
+      onAdImpression: (ad) {
+        print("$ad impression occurred");
+      },
+    );
   }
 }
