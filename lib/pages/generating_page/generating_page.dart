@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:qr_mobile_app/admob_helper/admob_helper.dart';
 import 'package:qr_mobile_app/model/generated_qr_model.dart';
 import 'package:qr_mobile_app/utils/colors.dart';
 import 'package:screenshot/screenshot.dart';
@@ -22,8 +23,6 @@ class QRGeneratingPage extends StatefulWidget {
 }
 
 class _QRGeneratingPageState extends State<QRGeneratingPage> {
-  // Advertisement
-  BannerAd? _bannerAd;
 
   final TextEditingController qrInputController = TextEditingController();
   String? qrData;
@@ -32,32 +31,9 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
   bool isCreated = false;
 
   @override
-  void initState() {
-    super.initState();
-    _bannerAd = BannerAd(
-      size: AdSize.banner,
-      adUnitId: "ca-app-pub-3940256099942544/6300978111", // Replace with actual ID for release
-      listener: BannerAdListener(
-        onAdLoaded: (Ad ad) {
-          print("Ad loaded");
-          setState(() {});
-        },
-        onAdFailedToLoad: (Ad ad, LoadAdError error) {
-          print("Ad failed to load: $error");
-          ad.dispose();
-        },
-        onAdOpened: (Ad ad) {
-          print("Ad opened");
-        },
-      ),
-      request: const AdRequest(),
-    )..load();
-  }
-
-  @override
   void dispose() {
     qrInputController.dispose();
-    _bannerAd?.dispose();
+    // _bannerAd?.dispose();
     super.dispose();
   }
 
@@ -172,12 +148,11 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
             left: 0,
             right: 0,
             bottom: 0,
-            child: _bannerAd != null
-                ? Container(
+            child: SizedBox(
                 height: 50,
                 // color: Colors.red,
-                child: AdWidget(ad: _bannerAd!))
-                : const SizedBox(),
+                child: AdWidget(ad: AdmobHelper.getBannerAd()..load(),
+                key: UniqueKey(),))
           ),
         ],
       ),
