@@ -104,6 +104,7 @@ class GeneratedHistoryTab extends StatelessWidget {
                               onPressed: () async {
                                 await qrHistoryProvider
                                     .deleteGeneratedQRCode(qrCode);
+                                qrHistoryProvider.loadGeneratedQRCodes();
                               },
                               icon: Icon(
                                 Icons.delete_outline,

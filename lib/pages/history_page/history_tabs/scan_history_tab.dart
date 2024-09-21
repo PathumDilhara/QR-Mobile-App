@@ -99,6 +99,7 @@ class ScanHistoryTab extends StatelessWidget {
                             trailing: IconButton(
                               onPressed: () async {
                                 await qrHistoryProvider.deleteScnQRCode(qrCode);
+                                qrHistoryProvider.loadScnQRCodes();
                               },
                               icon: Icon(
                                 Icons.delete_outline,
