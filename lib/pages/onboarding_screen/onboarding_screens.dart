@@ -35,7 +35,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               },
               children: const [
                 OnboardingScreenWidget(
-                  title: "Easy QR App",
+                  title: "QR Vault",
                   imageUrl: "assets/images/logo2.png",
                   description:
                       "This app is made to create and scan any QR and Barcode",
