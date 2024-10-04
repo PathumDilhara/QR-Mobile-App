@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_mobile_app/admob_helper/admob_helper.dart';
@@ -52,7 +51,7 @@ class _MyAppState extends State<MyApp> {
       builder: (BuildContext context, SettingsProvider themeProvider,
           Widget? child) {
         return MaterialApp.router(
-          title: "Easy QR App",
+          title: "QR Vault",
           routerConfig: AppRouter.router,
           debugShowCheckedModeBanner: false,
           theme: CustomThemeData.lightTheme(context),

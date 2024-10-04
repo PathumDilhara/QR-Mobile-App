@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:qr_mobile_app/utils/colors.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../utils/text_styles.dart';

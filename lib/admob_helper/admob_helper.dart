@@ -1,5 +1,10 @@
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
+// id : ca-app-pub-6164977547035716~7865252074
+// banner ad : ca-app-pub-6164977547035716/4582877954
+// interstitial : ca-app-pub-6164977547035716/5704387930
+// rewarded : ca-app-pub-6164977547035716/4630183252
+
 class AdmobHelper {
   // Banner ads
   static String get bannerUnit => "ca-app-pub-3940256099942544/6300978111";
@@ -12,9 +17,7 @@ class AdmobHelper {
   RewardedAd? _rewardedAd;
 
   static initialization() {
-    if (MobileAds.instance == null) {
-      MobileAds.instance.initialize();
-    }
+    
   }
 
   // Banner ads

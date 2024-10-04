@@ -311,7 +311,7 @@ class _FeedbackPagesState extends State<FeedbackPages> {
         _nameController.clear();
         _emailController.clear();
         _feedbackController.clear();
-      } on MailerException catch (e) {
+      } on MailerException {
 
         // ScaffoldMessenger.of(context).showSnackBar(
         //   SnackBar(
