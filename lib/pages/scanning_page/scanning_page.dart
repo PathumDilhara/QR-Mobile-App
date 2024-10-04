@@ -45,9 +45,9 @@ class _QRScanningPageState extends State<QRScanningPage>
 
   bool isCameraPaused = false; // State variable to track camera status
 
-  // For image picker obj
-  final ImagePicker _picker = ImagePicker();
-  File? _image;
+  // // For image picker obj
+  // final ImagePicker _picker = ImagePicker();
+  // File? _image;
 
   // Camera permission granted or not
   bool _isCameraPermissionGranted = false;
@@ -147,36 +147,36 @@ class _QRScanningPageState extends State<QRScanningPage>
     // }
   }
 
-  // Method to pick image
-  Future<void> _pickImage() async {
-    try {
-      // Add a print statement before image picker action
-      print('################Opening image picker...');
-
-      final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-
-      // Check if the pickedFile is null or valid
-      if (pickedFile != null) {
-        print('##############Image selected: ${pickedFile.path}');
-        setState(() {
-          _image = File(pickedFile.path);
-        });
-        // *************** Function call here
-      } else {
-        print('#############No image selected.');
-      }
-    } catch (e) {
-      // If there is an error, print the error details
-      print('####################Error picking image: $e');
-    }
-  }
+  // // Method to pick image
+  // Future<void> _pickImage() async {
+  //   try {
+  //     // Add a print statement before image picker action
+  //     print('################Opening image picker...');
+  //
+  //     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+  //
+  //     // Check if the pickedFile is null or valid
+  //     if (pickedFile != null) {
+  //       print('##############Image selected: ${pickedFile.path}');
+  //       setState(() {
+  //         _image = File(pickedFile.path);
+  //       });
+  //       // *************** Function call here
+  //     } else {
+  //       print('#############No image selected.');
+  //     }
+  //   } catch (e) {
+  //     // If there is an error, print the error details
+  //     print('####################Error picking image: $e');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
     var scanArea = (MediaQuery.of(context).size.width < 400 ||
             MediaQuery.of(context).size.height < 400)
-        ? 300.0
-        : 300.0;
+        ? MediaQuery.of(context).size.width * 0.66
+        : MediaQuery.of(context).size.width * 0.66;
     return Scaffold(
       body: !_isCameraPermissionGranted
           ? _customScanScreen()
@@ -233,7 +233,7 @@ class _QRScanningPageState extends State<QRScanningPage>
                 _buildScanningAnimation(scanArea),
                 _flashButton(),
                 _cameraControlButton(),
-                _galleryButton(),
+                // _galleryButton(),
               ],
             ),
     );
@@ -319,7 +319,7 @@ class _QRScanningPageState extends State<QRScanningPage>
             }
           }
         } catch (err) {
-          print(err.toString());
+          // print(err.toString());
         }
       },
     );
@@ -425,26 +425,26 @@ class _QRScanningPageState extends State<QRScanningPage>
     );
   }
 
-  Widget _galleryButton() {
-    return Positioned(
-      left: 20,
-      //right: 0,
-      bottom: 260,
-      child: ElevatedButton(
-        style: const ButtonStyle(
-            backgroundColor: WidgetStatePropertyAll(Colors.transparent)),
-        onPressed: () {
-          print("**************************** Gallery button");
-          _pickImage();
-        },
-        child: const Icon(
-          Icons.photo_album_outlined,
-          size: 24,
-          color: AppColors.kMainPurpleColor,
-        ),
-      ),
-    );
-  }
+  // Widget _galleryButton() {
+  //   return Positioned(
+  //     left: 20,
+  //     //right: 0,
+  //     bottom: 260,
+  //     child: ElevatedButton(
+  //       style: const ButtonStyle(
+  //           backgroundColor: WidgetStatePropertyAll(Colors.transparent)),
+  //       onPressed: () {
+  //         print("**************************** Gallery button");
+  //         _pickImage();
+  //       },
+  //       child: const Icon(
+  //         Icons.photo_album_outlined,
+  //         size: 24,
+  //         color: AppColors.kMainPurpleColor,
+  //       ),
+  //     ),
+  //   );
+  // }
 
   // Open bottom sheet
   void _openBottomSheet(String qrCode) {

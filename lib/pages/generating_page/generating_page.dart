@@ -147,20 +147,20 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
               ),
             ),
           ),
-          // Advertisement
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: SizedBox(
-              height: 50,
-              // color: Colors.red,
-              child: AdWidget(
-                ad: AdmobHelper.getBannerAd()..load(),
-                key: UniqueKey(),
-              ),
-            ),
-          ),
+          // // Advertisement
+          // Positioned(
+          //   left: 0,
+          //   right: 0,
+          //   bottom: 0,
+          //   child: SizedBox(
+          //     height: 50,
+          //     // color: Colors.red,
+          //     child: AdWidget(
+          //       ad: AdmobHelper.getBannerAd()..load(),
+          //       key: UniqueKey(),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );
