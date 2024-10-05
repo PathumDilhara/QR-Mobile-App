@@ -33,23 +33,23 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               },
               children: const [
                 OnboardingScreenWidget(
-                  title: "QR Vault",
+                  title: "Welcome to QR Vault",
                   imageUrl: "assets/images/logo2.png",
                   description:
-                      "This app is made to create and scan any QR and Barcode",
+                      "Securely create, scan, and store QR codes and barcodes in one place. Your ultimate vault for all things QR!",
                 ),
                 OnboardingScreenWidget(
-                  title: "QR Scanning",
+                  title: "QR Scanning Made Easy",
                   imageUrl: "assets/images/logo2.png",
                   description:
-                      "This app is made to create and scan any QR and Barcode",
+                      "Effortlessly scan any QR code or barcode with precision and speed. Access information instantly with QR Vault.",
                 ),
                 OnboardingScreenWidget(
-                  title: "QR Generating",
+                  title: "Generate Custom QR Codes",
                   imageUrl: "assets/images/logo2.png",
                   description:
-                      "This app is made to create and scan any QR and Barcode",
-                )
+                      "Create personalized QR codes for websites, contact info, and more. QR Vault gives you the power to generate with ease.",
+                ),
               ],
             ),
             // Smooth page indicator
@@ -63,8 +63,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     offset: 10,
                     spacing: 10,
                     radius: 100,
-                    dotWidth: 12,
-                    dotHeight: 12,
+                    dotWidth: 10,
+                    dotHeight: 10,
                     paintStyle: PaintingStyle.fill,
                     strokeWidth: 1,
                     dotColor: AppColors.kSubtitleColor.withOpacity(0.1),

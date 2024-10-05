@@ -35,7 +35,7 @@ class ScanHistoryTab extends StatelessWidget {
               Text(
                 "Clear all",
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 15,
                 ),
               ),
               Icon(
@@ -63,7 +63,7 @@ class ScanHistoryTab extends StatelessWidget {
                 child: Text(
                   "No history available",
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 17,
                     fontWeight: FontWeight.w500,
                     color: Theme.of(context).brightness == Brightness.dark
                         ? Colors.white.withOpacity(0.7)

@@ -27,16 +27,16 @@ class OnboardingScreenWidget extends StatelessWidget {
         Text(title,
             textAlign: TextAlign.center,
             style: AppTextStyles.appTitleStyle.copyWith(
-              fontSize: 40,
+              fontSize: 30,
               fontWeight: FontWeight.bold,
             )),
         Text(
           description,
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 18,
+            fontSize: 16,
             fontWeight: FontWeight.normal,
-            color: AppColors.kSubtitleColor,
+            color: AppColors.kGreyColor.withOpacity(0.6),
           ),
         ),
         const SizedBox(

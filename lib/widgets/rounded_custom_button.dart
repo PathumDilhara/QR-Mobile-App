@@ -35,8 +35,10 @@ class RoundedCustomButton extends StatelessWidget {
       style: ButtonStyle(
         overlayColor: WidgetStatePropertyAll(Colors.white.withOpacity(0.1)),
         minimumSize: const WidgetStatePropertyAll(
-          Size(double.infinity, 50),
+          Size(double.infinity, 46),
         ),
+        maximumSize: const WidgetStatePropertyAll(
+            Size(double.infinity, 46),),
         backgroundColor: const WidgetStatePropertyAll(AppColors.kMainPurpleColor),
       ),
       child: Center(

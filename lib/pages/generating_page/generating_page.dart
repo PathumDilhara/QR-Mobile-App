@@ -198,7 +198,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
           hintText: "Enter text or URL to generate QR code",
           hintStyle: TextStyle(
             color: AppColors.kGreyColor,
-            fontSize: 15,
+            fontSize: 14,
             fontWeight: FontWeight.w100,
           ),
           border: OutlineInputBorder(
@@ -240,7 +240,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
           Text(
             "No data provided",
             style: TextStyle(
-              fontSize: 20,
+              fontSize: 17,
               color: Theme.of(context).brightness == Brightness.dark
                   ? AppColors.kWhiteColor.withOpacity(0.7)
                   : AppColors.kGreyColor,
