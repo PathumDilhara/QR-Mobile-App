@@ -2,7 +2,8 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
+// import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -56,21 +57,21 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
     return permissionGranted;
   }
 
-  // Future<void> _requestPermission() async {
-  //   final status = await Permission.storage.request();
-  //   if (status.isGranted) {
-  //     // Permission granted
-  //     // print("Permission granted");
-  //   } else if (status.isDenied) {
-  //     // Handle permission denied
-  //     // print("Permission denied");
-  //     // openAppSettings();
-  //   } else if (status.isPermanentlyDenied) {
-  //     // Permission permanently denied, redirect to settings
-  //     // print("Permission permanently denied");
-  //     openAppSettings();
-  //   }
-  // }
+  Future<void> _requestPermission() async {
+    final status = await Permission.storage.request();
+    if (status.isGranted) {
+      // Permission granted
+      // print("Permission granted");
+    } else if (status.isDenied) {
+      // Handle permission denied
+      // print("Permission denied");
+      // openAppSettings();
+    } else if (status.isPermanentlyDenied) {
+      // Permission permanently denied, redirect to settings
+      // print("Permission permanently denied");
+      openAppSettings();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -297,7 +298,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
               final Uint8List? image = await screenshotController.capture();
               if (image != null) {
                 // Save image to gallery
-                final result = await ImageGallerySaver.saveImage(image,
+                final result = await ImageGallerySaverPlus.saveImage(image,
                     name: "QR_$formattedDateTime");
 
                 // Show success or failure message
