@@ -13,7 +13,7 @@ import 'model/scanned_qr_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  AdmobHelper.initialization();
+  await AdmobHelper.initialization();
   await SharedPreferences.getInstance();
   await Hive.initFlutter();
   Hive.registerAdapter(GeneratedQRModelAdapter());

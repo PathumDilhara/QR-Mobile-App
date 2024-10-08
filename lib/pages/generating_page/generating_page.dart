@@ -38,37 +38,55 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
     super.dispose();
   }
 
-  // Function to check and request permission
   Future<bool> _checkAndRequestPermission() async {
-    // final status = await Permission.storage.status;
-    bool permissionGranted =
-        await Permission.storage.isGranted || await Permission.photos.isGranted;
+    var status = await Permission.storage.status;
 
-    if (!permissionGranted) {
-      permissionGranted = await Permission.storage.request().isGranted ||
-          await Permission.photos.request().isGranted;
+    if (status.isGranted) {
+      return true; // Permission already granted
+    } else if (status.isDenied) {
       // Request permission
-      // final result = await Permission.storage.request();
-      // return result.isGranted;
-      // return permissionGranted;
+      var result = await Permission.storage.request();
+      return result.isGranted;
+    } else if (status.isPermanentlyDenied) {
+      // Permission permanently denied, redirect to settings
+      openAppSettings();
+      return false;
     }
-
-    // return true; // Permission already granted
-    return permissionGranted;
+    return false;
   }
+
+
+  // // Function to check and request permission
+  // Future<bool> _checkAndRequestPermission() async {
+  //   // final status = await Permission.storage.status;
+  //   bool permissionGranted =
+  //       await Permission.storage.isGranted || await Permission.photos.isGranted;
+  //   print("****************$permissionGranted");
+  //
+  //   if (!permissionGranted) {
+  //     permissionGranted = await Permission.storage.request().isGranted ||
+  //         await Permission.photos.request().isGranted;
+  //     // Request permission
+  //     // final result = await Permission.storage.request();
+  //     // return result.isGranted;
+  //     // return permissionGranted;
+  //   }
+  //
+  //   // return true; // Permission already granted
+  //   return permissionGranted;
+  // }
 
   Future<void> _requestPermission() async {
     final status = await Permission.storage.request();
     if (status.isGranted) {
-      // Permission granted
-      // print("Permission granted");
-    } else if (status.isDenied) {
-      // Handle permission denied
-      // print("Permission denied");
+      print("Permission granted");
+    } else if (status.isDenied || status.isPermanentlyDenied) {
+      print("Permission denied");
+      final result = await Permission.storage.request();
       // openAppSettings();
     } else if (status.isPermanentlyDenied) {
       // Permission permanently denied, redirect to settings
-      // print("Permission permanently denied");
+      print("Permission permanently denied");
       openAppSettings();
     }
   }
@@ -125,7 +143,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
                                     fontSize: 18,
                                   ),
                                 ),
-                                duration: Duration(seconds: 1),
+                                duration: Duration(seconds: 3),
                               ), //
                             );
                           });
@@ -287,11 +305,13 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
         ),
         onPressed: () async {
           // interstitial add will show when saving qr code
-          admobHelper.loadInterstitialAds();
+          // admobHelper.loadInterstitialAds();
 
           bool permissionGranted = await _checkAndRequestPermission();
+
           if (permissionGranted) {
             // await _requestPermission();
+            admobHelper.loadInterstitialAds();
             try {
               // check unnecessary imports
               await Future.delayed(const Duration(milliseconds: 300));
@@ -306,7 +326,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
                   SnackBar(
                     elevation: 3,
                     backgroundColor: AppColors.kSnackBarBgColor,
-                    duration: const Duration(seconds: 1),
+                    duration: const Duration(seconds: 3),
                     content: Text(
                       result['isSuccess']
                           ? "Image Saved Successfully."
@@ -326,7 +346,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   backgroundColor: Colors.red,
-                  duration: Duration(seconds: 1),
+                  duration: Duration(seconds: 3),
                   content: Text(
                     "Failed to save image.",
                     style: TextStyle(fontSize: 18),
@@ -335,24 +355,32 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
               );
             }
           } else {
+            await Permission.storage.request();
+            // await Permission.photos.request();
             bool isPermanentlyDenied =
                 await Permission.storage.status.isPermanentlyDenied;
             if (isPermanentlyDenied) {
               openAppSettings();
             } else {
               await Permission.storage.request();
+              openAppSettings();
             }
             // Permission was denied
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                backgroundColor: Colors.red,
-                duration: Duration(seconds: 1),
-                content: Text(
-                  "Permission denied. Unable to save image.",
-                  style: TextStyle(fontSize: 18),
+            if(await Permission.storage.status.isPermanentlyDenied || await Permission.storage.status.isDenied) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  backgroundColor: Colors.red,
+                  duration: Duration(seconds: 3),
+                  content: Text(
+                    "Permission denied. Unable to save image.",
+                    style: TextStyle(fontSize: 18),
+                  ),
                 ),
-              ),
-            );
+              );
+            }
+            _requestPermission();
+            // bool isPermanentlyDeniednew = await Permission.storage.isDenied;
+            // print("**************${isPermanentlyDenied}");
           }
         },
         child: const Center(

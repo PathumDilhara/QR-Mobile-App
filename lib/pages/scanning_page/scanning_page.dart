@@ -575,7 +575,7 @@ class _QRScanningPageState extends State<QRScanningPage>
                               );
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  duration: const Duration(seconds: 1),
+                                  duration: const Duration(seconds: 3),
                                   backgroundColor: AppColors.kSnackBarBgColor,
                                   content: Text(
                                     "Copied to clipboard",
@@ -589,7 +589,7 @@ class _QRScanningPageState extends State<QRScanningPage>
                               );
                             } catch (err) {
                               SnackBar(
-                                duration: const Duration(seconds: 1),
+                                duration: const Duration(seconds: 3),
                                 backgroundColor: AppColors.kMainPurpleColor,
                                 content: Text(
                                   "Error copying to clipboard",

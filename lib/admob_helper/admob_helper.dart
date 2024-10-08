@@ -16,8 +16,8 @@ class AdmobHelper {
   // Reward ads
   RewardedAd? _rewardedAd;
 
-  static initialization() {
-    
+  static initialization() async {
+    await MobileAds.instance.initialize();
   }
 
   // Banner ads
@@ -44,11 +44,11 @@ class AdmobHelper {
     return _bannerAd;
   }
 
-  // Interstitial ads
+  // Interstitial ads creating
   void createInterstitialAds() {
     InterstitialAd.load(
       adUnitId:
-          "ca-app-pub-6164977547035716/5704387930", // Replace with actual ID for release
+          "ca-app-pub-6164977547035716/5704387930",
       request: const AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (ad) {
@@ -67,7 +67,7 @@ class AdmobHelper {
     );
   }
 
-  // Interstitial ads
+  // Interstitial ads loading
   void loadInterstitialAds() {
     if (_interstitialAd == null) {
       return;
@@ -83,7 +83,7 @@ class AdmobHelper {
       onAdFailedToShowFullScreenContent: (ad, error) {
         print("$ad onAdFailed $error");
         ad.dispose();
-        createInterstitialAds();
+        createInterstitialAds(); // Load a new ad
       },
     );
     _interstitialAd!.show();
