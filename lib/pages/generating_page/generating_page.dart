@@ -89,11 +89,12 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
       // return true; // Permission already granted
       PermissionStatus requestStatus = await Permission.storage.request();
 
-      if(requestStatus.isDenied){
+      if (requestStatus.isDenied) {
         _showPermissionDeniedDialog();
-      } else if (requestStatus.isPermanentlyDenied){
+      } else if (requestStatus.isPermanentlyDenied) {
         setState(() {
-          _isStoragePermissionPermanentlyDenied = requestStatus.isPermanentlyDenied;
+          _isStoragePermissionPermanentlyDenied =
+              requestStatus.isPermanentlyDenied;
         });
       }
       setState(() {
@@ -113,17 +114,21 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
         actions: [
           TextButton(
             onPressed: () {
-              if(_retryCount == 0){
-              Navigator.of(context).pop();
-              _checkStoragePermission(); // Try to request permission again
-              _retryCount ++;
-              } else if(_retryCount >= 1){
+              if (_retryCount == 0) {
+                Navigator.of(context).pop();
+                _checkStoragePermission(); // Try to request permission again
+                _retryCount++;
+              } else if (_retryCount >= 1) {
                 Navigator.of(context).pop();
                 openAppSettings();
                 _retryCount = 0;
               }
             },
-            child: Text(_retryCount == 0 ? "Retry" : "open App settings"),
+            child: Text(
+              _retryCount == 0 && !_isStoragePermissionPermanentlyDenied
+                  ? "Retry"
+                  : "open App settings",
+            ),
           ),
           TextButton(
             onPressed: () {
@@ -367,9 +372,8 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
               const WidgetStatePropertyAll(AppColors.kMainPurpleColor),
         ),
         onPressed: () async {
-
           _checkStoragePermission();
-          
+
           if (_isStoragePermissionGranted) {
             // await _requestPermission();
             // interstitial add will show when saving qr code
