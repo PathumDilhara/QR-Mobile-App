@@ -68,7 +68,7 @@ class AdmobHelper {
   }
 
   // Interstitial ads loading
-  void loadInterstitialAds() {
+  Future<void> loadInterstitialAds() async{
     if (_interstitialAd == null) {
       return;
     }
@@ -86,7 +86,7 @@ class AdmobHelper {
         createInterstitialAds(); // Load a new ad
       },
     );
-    _interstitialAd!.show();
+    await _interstitialAd!.show();
     _interstitialAd = null;
   }
 

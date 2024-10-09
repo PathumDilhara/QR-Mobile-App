@@ -32,29 +32,32 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
 
   AdmobHelper admobHelper = new AdmobHelper();
 
+  bool _isStoragePermissionGranted = false;
+  bool _isStoragePermissionPermanentlyDenied = false;
+  int _retryCount = 0;
+
   @override
   void dispose() {
     qrInputController.dispose();
     super.dispose();
   }
 
-  Future<bool> _checkAndRequestPermission() async {
-    var status = await Permission.storage.status;
-
-    if (status.isGranted) {
-      return true; // Permission already granted
-    } else if (status.isDenied) {
-      // Request permission
-      var result = await Permission.storage.request();
-      return result.isGranted;
-    } else if (status.isPermanentlyDenied) {
-      // Permission permanently denied, redirect to settings
-      openAppSettings();
-      return false;
-    }
-    return false;
-  }
-
+  // Future<bool> _checkAndRequestPermission() async {
+  //   var status = await Permission.storage.status;
+  //
+  //   if (status.isGranted) {
+  //     return true; // Permission already granted
+  //   } else if (status.isDenied) {
+  //     // Request permission
+  //     var result = await Permission.storage.request();
+  //     return result.isGranted;
+  //   } else if (status.isPermanentlyDenied) {
+  //     // Permission permanently denied, redirect to settings
+  //     openAppSettings();
+  //     return false;
+  //   }
+  //   return false;
+  // }
 
   // // Function to check and request permission
   // Future<bool> _checkAndRequestPermission() async {
@@ -76,20 +79,80 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
   //   return permissionGranted;
   // }
 
-  Future<void> _requestPermission() async {
-    final status = await Permission.storage.request();
-    if (status.isGranted) {
-      print("Permission granted");
-    } else if (status.isDenied || status.isPermanentlyDenied) {
-      print("Permission denied");
-      final result = await Permission.storage.request();
-      // openAppSettings();
-    } else if (status.isPermanentlyDenied) {
-      // Permission permanently denied, redirect to settings
-      print("Permission permanently denied");
-      openAppSettings();
+  Future<void> _checkStoragePermission() async {
+    PermissionStatus status = await Permission.storage.status;
+    setState(() {
+      _isStoragePermissionGranted = status.isGranted;
+    });
+
+    if (status.isDenied || status.isPermanentlyDenied) {
+      // return true; // Permission already granted
+      PermissionStatus requestStatus = await Permission.storage.request();
+
+      if(requestStatus.isDenied){
+        _showPermissionDeniedDialog();
+      } else if (requestStatus.isPermanentlyDenied){
+        setState(() {
+          _isStoragePermissionPermanentlyDenied = requestStatus.isPermanentlyDenied;
+        });
+      }
+      setState(() {
+        _isStoragePermissionGranted = requestStatus.isGranted;
+        _isStoragePermissionPermanentlyDenied = !requestStatus.isGranted;
+      });
     }
   }
+
+  void _showPermissionDeniedDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Storage Permission Required"),
+        content: const Text(
+            "This app requires storage access to save QR codes. Please grant storage permission."),
+        actions: [
+          TextButton(
+            onPressed: () {
+              if(_retryCount == 0){
+              Navigator.of(context).pop();
+              _checkStoragePermission(); // Try to request permission again
+              _retryCount ++;
+              } else if(_retryCount >= 1){
+                Navigator.of(context).pop();
+                openAppSettings();
+                _retryCount = 0;
+              }
+            },
+            child: Text(_retryCount == 0 ? "Retry" : "open App settings"),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              setState(() {
+                _isStoragePermissionPermanentlyDenied = true;
+              });
+            },
+            child: const Text("Cancel"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Future<void> _requestPermission() async {
+  //   final status = await Permission.storage.request();
+  //   if (status.isGranted) {
+  //     print("Permission granted");
+  //   } else if (status.isDenied || status.isPermanentlyDenied) {
+  //     print("Permission denied");
+  //     final result = await Permission.storage.request();
+  //     // openAppSettings();
+  //   } else if (status.isPermanentlyDenied) {
+  //     // Permission permanently denied, redirect to settings
+  //     print("Permission permanently denied");
+  //     openAppSettings();
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -304,13 +367,12 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
               const WidgetStatePropertyAll(AppColors.kMainPurpleColor),
         ),
         onPressed: () async {
-          // interstitial add will show when saving qr code
-          // admobHelper.loadInterstitialAds();
 
-          bool permissionGranted = await _checkAndRequestPermission();
-
-          if (permissionGranted) {
+          _checkStoragePermission();
+          
+          if (_isStoragePermissionGranted) {
             // await _requestPermission();
+            // interstitial add will show when saving qr code
             admobHelper.loadInterstitialAds();
             try {
               // check unnecessary imports
@@ -355,18 +417,19 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
               );
             }
           } else {
-            await Permission.storage.request();
+            // _checkStoragePermission();
+            // await Permission.storage.request();
             // await Permission.photos.request();
-            bool isPermanentlyDenied =
-                await Permission.storage.status.isPermanentlyDenied;
-            if (isPermanentlyDenied) {
-              openAppSettings();
-            } else {
-              await Permission.storage.request();
-              openAppSettings();
-            }
-            // Permission was denied
-            if(await Permission.storage.status.isPermanentlyDenied || await Permission.storage.status.isDenied) {
+            // bool isPermanentlyDenied =
+            //     await Permission.storage.status.isPermanentlyDenied;
+            // if (isPermanentlyDenied) {
+            //   openAppSettings();
+            // } else {
+            //   // await Permission.storage.request();
+            //   openAppSettings();
+            // }
+            // Permission was permanently denied
+            if (_isStoragePermissionPermanentlyDenied) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   backgroundColor: Colors.red,
@@ -378,8 +441,12 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
                 ),
               );
             }
-            _requestPermission();
-            // bool isPermanentlyDeniednew = await Permission.storage.isDenied;
+            // _checkStoragePermission();
+            // if(_isStoragePermissionPermanentlyDenied){
+            //   openAppSettings();
+            // }
+            // _requestPermission();
+            // bool isPermanentlyDenied = await Permission.storage.isDenied;
             // print("**************${isPermanentlyDenied}");
           }
         },
