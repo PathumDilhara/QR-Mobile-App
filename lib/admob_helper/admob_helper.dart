@@ -60,8 +60,7 @@ class AdmobHelper {
           _interstitialAd = null;
 
           if (numOfAttemptLoad <= 2) {
-            // createInterstitialAds();
-
+            createInterstitialAds();
           }
         },
       ),
@@ -99,10 +98,11 @@ class AdmobHelper {
       request: const AdRequest(),
       rewardedAdLoadCallback: RewardedAdLoadCallback(
         onAdLoaded: (ad) {
-          this._rewardedAd = ad;
+          _rewardedAd = ad;
         },
         onAdFailedToLoad: (error) {
-          // loadRewardAds();
+          // Retry loading the ad if it fails
+          loadRewardAds();
         },
       ),
     );

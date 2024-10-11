@@ -1,5 +1,6 @@
 // import 'dart:io';
 
+import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -25,7 +26,6 @@ class QRScanningPage extends StatefulWidget {
 
 class _QRScanningPageState extends State<QRScanningPage>
     with SingleTickerProviderStateMixin {
-
   // Ads
   AdmobHelper admobHelper = AdmobHelper();
 
@@ -449,9 +449,25 @@ class _QRScanningPageState extends State<QRScanningPage>
 
   // Open bottom sheet
   void _openBottomSheet(String qrCode) {
+    // For Urls
     const urlPattern =
         r'^(https?:\/\/)?([\w-]+(\.[\w-]+)+)(\/[\w- ;,./?%&=]*)?$';
     final regExp = RegExp(urlPattern);
+
+    // For wifi
+    final wifiPattern = r'^WIFI.*T:WPA;.*$';
+    final isWifiConfig = RegExp(wifiPattern).hasMatch(qrCode);
+
+    // For phone numbers
+    final phoneNumberPattern = r'^TEL:(\+?\d+)$';
+    final isPhoneNumber = RegExp(phoneNumberPattern).hasMatch(qrCode);
+    // Extract the phone number
+    String phoneNumber = "";
+    if(isPhoneNumber) {
+      final match = RegExp(phoneNumberPattern).firstMatch(qrCode);
+      phoneNumber = match!.group(1).toString(); // Capture the number part
+    }
+
     showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) {
@@ -503,7 +519,7 @@ class _QRScanningPageState extends State<QRScanningPage>
                           style: TextStyle(
                             fontStyle: FontStyle.italic,
                             fontSize: 18,
-                            color: regExp.hasMatch(qrCode)
+                            color: regExp.hasMatch(qrCode) || isWifiConfig
                                 ? Colors.blue
                                 : Colors.black,
                           ),
@@ -543,12 +559,22 @@ class _QRScanningPageState extends State<QRScanningPage>
                               ? () {
                                   _launchURL(qrCode);
                                 }
-                              : null,
+                              : isWifiConfig
+                                  ? () {
+                                      _openWiFiSettings();
+                                    }
+                                  : isPhoneNumber
+                                      ? () {
+                                          _openDialer(phoneNumber);
+                                        }
+                                      : null,
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(horizontal: 0),
                             minimumSize: Size(
                                 MediaQuery.of(context).size.width * 0.9, 50),
-                            backgroundColor: regExp.hasMatch(qrCode)
+                            backgroundColor: regExp.hasMatch(qrCode) ||
+                                    isWifiConfig ||
+                                    isPhoneNumber
                                 ? AppColors.kMainPurpleColor
                                 : Colors.grey,
                             shape: RoundedRectangleBorder(
@@ -556,7 +582,13 @@ class _QRScanningPageState extends State<QRScanningPage>
                             ),
                           ),
                           child: Text(
-                            "Open in browser",
+                            regExp.hasMatch(qrCode)
+                                ? "Open in browser"
+                                : isWifiConfig
+                                    ? "Connect to wifi"
+                                    : isPhoneNumber
+                                        ? "Dial"
+                                        : "Copy",
                             style: AppTextStyles.appTitleStyle.copyWith(
                               color: AppColors.kWhiteColor,
                               fontSize: 20,
@@ -643,6 +675,7 @@ class _QRScanningPageState extends State<QRScanningPage>
     });
   }
 
+  // Method to launch urls
   Future<void> _launchURL(String qrCode) async {
     final Uri url = Uri.parse(qrCode);
 
@@ -656,6 +689,29 @@ class _QRScanningPageState extends State<QRScanningPage>
       await launchUrl(url, mode: LaunchMode.externalApplication);
     } else {
       throw Exception("Invalid URL or could not launch $url");
+    }
+  }
+
+  // Method to open wifi settings
+  void _openWiFiSettings() {
+    final intent = AndroidIntent(
+      action: 'android.settings.WIFI_SETTINGS',
+    );
+    intent.launch();
+  }
+
+  // Open dialer
+  void _openDialer(String phoneNumber) async {
+    final dialerUrl = Uri(scheme: 'tel', path: phoneNumber);
+
+    if (await canLaunchUrl(dialerUrl)) {
+      await launchUrl(dialerUrl);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Could not launch dialer.'),
+        ),
+      );
     }
   }
 
