@@ -7,7 +7,8 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class AdmobHelper {
   // Banner ads
-  static String get bannerUnit => "ca-app-pub-6164977547035716/4582877954";
+  // static String get bannerUnit => "ca-app-pub-6164977547035716/4582877954";
+  static String get bannerUnit => "ca-app-pub-3940256099942544/6300978111";
 
   // Interstitial ads
   InterstitialAd? _interstitialAd;
@@ -25,7 +26,7 @@ class AdmobHelper {
     BannerAd _bannerAd = BannerAd(
       size: AdSize.banner,
       adUnitId:
-          "ca-app-pub-6164977547035716/4582877954", // Replace with actual ID for release
+          "ca-app-pub-3940256099942544/6300978111", // Replace with actual ID for release
       listener: BannerAdListener(
         onAdLoaded: (Ad ad) {
           print("Ad loaded");
@@ -48,7 +49,7 @@ class AdmobHelper {
   void createInterstitialAds() {
     InterstitialAd.load(
       adUnitId:
-          "ca-app-pub-6164977547035716/5704387930",
+          "ca-app-pub-3940256099942544/1033173712",
       request: const AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (ad) {
@@ -60,7 +61,8 @@ class AdmobHelper {
           _interstitialAd = null;
 
           if (numOfAttemptLoad <= 2) {
-            createInterstitialAds();
+            // createInterstitialAds();
+
           }
         },
       ),
@@ -94,7 +96,7 @@ class AdmobHelper {
   void loadRewardAds() {
     RewardedAd.load(
       adUnitId:
-          "ca-app-pub-6164977547035716/4630183252", // Replace with actual ID for release
+          "ca-app-pub-3940256099942544/5224354917", // Replace with actual ID for release
       request: const AdRequest(),
       rewardedAdLoadCallback: RewardedAdLoadCallback(
         onAdLoaded: (ad) {

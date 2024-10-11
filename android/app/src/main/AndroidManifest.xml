@@ -11,10 +11,10 @@
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
 
-        <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 -->
+        <!-- Sample AdMob app ID: ca-app-pub-3940256099942544~3347511713 , my : ca-app-pub-6164977547035716~7865252074 -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-6164977547035716~7865252074"/>
+            android:value="ca-app-pub-3940256099942544~3347511713"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

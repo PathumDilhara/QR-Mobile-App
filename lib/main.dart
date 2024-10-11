@@ -94,3 +94,6 @@ class _MyAppState extends State<MyApp> {
 // Generating QR categorized Phone number, url, personal details, ...
 
 // if wifi open wifi settings
+
+
+// admobHelper.createInterstitialAds();

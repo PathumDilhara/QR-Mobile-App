@@ -1,4 +1,4 @@
-import 'dart:io';
+// import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -312,7 +312,8 @@ class _QRScanningPageState extends State<QRScanningPage>
             // Pause camera, animation and open a bottom sheet
             qrViewController.pauseCamera();
             _animationController.stop();
-            admobHelper.loadRewardAds();
+            // admobHelper.loadRewardAds();
+            // admobHelper.createInterstitialAds();
             _openBottomSheet(result!.code.toString());
             if (settingsProvider.isHistorySaving) {
               await qrHistoryProvider.storeScnQR(scannedQRModel);
@@ -568,7 +569,7 @@ class _QRScanningPageState extends State<QRScanningPage>
                         // Copy to clipboard
                         ElevatedButton(
                           onPressed: () async {
-                            admobHelper.showRewardAds();
+                            // admobHelper.showRewardAds();
                             try {
                               await Clipboard.setData(
                                 ClipboardData(text: qrCode),

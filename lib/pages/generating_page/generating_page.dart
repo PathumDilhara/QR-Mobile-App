@@ -377,7 +377,6 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
           if (_isStoragePermissionGranted) {
             // await _requestPermission();
             // interstitial add will show when saving qr code
-            admobHelper.loadInterstitialAds();
             try {
               // check unnecessary imports
               await Future.delayed(const Duration(milliseconds: 300));
@@ -407,6 +406,8 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
                   ),
                 );
               }
+              await Future.delayed(const Duration(milliseconds: 300));
+              await admobHelper.loadInterstitialAds();
             } catch (err) {
               // print('Error saving image: $err');
               ScaffoldMessenger.of(context).showSnackBar(
@@ -445,13 +446,6 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
                 ),
               );
             }
-            // _checkStoragePermission();
-            // if(_isStoragePermissionPermanentlyDenied){
-            //   openAppSettings();
-            // }
-            // _requestPermission();
-            // bool isPermanentlyDenied = await Permission.storage.isDenied;
-            // print("**************${isPermanentlyDenied}");
           }
         },
         child: const Center(
