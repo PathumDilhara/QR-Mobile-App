@@ -1,9 +1,8 @@
 import 'dart:typed_data';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
-// import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -42,42 +41,13 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
     super.dispose();
   }
 
-  // Future<bool> _checkAndRequestPermission() async {
-  //   var status = await Permission.storage.status;
-  //
-  //   if (status.isGranted) {
-  //     return true; // Permission already granted
-  //   } else if (status.isDenied) {
-  //     // Request permission
-  //     var result = await Permission.storage.request();
-  //     return result.isGranted;
-  //   } else if (status.isPermanentlyDenied) {
-  //     // Permission permanently denied, redirect to settings
-  //     openAppSettings();
-  //     return false;
-  //   }
-  //   return false;
-  // }
-
-  // // Function to check and request permission
-  // Future<bool> _checkAndRequestPermission() async {
-  //   // final status = await Permission.storage.status;
-  //   bool permissionGranted =
-  //       await Permission.storage.isGranted || await Permission.photos.isGranted;
-  //   print("****************$permissionGranted");
-  //
-  //   if (!permissionGranted) {
-  //     permissionGranted = await Permission.storage.request().isGranted ||
-  //         await Permission.photos.request().isGranted;
-  //     // Request permission
-  //     // final result = await Permission.storage.request();
-  //     // return result.isGranted;
-  //     // return permissionGranted;
-  //   }
-  //
-  //   // return true; // Permission already granted
-  //   return permissionGranted;
-  // }
+  Future<String> _getAndroidVersion() async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+    // String version = '${androidInfo.version.release} (SDK ${androidInfo.version.sdkInt})';
+    // print('Android version: $version');
+    return androidInfo.version.release;
+  }
 
   Future<void> _checkStoragePermission() async {
     PermissionStatus status = await Permission.storage.status;
@@ -87,7 +57,16 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
 
     if (status.isDenied || status.isPermanentlyDenied) {
       // return true; // Permission already granted
-      PermissionStatus requestStatus = await Permission.storage.request();
+      // PermissionStatus requestStatus = await Permission.storage.request();
+      String androidVersion = await _getAndroidVersion();
+      PermissionStatus requestStatus;
+
+      if (int.parse(androidVersion) >= 13) {
+        requestStatus =
+            await Permission.photos.request(); // Adjust based on your needs
+      } else {
+        requestStatus = await Permission.storage.request();
+      }
 
       if (requestStatus.isDenied) {
         _showPermissionDeniedDialog();
@@ -114,11 +93,12 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
         actions: [
           TextButton(
             onPressed: () {
-              if (_retryCount == 0) {
+              if (_retryCount == 0 && !_isStoragePermissionPermanentlyDenied) {
                 Navigator.of(context).pop();
                 _checkStoragePermission(); // Try to request permission again
                 _retryCount++;
-              } else if (_retryCount >= 1) {
+              } else if (_retryCount >= 1 ||
+                  _isStoragePermissionPermanentlyDenied) {
                 Navigator.of(context).pop();
                 openAppSettings();
                 _retryCount = 0;
@@ -143,21 +123,6 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
       ),
     );
   }
-
-  // Future<void> _requestPermission() async {
-  //   final status = await Permission.storage.request();
-  //   if (status.isGranted) {
-  //     print("Permission granted");
-  //   } else if (status.isDenied || status.isPermanentlyDenied) {
-  //     print("Permission denied");
-  //     final result = await Permission.storage.request();
-  //     // openAppSettings();
-  //   } else if (status.isPermanentlyDenied) {
-  //     // Permission permanently denied, redirect to settings
-  //     print("Permission permanently denied");
-  //     openAppSettings();
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -234,20 +199,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
               ),
             ),
           ),
-          // // Advertisement
-          // Positioned(
-          //   left: 0,
-          //   right: 0,
-          //   bottom: 0,
-          //   child: SizedBox(
-          //     height: 50,
-          //     // color: Colors.red,
-          //     child: AdWidget(
-          //       ad: AdmobHelper.getBannerAd()..load(),
-          //       key: UniqueKey(),
-          //     ),
-          //   ),
-          // ),
+          // Advertisement
         ],
       ),
     );
@@ -520,4 +472,70 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
       ),
     );
   }
+
+// Future<bool> _checkAndRequestPermission() async {
+//   var status = await Permission.storage.status;
+//
+//   if (status.isGranted) {
+//     return true; // Permission already granted
+//   } else if (status.isDenied) {
+//     // Request permission
+//     var result = await Permission.storage.request();
+//     return result.isGranted;
+//   } else if (status.isPermanentlyDenied) {
+//     // Permission permanently denied, redirect to settings
+//     openAppSettings();
+//     return false;
+//   }
+//   return false;
+// }
+
+// // Function to check and request permission
+// Future<bool> _checkAndRequestPermission() async {
+//   // final status = await Permission.storage.status;
+//   bool permissionGranted =
+//       await Permission.storage.isGranted || await Permission.photos.isGranted;
+//   print("****************$permissionGranted");
+//
+//   if (!permissionGranted) {
+//     permissionGranted = await Permission.storage.request().isGranted ||
+//         await Permission.photos.request().isGranted;
+//     // Request permission
+//     // final result = await Permission.storage.request();
+//     // return result.isGranted;
+//     // return permissionGranted;
+//   }
+//
+//   // return true; // Permission already granted
+//   return permissionGranted;
+// }
+
+// Positioned(
+//   left: 0,
+//   right: 0,
+//   bottom: 0,
+//   child: SizedBox(
+//     height: 50,
+//     // color: Colors.red,
+//     child: AdWidget(
+//       ad: AdmobHelper.getBannerAd()..load(),
+//       key: UniqueKey(),
+//     ),
+//   ),
+// ),
+
+// Future<void> _requestPermission() async {
+//   final status = await Permission.storage.request();
+//   if (status.isGranted) {
+//     print("Permission granted");
+//   } else if (status.isDenied || status.isPermanentlyDenied) {
+//     print("Permission denied");
+//     final result = await Permission.storage.request();
+//     // openAppSettings();
+//   } else if (status.isPermanentlyDenied) {
+//     // Permission permanently denied, redirect to settings
+//     print("Permission permanently denied");
+//     openAppSettings();
+//   }
+// }
 }
