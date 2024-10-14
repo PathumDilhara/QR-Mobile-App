@@ -47,7 +47,7 @@ class _UpdatePageState extends State<UpdatePage> {
       _isUpdating = true;
     });
     try {
-      await InAppUpdate.startFlexibleUpdate();
+      await InAppUpdate.performImmediateUpdate();
       // Optionally, you might want to handle the update completion here
     } catch (err) {
       setState(() {
@@ -105,7 +105,7 @@ class _UpdatePageState extends State<UpdatePage> {
             const SizedBox(height: 20),
             _isUpdateAvailable
                 ? _isUpdating
-                    ? const CircularProgressIndicator()
+                    ? const LinearProgressIndicator(color: AppColors.kMainPurpleColor,)
                     : Column(
                         children: [
                           SizedBox(
