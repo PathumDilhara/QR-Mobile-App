@@ -15,13 +15,13 @@ class _FAQPageState extends State<FAQPage> {
   final List<FAQModel> faqData = FAQData.faqData;
   @override
   Widget build(BuildContext context) {
-
     bool isDark = Theme.of(context).brightness == Brightness.dark;
 
     Color backgroundColor = isDark
         ? AppColors.kSettingsContentsPageBgColor
         : AppColors.kWhiteColor.withOpacity(0.95);
-    Color titleColor = isDark ? AppColors.kWhiteColor.withOpacity(0.7) : AppColors.kBlackColor;
+    Color titleColor =
+        isDark ? AppColors.kWhiteColor.withOpacity(0.7) : AppColors.kBlackColor;
     // Color panelListBgColor = isDark ? AppColors.kWhiteColor.withOpacity(0.7) : AppColors.kPurpleColor;
 
     return Scaffold(
@@ -67,7 +67,7 @@ class _FAQPageState extends State<FAQPage> {
                           title: Text(
                             faq.title,
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 18,
                               fontWeight: FontWeight.bold,
                               color: isExpanded
                                   ? AppColors.kMainPurpleColor
@@ -81,30 +81,38 @@ class _FAQPageState extends State<FAQPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: faq.description
                               .split('\n') // Split the description by new lines
-                              .map((line) => Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Icon(
-                                Icons.brightness_1, // Bullet point icon
-                                size: 10, // Customize the size of the bullet
-                                color: AppColors.kGreyColor, // Bullet point color
-                              ),
-                              const SizedBox(width: 8), // Space between bullet and text
-                              Expanded(
-                                child: Text(
-                                  line.trim(), // Text of the description
-                                  style: TextStyle(
-                                    fontStyle: FontStyle.italic,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.black.withOpacity(0.5),
-                                  ),
+                              .map(
+                                (line) => Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: Icon(
+                                        Icons.circle, // Bullet point icon
+                                        size:
+                                            10, // Customize the size of the bullet
+                                        color: AppColors
+                                            .kGreyColor, // Bullet point color
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                        width:
+                                            8), // Space between bullet and text
+                                    Expanded(
+                                      child: Text(
+                                        line.trim(), // Text of the description
+                                        style: TextStyle(
+                                          fontStyle: FontStyle.italic,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.black.withOpacity(0.5),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ))
-                              .toList(),
+                              ).toList(),
                         ),
                       ),
 
