@@ -62,10 +62,14 @@ class _UpdatePageState extends State<UpdatePage> {
   @override
   Widget build(BuildContext context) {
     bool isDark = Theme.of(context).brightness == Brightness.dark;
-    Color backgroundColor =
-        isDark ? AppColors.kBlackColor : AppColors.kWhiteColor.withOpacity(0.95);
-    Color titleColor = isDark ? AppColors.kWhiteColor.withOpacity(0.7) : AppColors.kBlackColor;
-    Color buttonColor = isDark ? AppColors.kGreyColor.withOpacity(0.3) : AppColors.kGreyColor.withOpacity(0.8);
+    Color backgroundColor = isDark
+        ? AppColors.kBlackColor
+        : AppColors.kWhiteColor.withOpacity(0.95);
+    Color titleColor =
+        isDark ? AppColors.kWhiteColor.withOpacity(0.7) : AppColors.kBlackColor;
+    Color buttonColor = isDark
+        ? AppColors.kGreyColor.withOpacity(0.3)
+        : AppColors.kGreyColor.withOpacity(0.8);
 
     return Scaffold(
       backgroundColor: backgroundColor,
@@ -83,7 +87,11 @@ class _UpdatePageState extends State<UpdatePage> {
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.asset("assets/images/qrc.png", width: 100, fit: BoxFit.cover,),
+            Image.asset(
+              "assets/images/qrc.png",
+              width: 100,
+              fit: BoxFit.cover,
+            ),
             Text(
               "Update your \napplication to the \nlatest version",
               style: TextStyle(
@@ -92,20 +100,26 @@ class _UpdatePageState extends State<UpdatePage> {
                 color: titleColor,
               ),
             ),
-            const SizedBox(height: 10,),
-            _isUpdateAvailable ? Text(
-              "This update includes improvements to the QR scanning and generating features, enhancing performance and user experience.",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: titleColor.withOpacity(0.6),
-              ),
-            ):
-            const SizedBox(),
+            const SizedBox(
+              height: 10,
+            ),
+            _isUpdateAvailable
+                ? Text(
+                    "This update includes improvements to the QR scanning and generating features, enhancing performance and user experience.",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: titleColor.withOpacity(0.6),
+                    ),
+                  )
+                : const SizedBox(),
             const SizedBox(height: 20),
             _isUpdateAvailable
                 ? _isUpdating
-                    ? const LinearProgressIndicator(color: AppColors.kMainPurpleColor,)
+                    ? const LinearProgressIndicator(
+                        color: AppColors.kMainPurpleColor,
+                        backgroundColor: Colors.lightBlueAccent,
+                      )
                     : Column(
                         children: [
                           SizedBox(

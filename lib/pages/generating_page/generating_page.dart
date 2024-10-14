@@ -32,6 +32,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
   AdmobHelper admobHelper = new AdmobHelper();
 
   bool _isStoragePermissionGranted = false;
+  bool _isPhotoPermissionGranted = false;
   bool _isStoragePermissionPermanentlyDenied = false;
   int _retryCount = 0;
 
@@ -51,19 +52,23 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
 
   Future<void> _checkStoragePermission() async {
     PermissionStatus status = await Permission.storage.status;
+    PermissionStatus photosStatus = await Permission.photos.status;
     setState(() {
       _isStoragePermissionGranted = status.isGranted;
+      _isPhotoPermissionGranted = photosStatus.isGranted;
     });
 
-    if (status.isDenied || status.isPermanentlyDenied) {
+    if (status.isDenied ||
+        status.isPermanentlyDenied ||
+        photosStatus.isDenied ||
+        photosStatus.isPermanentlyDenied) {
       // return true; // Permission already granted
       // PermissionStatus requestStatus = await Permission.storage.request();
       String androidVersion = await _getAndroidVersion();
       PermissionStatus requestStatus;
 
       if (int.parse(androidVersion) >= 13) {
-        requestStatus =
-            await Permission.photos.request(); // Adjust based on your needs
+        requestStatus = await Permission.photos.request();
       } else {
         requestStatus = await Permission.storage.request();
       }
