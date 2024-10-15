@@ -27,7 +27,7 @@ class GeneratedHistoryTab extends StatelessWidget {
               ? () {}
               : () async {
                   await qrHistoryProvider.clearGeneratedQRBox();
-                  qrHistoryProvider.loadGeneratedQRCodes();
+                  // qrHistoryProvider.loadGeneratedQRCodes();
                 },
           child: const Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -104,7 +104,7 @@ class GeneratedHistoryTab extends StatelessWidget {
                               onPressed: () async {
                                 await qrHistoryProvider
                                     .deleteGeneratedQRCode(qrCode);
-                                qrHistoryProvider.loadGeneratedQRCodes();
+                                // qrHistoryProvider.loadGeneratedQRCodes();
                               },
                               icon: Icon(
                                 Icons.delete_outline,

@@ -452,7 +452,7 @@ class _QRScanningPageState extends State<QRScanningPage>
     // For Urls
     const urlPattern =
         r'^(https?:\/\/)?([\w-]+(\.[\w-]+)+)(\/[\w- ;,./?%&=]*)?$';
-    final regExp = RegExp(urlPattern);
+    final isUrl = RegExp(urlPattern).hasMatch(qrCode);
 
     // For wifi
     final wifiPattern = r'^WIFI.*T:WPA;.*$';
@@ -461,9 +461,10 @@ class _QRScanningPageState extends State<QRScanningPage>
     // For phone numbers
     final phoneNumberPattern = r'^TEL:(\+?\d+)$';
     final isPhoneNumber = RegExp(phoneNumberPattern).hasMatch(qrCode);
+
     // Extract the phone number
     String phoneNumber = "";
-    if(isPhoneNumber) {
+    if (isPhoneNumber) {
       final match = RegExp(phoneNumberPattern).firstMatch(qrCode);
       phoneNumber = match!.group(1).toString(); // Capture the number part
     }
@@ -473,7 +474,9 @@ class _QRScanningPageState extends State<QRScanningPage>
       builder: (BuildContext context) {
         // bottom sheet main container
         return Container(
-          height: MediaQuery.of(context).size.height * 0.45,
+          height: (isUrl || isWifiConfig || isPhoneNumber)
+              ? MediaQuery.of(context).size.height * 0.45
+              : MediaQuery.of(context).size.height * 0.40,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),
             color: Colors.grey.withOpacity(0.3),
@@ -519,7 +522,7 @@ class _QRScanningPageState extends State<QRScanningPage>
                           style: TextStyle(
                             fontStyle: FontStyle.italic,
                             fontSize: 18,
-                            color: regExp.hasMatch(qrCode) || isWifiConfig
+                            color: isUrl || isWifiConfig
                                 ? Colors.blue
                                 : Colors.black,
                           ),
@@ -553,48 +556,51 @@ class _QRScanningPageState extends State<QRScanningPage>
                     Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        // Open in browser
-                        ElevatedButton(
-                          onPressed: regExp.hasMatch(qrCode)
-                              ? () {
-                                  _launchURL(qrCode);
-                                }
-                              : isWifiConfig
-                                  ? () {
-                                      _openWiFiSettings();
-                                    }
-                                  : isPhoneNumber
-                                      ? () {
-                                          _openDialer(phoneNumber);
-                                        }
-                                      : null,
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(horizontal: 0),
-                            minimumSize: Size(
-                                MediaQuery.of(context).size.width * 0.9, 50),
-                            backgroundColor: regExp.hasMatch(qrCode) ||
-                                    isWifiConfig ||
-                                    isPhoneNumber
-                                ? AppColors.kMainPurpleColor
-                                : Colors.grey,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          child: Text(
-                            regExp.hasMatch(qrCode)
-                                ? "Open in browser"
-                                : isWifiConfig
-                                    ? "Connect to wifi"
-                                    : isPhoneNumber
-                                        ? "Dial"
-                                        : "Copy",
-                            style: AppTextStyles.appTitleStyle.copyWith(
-                              color: AppColors.kWhiteColor,
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
+                        // Open in browser, or dial Pad, or wifi
+                        (isUrl || isWifiConfig || isPhoneNumber)
+                            ? ElevatedButton(
+                                onPressed: isUrl
+                                    ? () {
+                                        _launchURL(qrCode, isUrl);
+                                      }
+                                    : isWifiConfig
+                                        ? () {
+                                            _openWiFiSettings();
+                                          }
+                                        : isPhoneNumber
+                                            ? () {
+                                                _openDialer(phoneNumber);
+                                              }
+                                            : null,
+                                style: ElevatedButton.styleFrom(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 0),
+                                  minimumSize: Size(
+                                      MediaQuery.of(context).size.width * 0.9,
+                                      50),
+                                  backgroundColor:
+                                      isUrl || isWifiConfig || isPhoneNumber
+                                          ? AppColors.kMainPurpleColor
+                                          : Colors.grey,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                                child: Text(
+                                  isUrl
+                                      ? "Open in browser"
+                                      : isWifiConfig
+                                          ? "Connect to wifi"
+                                          : isPhoneNumber
+                                              ? "Dial"
+                                              : "",
+                                  style: AppTextStyles.appTitleStyle.copyWith(
+                                    color: AppColors.kWhiteColor,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              )
+                            : SizedBox(),
                         const SizedBox(
                           height: 10,
                         ),
@@ -676,16 +682,16 @@ class _QRScanningPageState extends State<QRScanningPage>
   }
 
   // Method to launch urls
-  Future<void> _launchURL(String qrCode) async {
+  Future<void> _launchURL(String qrCode, bool isUrl) async {
     final Uri url = Uri.parse(qrCode);
 
-    // Regular expression for validating URLs
-    const urlPattern =
-        r'^(https?:\/\/)?([\w-]+(\.[\w-]+)+)(\/[\w- ;,./?%&=]*)?$';
-    final regExp = RegExp(urlPattern);
+    // // Regular expression for validating URLs
+    // const urlPattern =
+    //     r'^(https?:\/\/)?([\w-]+(\.[\w-]+)+)(\/[\w- ;,./?%&=]*)?$';
+    // final regExp = RegExp(urlPattern);
 
     // print(regExp.hasMatch(qrCode));
-    if (regExp.hasMatch(qrCode) && await canLaunchUrl(url)) {
+    if (isUrl && await canLaunchUrl(url)) {
       await launchUrl(url, mode: LaunchMode.externalApplication);
     } else {
       throw Exception("Invalid URL or could not launch $url");
