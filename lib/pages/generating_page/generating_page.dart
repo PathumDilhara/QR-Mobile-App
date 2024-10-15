@@ -24,7 +24,7 @@ class QRGeneratingPage extends StatefulWidget {
 
 class _QRGeneratingPageState extends State<QRGeneratingPage> {
   final TextEditingController qrInputController = TextEditingController();
-  String? qrData;
+  String qrData = "";
   final ScreenshotController screenshotController = ScreenshotController();
 
   bool isCreated = false;
@@ -232,10 +232,13 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
       onChanged: (value) {
         if (value.isEmpty) {
           setState(() {
-            qrData = "";
+            qrData = value.isEmpty ? '' : value;
             isCreated = false;
           });
         }
+        // setState(() {
+        //   isCreated = false;
+        // });
       },
       onTap: () {
         if(qrInputController.text.isNotEmpty && isCreated){
