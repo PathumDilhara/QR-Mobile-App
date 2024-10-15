@@ -83,6 +83,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
       }
       setState(() {
         _isStoragePermissionGranted = requestStatus.isGranted;
+        _isPhotoPermissionGranted = requestStatus.isGranted;
         _isStoragePermissionPermanentlyDenied = !requestStatus.isGranted;
       });
     }
@@ -131,7 +132,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
 
   @override
   Widget build(BuildContext context) {
-    qrData = qrInputController.text;
+    // qrData = qrInputController.text;
     return Scaffold(
       body: Stack(
         children: [
@@ -219,6 +220,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
     // final settingsProvider = Provider.of<SettingsProvider>(context);
 
     return TextField(
+      controller: qrInputController,
       maxLines: 2,
       autofocus:
           true, //  text field will focus itself if nothing else is already focused.
@@ -230,12 +232,27 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
       onChanged: (value) {
         if (value.isEmpty) {
           setState(() {
-            qrInputController.text = "";
+            qrData = "";
             isCreated = false;
           });
         }
       },
-      controller: qrInputController,
+      onTap: () {
+        if(qrInputController.text.isNotEmpty && isCreated){
+          setState(() {
+            isCreated = false;
+            qrData = "";
+          });
+        }
+      },
+      // when tap the tik icon on keyboard or enter of keyboard
+      onSubmitted: (value) {
+        setState(() {
+          qrData = value;
+          // isCreated = true;
+        });
+      },
+
       decoration: InputDecoration(
           filled: true,
           fillColor: AppColors.kWhiteColor,
@@ -264,12 +281,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
               borderSide: BorderSide(
                   color: AppColors.kBlackColor.withOpacity(0.3), width: 2))),
 
-      // when tap the tik icon on keyboard or enter of keyboard
-      onSubmitted: (value) {
-        setState(() {
-          qrData = value;
-        });
-      },
+
     );
   }
 
@@ -331,7 +343,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
         onPressed: () async {
           _checkStoragePermission();
 
-          if (_isStoragePermissionGranted) {
+          if (_isStoragePermissionGranted || _isPhotoPermissionGranted) {
             // await _requestPermission();
             // interstitial add will show when saving qr code
             try {
@@ -378,31 +390,18 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
                 ),
               );
             }
-          } else {
-            // _checkStoragePermission();
-            // await Permission.storage.request();
-            // await Permission.photos.request();
-            // bool isPermanentlyDenied =
-            //     await Permission.storage.status.isPermanentlyDenied;
-            // if (isPermanentlyDenied) {
-            //   openAppSettings();
-            // } else {
-            //   // await Permission.storage.request();
-            //   openAppSettings();
-            // }
+          } else if (_isStoragePermissionPermanentlyDenied) {
             // Permission was permanently denied
-            if (_isStoragePermissionPermanentlyDenied) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  backgroundColor: Colors.red,
-                  duration: Duration(seconds: 3),
-                  content: Text(
-                    "Permission denied. Unable to save image.",
-                    style: TextStyle(fontSize: 18),
-                  ),
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                backgroundColor: Colors.red,
+                duration: Duration(seconds: 3),
+                content: Text(
+                  "Permission denied. Unable to save image.",
+                  style: TextStyle(fontSize: 18),
                 ),
-              );
-            }
+              ),
+            );
           }
         },
         child: const Center(
@@ -450,6 +449,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
         ),
         onPressed: () async {
           isCreated = true;
+          qrData = qrInputController.text;
 
           // interstitial add will create when generate qr code
           admobHelper.createInterstitialAds();
