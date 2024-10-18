@@ -53,10 +53,8 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
   Future<void> _checkStoragePermission() async {
     PermissionStatus status = await Permission.storage.status;
     PermissionStatus photosStatus = await Permission.photos.status;
-    setState(() {
       _isStoragePermissionGranted = status.isGranted;
       _isPhotoPermissionGranted = photosStatus.isGranted;
-    });
 
     if (status.isDenied ||
         status.isPermanentlyDenied ||
@@ -76,16 +74,12 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
       if (requestStatus.isDenied) {
         _showPermissionDeniedDialog();
       } else if (requestStatus.isPermanentlyDenied) {
-        setState(() {
           _isStoragePermissionPermanentlyDenied =
               requestStatus.isPermanentlyDenied;
-        });
       }
-      setState(() {
         _isStoragePermissionGranted = requestStatus.isGranted;
         _isPhotoPermissionGranted = requestStatus.isGranted;
         _isStoragePermissionPermanentlyDenied = !requestStatus.isGranted;
-      });
     }
   }
 
@@ -198,7 +192,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
                       },
                     ),
                   ),
-                  qrData == null || qrData!.isEmpty
+                  qrData.isEmpty
                       ? const SizedBox()
                       : _saveButton(),
                 ],
