@@ -230,9 +230,6 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
             isCreated = false;
           });
         }
-        // setState(() {
-        //   isCreated = false;
-        // });
       },
       onTap: () {
         if(qrInputController.text.isNotEmpty && isCreated){
@@ -338,7 +335,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
               const WidgetStatePropertyAll(AppColors.kMainPurpleColor),
         ),
         onPressed: () async {
-          _checkStoragePermission();
+          await _checkStoragePermission();
 
           if (_isStoragePermissionGranted || _isPhotoPermissionGranted) {
             // await _requestPermission();

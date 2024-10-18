@@ -29,7 +29,9 @@ class QRHistoryProvider extends ChangeNotifier {
     } catch (err) {
       print(err.toString());
     }
+
     loadGeneratedQRCodes();
+
     notifyListeners();
   }
 
@@ -43,6 +45,8 @@ class QRHistoryProvider extends ChangeNotifier {
     storedGenQRCodes = qrCodeList;
 
    // storedGenQRCodes = allGenQRCodes.cast<GeneratedQRModel>().toList();
+
+    notifyListeners();
   }
 
   // Method to delete a single history
@@ -55,6 +59,7 @@ class QRHistoryProvider extends ChangeNotifier {
     } catch (err) {
       print(err.toString());
     }
+    loadGeneratedQRCodes();
     notifyListeners();
   }
 
@@ -82,7 +87,7 @@ class QRHistoryProvider extends ChangeNotifier {
     } catch (err) {
       print(err.toString());
     }
-    loadScnQRCodes();
+    // loadScnQRCodes();
     notifyListeners();
   }
 
