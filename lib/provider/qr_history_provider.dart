@@ -66,6 +66,7 @@ class QRHistoryProvider extends ChangeNotifier {
   // Method to clear storage
   Future<void> clearGeneratedQRBox() async {
     await _myGenQRBox.clear();
+    loadGeneratedQRCodes();
     notifyListeners();
   }
 
@@ -87,7 +88,9 @@ class QRHistoryProvider extends ChangeNotifier {
     } catch (err) {
       print(err.toString());
     }
-    // loadScnQRCodes();
+
+    loadScnQRCodes();
+
     notifyListeners();
   }
 
@@ -99,8 +102,8 @@ class QRHistoryProvider extends ChangeNotifier {
     List<ScannedQrModel> qrCodeList = allScnQRCodes.cast<ScannedQrModel>().toList();
     qrCodeList.sort((a, b) => b.date.compareTo(a.date)); // Newest first
     storedScnQRCodes = qrCodeList;
-
     // storedScnQRCodes = allScnQRCodes.cast<ScannedQrModel>().toList();
+    notifyListeners();
   }
 
   // Method to delete a single scn history
@@ -113,12 +116,14 @@ class QRHistoryProvider extends ChangeNotifier {
     } catch (err) {
       print(err.toString());
     }
+    loadScnQRCodes();
     notifyListeners();
   }
 
   // Method to clear storage
   Future<void> clearScnQRBox() async {
     await _myScnQRBox.clear();
+    loadScnQRCodes();
     notifyListeners();
   }
 }

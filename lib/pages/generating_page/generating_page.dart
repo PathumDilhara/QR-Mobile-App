@@ -135,12 +135,12 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
                 left: 20.0,
                 right: 20,
                 top: 30,
-                bottom: qrData!.isEmpty ? 80 : 150),
+                bottom: qrData.isEmpty ? 80 : 150),
             child: SingleChildScrollView(
               child: Column(
                 children: [
                   SizedBox(
-                    height: qrData == null || qrData!.isEmpty ? 200 : 60,
+                    height: qrData.isEmpty ? 200 : 60,
                   ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.15,
@@ -151,7 +151,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
                   ),
                   isCreated ? const SizedBox() : _generateButton(),
                   SizedBox(
-                    height: qrData == null || qrData!.isEmpty ? 0 : 30,
+                    height: qrData.isEmpty ? 0 : 30,
                   ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.4,

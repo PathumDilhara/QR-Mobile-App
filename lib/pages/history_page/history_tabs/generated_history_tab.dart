@@ -15,7 +15,6 @@ class GeneratedHistoryTab extends StatefulWidget {
 }
 
 class _GeneratedHistoryTabState extends State<GeneratedHistoryTab> {
-
   // late initializer for QRHistoryProvider
   late QRHistoryProvider qrHistoryProvider;
 
@@ -24,7 +23,8 @@ class _GeneratedHistoryTabState extends State<GeneratedHistoryTab> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Call your provider method after the widget tree is built
-      Provider.of<QRHistoryProvider>(context, listen: false).loadGeneratedQRCodes();
+      Provider.of<QRHistoryProvider>(context, listen: false)
+          .loadGeneratedQRCodes();
     });
   }
 
@@ -44,7 +44,8 @@ class _GeneratedHistoryTabState extends State<GeneratedHistoryTab> {
       floatingActionButton: Consumer<QRHistoryProvider>(
         builder: (context, qrHistoryProvider, child) {
           // Determine if the stored QR list is empty based on the provider's state
-          bool isGenStoredQrListEmpty = qrHistoryProvider.storedGenQRCodes.isEmpty;
+          bool isGenStoredQrListEmpty =
+              qrHistoryProvider.storedGenQRCodes.isEmpty;
 
           return SizedBox(
             width: 120,
@@ -55,10 +56,11 @@ class _GeneratedHistoryTabState extends State<GeneratedHistoryTab> {
                   : AppColors.kMainPurpleColor,
               // Only enable FAB action when there are QR codes to clear
               onPressed: isGenStoredQrListEmpty
-                  ? null  // Disable button if list is empty
+                  ? (){} // Disable button if list is empty
                   : () async {
-                await qrHistoryProvider.clearGeneratedQRBox();  // Clear QR box
-              },
+                      await qrHistoryProvider
+                          .clearGeneratedQRBox(); // Clear QR box
+                    },
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -101,12 +103,12 @@ class _GeneratedHistoryTabState extends State<GeneratedHistoryTab> {
 
           // Build the ListView when QR codes are available
           return ListView.builder(
-            padding: const EdgeInsets.only(
-                bottom: kBottomNavigationBarHeight + 10),
+            padding:
+                const EdgeInsets.only(bottom: kBottomNavigationBarHeight + 10),
             itemCount: qrHistoryProvider.storedGenQRCodes.length,
             itemBuilder: (context, index) {
               final GeneratedQRModel qrCode =
-              qrHistoryProvider.storedGenQRCodes[index];
+                  qrHistoryProvider.storedGenQRCodes[index];
 
               return Padding(
                 padding: const EdgeInsets.only(bottom: 5.0),
@@ -114,13 +116,15 @@ class _GeneratedHistoryTabState extends State<GeneratedHistoryTab> {
                   key: ValueKey<String>(qrCode.id),
                   // Dismiss QR codes using swipe action
                   onDismissed: (DismissDirection direction) async {
-                    await qrHistoryProvider.deleteGeneratedQRCode(qrCode);  // Delete QR code
+                    await qrHistoryProvider
+                        .deleteGeneratedQRCode(qrCode); // Delete QR code
                   },
                   child: ListTile(
                     tileColor: AppColors.kMainPurpleColor.withOpacity(0.3),
                     trailing: IconButton(
                       onPressed: () async {
-                        await qrHistoryProvider.deleteGeneratedQRCode(qrCode);  // Delete on button press
+                        await qrHistoryProvider.deleteGeneratedQRCode(
+                            qrCode); // Delete on button press
                       },
                       icon: Icon(
                         Icons.delete_outline,
