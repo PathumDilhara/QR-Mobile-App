@@ -110,7 +110,9 @@ class _UpdatePageState extends State<UpdatePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Image.asset(
-                  "assets/images/qr_vault.jpg",
+                  isDark
+                      ? "assets/images/qr_vault-removebg-preview_dark.png"
+                      : "assets/images/qr_vault-removebg-preview.png",//
                   width: 100,
                   fit: BoxFit.cover,
                 ),
@@ -121,7 +123,7 @@ class _UpdatePageState extends State<UpdatePage> {
                           ? "Error checking for updates"
                           : (_isUpdateAvailable
                               ? "Update your \napplication to the \nlatest version"
-                              : "Your application \nis up to date"),
+                              : "You’re using the \nlatest version."),
                   style: TextStyle(
                     fontSize: 36,
                     fontWeight: FontWeight.bold,
