@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:in_app_update/in_app_update.dart';
 
 import '../../../utils/colors.dart';
+import '../../../utils/text_styles.dart';
 
 //  the in_app_update package works with Google Play Store services to facilitate
 //  in-app updates for Android apps. Here’s a breakdown of how it integrates with
@@ -19,11 +20,11 @@ class _UpdatePageState extends State<UpdatePage> {
   bool _isUpdateAvailable = false;
   bool _isUpdating = false;
 
-  @override
-  void initState() {
-    super.initState();
-    _checkForUpdate();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _checkForUpdate();
+  // }
 
   // Checks if a new update is available
   Future<void> _checkForUpdate() async {
@@ -53,8 +54,20 @@ class _UpdatePageState extends State<UpdatePage> {
       setState(() {
         _isUpdating = false; // Reset the state if the update fails
       });
-      debugPrint(
-        "Error during update: ${err.toString()}",
+      // debugPrint(
+      //   "Error during update: ${err.toString()}",
+      // );
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 3),
+          content: Text(
+            "Failed to check for updates. Please try again later.",
+            style: TextStyle(
+              fontSize: 18,
+            ),
+          ),
+        ),
       );
     }
   }
@@ -76,57 +89,67 @@ class _UpdatePageState extends State<UpdatePage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        // title: Text(
-        //   "Update page",
-        //   style: AppTextStyles.appTitleStyle,
-        // ),
+        title: Text(
+          "App Update",
+          style: TextStyle(
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+            color: AppColors.getTextColor(context),
+          ),
+        ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Image.asset(
-              "assets/images/qrc.png",
-              width: 100,
-              fit: BoxFit.cover,
-            ),
-            Text(
-              "Update your \napplication to the \nlatest version",
-              style: TextStyle(
-                fontSize: 36,
-                fontWeight: FontWeight.bold,
-                color: titleColor,
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            _isUpdateAvailable
-                ? Text(
-                    "This update includes improvements to the QR scanning and generating features, enhancing performance and user experience.",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: titleColor.withOpacity(0.6),
-                    ),
-                  )
-                : const SizedBox(),
-            const SizedBox(height: 20),
-            _isUpdateAvailable
-                ? _isUpdating
-                    ? const LinearProgressIndicator(
-                        color: AppColors.kMainPurpleColor,
-                        backgroundColor: Colors.lightBlueAccent,
+      body: FutureBuilder(
+        future: _checkForUpdate(),
+        builder: (context, snapshot) {
+          bool _isLoading = snapshot.connectionState == ConnectionState.waiting;
+          bool _hasError = snapshot.hasError;
+          return Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Image.asset(
+                  "assets/images/qr_vault.jpg",
+                  width: 100,
+                  fit: BoxFit.cover,
+                ),
+                Text(
+                  _isLoading
+                      ? "Checking for updates..."
+                      : _hasError
+                          ? "Error checking for updates"
+                          : (_isUpdateAvailable
+                              ? "Update your \napplication to the \nlatest version"
+                              : "Your application \nis up to date"),
+                  style: TextStyle(
+                    fontSize: 36,
+                    fontWeight: FontWeight.bold,
+                    color: titleColor,
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                _isUpdateAvailable
+                    ? Text(
+                        "This update includes improvements to the QR scanning and generating features, enhancing performance and user experience.",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: titleColor.withOpacity(0.6),
+                        ),
                       )
-                    : Column(
+                    : const SizedBox(),
+                const SizedBox(height: 20),
+                _isUpdateAvailable
+                    ? Column(
                         children: [
                           SizedBox(
                             height: MediaQuery.of(context).size.height * 0.2,
                           ),
                           _customElevatedButton(
-                            "Update now",
+                            _isUpdating ? "Updating..." : "Install Update",
                             AppColors.kMainPurpleColor,
                             _startUpdate,
                           ),
@@ -135,25 +158,31 @@ class _UpdatePageState extends State<UpdatePage> {
                           ),
                         ],
                       )
-                : Column(
-                    children: [
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.2,
+                    : Column(
+                        children: [
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.2,
+                          ),
+                          Center(
+                            child: _customElevatedButton(
+                              _isLoading
+                                  ? "Checking for updates..."
+                                  : _hasError
+                                      ? "Error checking for updates"
+                                      : "No Update Available",
+                              buttonColor,
+                              () {},
+                            ),
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.05,
+                          ),
+                        ],
                       ),
-                      Center(
-                        child: _customElevatedButton(
-                          "Up to date",
-                          buttonColor,
-                          () {},
-                        ),
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.05,
-                      ),
-                    ],
-                  ),
-          ],
-        ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
@@ -168,7 +197,7 @@ class _UpdatePageState extends State<UpdatePage> {
         ),
         elevation: const WidgetStatePropertyAll(5),
         maximumSize: const WidgetStatePropertyAll(
-          Size(400, 60),
+          Size(350, 55),
         ),
         backgroundColor: WidgetStatePropertyAll(buttonBgColor),
       ),

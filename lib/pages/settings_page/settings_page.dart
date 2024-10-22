@@ -48,7 +48,7 @@ class _SettingsPageState extends State<SettingsPage> {
         title: Text(
           "Settings",
           style: TextStyle(
-            fontSize: 35,
+            fontSize: 30,
             fontWeight: FontWeight.bold,
             color: AppColors.getTextColor(context),
           ),
