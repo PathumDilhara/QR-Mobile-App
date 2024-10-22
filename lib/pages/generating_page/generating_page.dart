@@ -53,8 +53,8 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
   Future<void> _checkStoragePermission() async {
     PermissionStatus status = await Permission.storage.status;
     PermissionStatus photosStatus = await Permission.photos.status;
-      _isStoragePermissionGranted = status.isGranted;
-      _isPhotoPermissionGranted = photosStatus.isGranted;
+    _isStoragePermissionGranted = status.isGranted;
+    _isPhotoPermissionGranted = photosStatus.isGranted;
 
     if (status.isDenied ||
         status.isPermanentlyDenied ||
@@ -74,12 +74,12 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
       if (requestStatus.isDenied) {
         _showPermissionDeniedDialog();
       } else if (requestStatus.isPermanentlyDenied) {
-          _isStoragePermissionPermanentlyDenied =
-              requestStatus.isPermanentlyDenied;
+        _isStoragePermissionPermanentlyDenied =
+            requestStatus.isPermanentlyDenied;
       }
-        _isStoragePermissionGranted = requestStatus.isGranted;
-        _isPhotoPermissionGranted = requestStatus.isGranted;
-        _isStoragePermissionPermanentlyDenied = !requestStatus.isGranted;
+      _isStoragePermissionGranted = requestStatus.isGranted;
+      _isPhotoPermissionGranted = requestStatus.isGranted;
+      _isStoragePermissionPermanentlyDenied = !requestStatus.isGranted;
     }
   }
 
@@ -192,9 +192,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
                       },
                     ),
                   ),
-                  qrData.isEmpty
-                      ? const SizedBox()
-                      : _saveButton(),
+                  qrData.isEmpty ? const SizedBox() : _saveButton(),
                 ],
               ),
             ),
@@ -232,7 +230,7 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
         }
       },
       onTap: () {
-        if(qrInputController.text.isNotEmpty && isCreated){
+        if (qrInputController.text.isNotEmpty && isCreated) {
           setState(() {
             isCreated = false;
             qrData = "";
@@ -274,8 +272,6 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
               borderRadius: BorderRadius.circular(20),
               borderSide: BorderSide(
                   color: AppColors.kBlackColor.withOpacity(0.3), width: 2))),
-
-
     );
   }
 
@@ -443,20 +439,20 @@ class _QRGeneratingPageState extends State<QRGeneratingPage> {
         ),
         onPressed: () async {
           isCreated = true;
-          qrData = qrInputController.text;
-
+          setState(() {
+            qrData = qrInputController.text;
+          });
           // interstitial add will create when generate qr code
           admobHelper.createInterstitialAds();
 
-          // instance of GeneratedQRModel
-          GeneratedQRModel generatedQRModel = GeneratedQRModel(
-            title: qrInputController.text,
-            date: DateTime.now(),
-          );
-
           FocusScope.of(context).unfocus();
-          if (settingsProvider.isHistorySaving &&
+          if (await settingsProvider.isHistorySaving &&
               qrInputController.text.isNotEmpty) {
+            // instance of GeneratedQRModel to save qr
+            GeneratedQRModel generatedQRModel = GeneratedQRModel(
+              title: qrInputController.text,
+              date: DateTime.now(),
+            );
             await qrHistoryProvider.storeGeneratedQR(generatedQRModel);
           }
         },

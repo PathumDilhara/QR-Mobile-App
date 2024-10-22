@@ -90,43 +90,43 @@ class AdmobHelper {
     _interstitialAd = null;
   }
 
-  // Reward ads
-  void loadRewardAds() {
-    RewardedAd.load(
-      adUnitId:
-          "ca-app-pub-6164977547035716/4630183252", // Replace with actual ID for release
-      request: const AdRequest(),
-      rewardedAdLoadCallback: RewardedAdLoadCallback(
-        onAdLoaded: (ad) {
-          _rewardedAd = ad;
-        },
-        onAdFailedToLoad: (error) {
-          // Retry loading the ad if it fails
-          loadRewardAds();
-        },
-      ),
-    );
-  }
-
-  void showRewardAds() {
-    _rewardedAd!.show(
-      onUserEarnedReward: (ad, reward) {
-        print("Reward Earned is ${reward.amount}");
-      },
-    );
-    _rewardedAd!.fullScreenContentCallback  = FullScreenContentCallback(
-      onAdShowedFullScreenContent: (ad) {
-
-      },
-      onAdFailedToShowFullScreenContent: (ad, error) {
-        ad.dispose();
-      },
-      onAdDismissedFullScreenContent: (ad) {
-        ad.dispose();
-      },
-      onAdImpression: (ad) {
-        print("$ad impression occurred");
-      },
-    );
-  }
+  // // Reward ads
+  // void loadRewardAds() {
+  //   RewardedAd.load(
+  //     adUnitId:
+  //         "ca-app-pub-6164977547035716/4630183252", // Replace with actual ID for release
+  //     request: const AdRequest(),
+  //     rewardedAdLoadCallback: RewardedAdLoadCallback(
+  //       onAdLoaded: (ad) {
+  //         _rewardedAd = ad;
+  //       },
+  //       onAdFailedToLoad: (error) {
+  //         // Retry loading the ad if it fails
+  //         loadRewardAds();
+  //       },
+  //     ),
+  //   );
+  // }
+  //
+  // void showRewardAds() {
+  //   _rewardedAd!.show(
+  //     onUserEarnedReward: (ad, reward) {
+  //       print("Reward Earned is ${reward.amount}");
+  //     },
+  //   );
+  //   _rewardedAd!.fullScreenContentCallback  = FullScreenContentCallback(
+  //     onAdShowedFullScreenContent: (ad) {
+  //
+  //     },
+  //     onAdFailedToShowFullScreenContent: (ad, error) {
+  //       ad.dispose();
+  //     },
+  //     onAdDismissedFullScreenContent: (ad) {
+  //       ad.dispose();
+  //     },
+  //     onAdImpression: (ad) {
+  //       print("$ad impression occurred");
+  //     },
+  //   );
+  // }
 }
